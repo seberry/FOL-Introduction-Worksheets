@@ -55,7 +55,8 @@
   <main>
     <h1 id="problem-title">Kripke Worksheet 2</h1>
     <p class="note">
-      Wireframe: model checks for formula truth only. Frame conditions (T, S4, S5) are not enforced yet.
+      This worksheet now checks both the truth constraints and the required frame
+      properties (reflexive, symmetric, transitive) for the listed modal logic.
     </p>
     <div id="problem-description"></div>
     <h3>Constraints to satisfy at w₀</h3>
@@ -78,71 +79,84 @@
       id: "T1",
       title: "T: []P ⊭ [][]P",
       frame: "T (reflexive only)",
-      description: "Make []P true and [][]P false at w₀. Accessibility should be reflexive, but this wireframe does not verify it yet.",
+      description: "Make []P true and [][]P false at w₀ while keeping accessibility reflexive.",
       constraints: [
         { type: "truth", world: 0, formula: "[]P", expected: true },
-        { type: "truth", world: 0, formula: "[][]P", expected: false }
+        { type: "truth", world: 0, formula: "[][]P", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
       ],
     },
     {
       id: "T2",
       title: "T: <>P ⊭ []<>P",
       frame: "T (reflexive only)",
-      description: "Make <>P true and []<>P false at w₀. Frame reflexivity not yet checked.",
+      description: "Make <>P true and []<>P false at w₀ while keeping accessibility reflexive.",
       constraints: [
         { type: "truth", world: 0, formula: "<>P", expected: true },
-        { type: "truth", world: 0, formula: "[]<>P", expected: false }
+        { type: "truth", world: 0, formula: "[]<>P", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
       ],
     },
     {
       id: "T3",
       title: "T: []<><>P ⊭ <>P",
       frame: "T (reflexive only)",
-      description: "Make []<><>P true and <>P false at w₀. Frame reflexivity not yet checked.",
+      description: "Make []<><>P true and <>P false at w₀ while keeping accessibility reflexive.",
       constraints: [
         { type: "truth", world: 0, formula: "[]<><>P", expected: true },
-        { type: "truth", world: 0, formula: "<>P", expected: false }
+        { type: "truth", world: 0, formula: "<>P", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
       ],
     },
     {
       id: "S41",
       title: "S4: <>[]P ⊭ []P",
       frame: "S4 (reflexive + transitive)",
-      description: "Make <>[]P true and []P false at w₀. Reflexivity/transitivity not yet checked.",
+      description: "Make <>[]P true and []P false at w₀ while accessibility stays reflexive and transitive.",
       constraints: [
         { type: "truth", world: 0, formula: "<>[]P", expected: true },
-        { type: "truth", world: 0, formula: "[]P", expected: false }
+        { type: "truth", world: 0, formula: "[]P", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
+        { type: "relation", property: "transitive", expected: true },
       ],
     },
     {
       id: "S42",
       title: "S4: <>P ⊭ []<>P",
       frame: "S4 (reflexive + transitive)",
-      description: "Make <>P true and []<>P false at w₀. Reflexivity/transitivity not yet checked.",
+      description: "Make <>P true and []<>P false at w₀ while accessibility stays reflexive and transitive.",
       constraints: [
         { type: "truth", world: 0, formula: "<>P", expected: true },
-        { type: "truth", world: 0, formula: "[]<>P", expected: false }
+        { type: "truth", world: 0, formula: "[]<>P", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
+        { type: "relation", property: "transitive", expected: true },
       ],
     },
     {
       id: "S51",
       title: "S5: [] (P | Q), ~[]P ⊭ []Q",
       frame: "S5 (reflexive + symmetric + transitive)",
-      description: "Make [](P | Q) and ~[]P true while []Q is false at w₀. Frame conditions not yet checked.",
+      description: "Make [](P | Q) and ~[]P true while []Q is false at w₀, using a reflexive, symmetric, and transitive frame.",
       constraints: [
         { type: "truth", world: 0, formula: "[](P | Q)", expected: true },
         { type: "truth", world: 0, formula: "~[]P", expected: true },
-        { type: "truth", world: 0, formula: "[]Q", expected: false }
+        { type: "truth", world: 0, formula: "[]Q", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
+        { type: "relation", property: "symmetric", expected: true },
+        { type: "relation", property: "transitive", expected: true },
       ],
     },
     {
       id: "S52",
       title: "S5: []P -> []Q ⊭ [](P -> Q)",
       frame: "S5 (reflexive + symmetric + transitive)",
-      description: "Make ([]P -> []Q) true while [](P -> Q) is false at w₀. Frame conditions not yet checked.",
+      description: "Make ([]P -> []Q) true while [](P -> Q) is false at w₀, using a reflexive, symmetric, and transitive frame.",
       constraints: [
         { type: "truth", world: 0, formula: "([]P -> []Q)", expected: true },
-        { type: "truth", world: 0, formula: "[](P -> Q)", expected: false }
+        { type: "truth", world: 0, formula: "[](P -> Q)", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
+        { type: "relation", property: "symmetric", expected: true },
+        { type: "relation", property: "transitive", expected: true },
       ],
     },
     {
@@ -204,7 +218,12 @@
     ul.innerHTML = "";
     p.constraints.forEach(c => {
       const li = document.createElement("li");
-      li.textContent = `At w${(c.world || 0)}: ${c.formula} should be ${c.expected ? "true" : "false"}`;
+      if (c.type === "relation") {
+        const expectation = c.expected ? "should hold" : "should fail";
+        li.textContent = `Accessibility ${c.property} ${expectation}.`;
+      } else {
+        li.textContent = `At w${(c.world || 0)}: ${c.formula} should be ${c.expected ? "true" : "false"}`;
+      }
       ul.appendChild(li);
     });
 
@@ -233,6 +252,12 @@
     let allOk = true;
     const lines = [];
 
+    const relationChecks = {
+      reflexive: AccessibilityChecks.isReflexive,
+      symmetric: AccessibilityChecks.isSymmetric,
+      transitive: AccessibilityChecks.isTransitive,
+    };
+
     for (const c of p.constraints) {
       if (c.type === "truth") {
         const wff = new MPL.Wff(c.formula);
@@ -240,6 +265,15 @@
         const ok = val === c.expected;
         allOk = allOk && ok;
         lines.push(`At w${c.world}: ${c.formula} is ${val ? "T" : "F"} (expected ${c.expected ? "T" : "F"})`);
+      } else if (c.type === "relation") {
+        const checker = relationChecks[c.property];
+        if (!checker) continue;
+        const val = checker(model);
+        const ok = val === c.expected;
+        allOk = allOk && ok;
+        const descriptor = c.property[0].toUpperCase() + c.property.slice(1);
+        const status = val ? "holds" : "fails";
+        lines.push(`Accessibility: ${descriptor} ${status} (expected ${c.expected ? "to hold" : "to fail"})`);
       }
     }
 
@@ -249,10 +283,12 @@
 
     renderProblemList();
     let out = lines.join("\n") + "\n\n";
-    if (!p.diagnostic && allOk) {
-      out += "✅ Meets the truth constraints.\nFrame conditions still need to be checked manually.";
+    if (p.diagnostic) {
+      out += "ℹ️ Diagnostic prompt: truth values and frame properties are reported but not graded.";
+    } else if (allOk) {
+      out += "✅ Meets the truth and accessibility constraints.";
     } else {
-      out += "ℹ️ This wireframe only reports the truth values; frame checks are TODO.";
+      out += "❌ Not yet — adjust your model and try again.";
     }
     document.getElementById("result").textContent = out;
   }
