@@ -484,20 +484,60 @@ function drawModelSVG(model) {
   // Draw arrows first (so they appear under nodes)
   model.R.forEach(([from, to]) => {
     if (from === to) {
-      // Self-loop: a small circle offset outward from the node
-      const p = pos[from];
-      const loopCx = p.x;
-      const loopCy = p.y - NODE_R - 14;
-      const circle = svgEl("circle");
-      circle.setAttribute("cx", loopCx);
-      circle.setAttribute("cy", loopCy);
-      circle.setAttribute("r", 10);
-      circle.setAttribute("fill", "none");
-      circle.setAttribute("stroke", "#1a1a2e");
-      circle.setAttribute("stroke-width", "1.5");
-      circle.setAttribute("marker-end", "url(#arr)");
-      svg.appendChild(circle);
-    } else {
+  // Self-loops are drawn as a near-complete arc using an SVG <path>.
+  // We can't use <circle> because marker-end only works on path/line elements.
+  //
+  // Strategy: compute the "outward" direction from the triangle center to this
+  // node, then place the loop center offset in that direction. Draw an arc
+  // that goes ~320° around, leaving a gap where the arrowhead will sit.
+
+  const p = pos[from];
+
+  // Vector from triangle center to this node — this is the "outward" direction.
+  // We normalize it (make it length 1) so we can use it for offsetting.
+  const dx = p.x - cx;   // cx, cy are the triangle center, defined earlier
+  const dy = p.y - cy;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  const ux = dx/dist;    // unit vector outward
+  const uy = dy/dist;
+
+  // Place the loop's center outside the node circle
+  const loopR = 12;      // radius of the self-loop arc
+  const offset = NODE_R + loopR + 2;
+  const loopCx = p.x + ux * offset;
+  const loopCy = p.y + uy * offset;
+
+  // We want two points on the loop circle that are close together —
+  // the arc will go the long way around between them (320°).
+  // Place them symmetrically either side of the "inward" direction
+  // (pointing back toward the node), separated by ~40°.
+  const gapAngle = 20 * Math.PI / 180;  // 20° either side of inward direction
+
+  // The inward direction angle (pointing from loop center back to node)
+  const inwardAngle = Math.atan2(p.y - loopCy, p.x - loopCx);
+
+  // Start point: inwardAngle - gapAngle
+  const startAngle = inwardAngle - gapAngle;
+  const startX = loopCx + Math.cos(startAngle) * loopR;
+  const startY = loopCy + Math.sin(startAngle) * loopR;
+
+  // End point: inwardAngle + gapAngle
+  const endAngle = inwardAngle + gapAngle;
+  const endX = loopCx + Math.cos(endAngle) * loopR;
+  const endY = loopCy + Math.sin(endAngle) * loopR;
+
+  // Arc command: A rx ry x-rotation large-arc-flag sweep-flag x y
+  // large-arc-flag=1 means go the long way (320°, not the 40° short way)
+  // sweep-flag=1 means clockwise
+  const path = svgEl("path");
+  path.setAttribute("d",
+    `M ${startX} ${startY} A ${loopR} ${loopR} 0 1 1 ${endX} ${endY}`);
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", "#1a1a2e");
+  path.setAttribute("stroke-width", "1.5");
+  path.setAttribute("marker-end", "url(#arr)");
+  svg.appendChild(path);
+} else {
       // Arrow between two nodes; offset start/end so arrows touch circle edge
       const fp = pos[from], tp = pos[to];
       const dx = tp.x - fp.x, dy = tp.y - fp.y;
