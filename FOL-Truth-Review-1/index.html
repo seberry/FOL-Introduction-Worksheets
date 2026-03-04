@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FOL Truth in a Model</title>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <title>Review: Truth in a First-Order Model</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
   <style>
     /* ── DESIGN TOKENS ─────────────────────────────────────────────────────── */
     :root {
-      --ink:        #1a1a2e;
-      --paper:      #faf8f4;
-      --rule:       #d4cfc6;
-      --accent:     #2d6a9f;
-      --correct:    #2a7c4f;
-      --incorrect:  #9b2335;
-      --trace-bg:   #f0ede8;
-      --mono:       'JetBrains Mono', monospace;
-      --serif:      'Libre Baskerville', Georgia, serif;
+      --ink: #1a1a2e;
+      --paper: #faf8f4;
+      --rule: #d4cfc6;
+      --accent: #2d6a9f;
+      --correct: #2a7c4f;
+      --incorrect: #9b2335;
+      --trace-bg: #f0ede8;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Libre Baskerville', Georgia, serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: var(--serif);
@@ -31,8 +38,30 @@
       line-height: 1.6;
     }
 
-    h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
-    h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.25rem;
+      flex: 1;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .new-model-btn {
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 0.4rem 0.8rem;
+    }
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
 
     /* ── MODEL BOX (sticky at top) ─────────────────────────────────────────── */
     #model-box {
@@ -47,11 +76,23 @@
       align-items: flex-start;
     }
 
-    #model-text { flex: 1; font-size: 0.9rem; }
-    #model-text p { margin: 0.2rem 0; }
-    #model-text code { font-family: var(--mono); font-size: 0.85rem; }
+    #model-text {
+      flex: 1;
+      font-size: 0.9rem;
+    }
 
-    #model-svg-wrap { flex-shrink: 0; }
+    #model-text p {
+      margin: 0.2rem 0;
+    }
+
+    #model-text code {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+    }
+
+    #model-svg-wrap {
+      flex-shrink: 0;
+    }
 
     /* ── PROBLEM CARDS ─────────────────────────────────────────────────────── */
     .problem {
@@ -71,7 +112,10 @@
       padding-bottom: 0.5rem;
     }
 
-    .problem-num { font-weight: 700; color: var(--accent); }
+    .problem-num {
+      font-weight: 700;
+      color: var(--accent);
+    }
 
     .stage-badge {
       font-family: var(--mono);
@@ -92,7 +136,12 @@
     }
 
     /* ── BUTTONS ───────────────────────────────────────────────────────────── */
-    .btn-row { display: flex; gap: 0.6rem; margin: 0.75rem 0; flex-wrap: wrap; }
+    .btn-row {
+      display: flex;
+      gap: 0.6rem;
+      margin: 0.75rem 0;
+      flex-wrap: wrap;
+    }
 
     button {
       font-family: var(--serif);
@@ -104,13 +153,48 @@
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
     }
-    button:hover:not(:disabled) { background: var(--ink); color: white; }
-    button:disabled { opacity: 0.4; cursor: default; }
-    button.selected-true  { background: var(--correct);   color: white; border-color: var(--correct); }
-    button.selected-false { background: var(--incorrect); color: white; border-color: var(--incorrect); }
-    button.witness-btn    { font-family: var(--mono); font-size: 1rem; width: 2.5rem; height: 2.5rem; padding: 0; }
-    button.witness-btn.selected-true  { background: var(--correct);   color: white; border-color: var(--correct); }
-    button.witness-btn.selected-false { background: var(--incorrect); color: white; border-color: var(--incorrect); }
+
+    button:hover:not(:disabled) {
+      background: var(--ink);
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    button.selected-true {
+      background: var(--correct);
+      color: white;
+      border-color: var(--correct);
+    }
+
+    button.selected-false {
+      background: var(--incorrect);
+      color: white;
+      border-color: var(--incorrect);
+    }
+
+    button.witness-btn {
+      font-family: var(--mono);
+      font-size: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0;
+    }
+
+    button.witness-btn.selected-true {
+      background: var(--correct);
+      color: white;
+      border-color: var(--correct);
+    }
+
+    button.witness-btn.selected-false {
+      background: var(--incorrect);
+      color: white;
+      border-color: var(--incorrect);
+    }
 
     /* ── FEEDBACK ──────────────────────────────────────────────────────────── */
     .feedback {
@@ -119,8 +203,18 @@
       border-radius: 3px;
       font-size: 0.9rem;
     }
-    .feedback.correct   { background: #e8f5ee; border-left: 3px solid var(--correct);   color: var(--correct); }
-    .feedback.incorrect { background: #fcecea; border-left: 3px solid var(--incorrect); color: var(--incorrect); }
+
+    .feedback.correct {
+      background: #e8f5ee;
+      border-left: 3px solid var(--correct);
+      color: var(--correct);
+    }
+
+    .feedback.incorrect {
+      background: #fcecea;
+      border-left: 3px solid var(--incorrect);
+      color: var(--incorrect);
+    }
 
     /* ── WITNESS PROMPT ────────────────────────────────────────────────────── */
     .witness-prompt {
@@ -140,7 +234,11 @@
       background: var(--trace-bg);
       color: #555;
     }
-    .trace-toggle:hover:not(:disabled) { background: #e5e0d8; color: var(--ink); }
+
+    .trace-toggle:hover:not(:disabled) {
+      background: #e5e0d8;
+      color: var(--ink);
+    }
 
     .trace-box {
       display: none;
@@ -153,20 +251,37 @@
       line-height: 1.7;
       overflow-x: auto;
     }
-    .trace-box.open { display: block; }
+
+    .trace-box.open {
+      display: block;
+    }
 
     /* Each row of the trace has indentation driven by a CSS variable */
     .trace-row {
       display: block;
       padding-left: calc(var(--depth, 0) * 1.4rem);
-      white-space: pre;       /* preserve spacing in formula display */
+      white-space: pre;
+      /* preserve spacing in formula display */
     }
-    .trace-row.true  { color: var(--correct); }
-    .trace-row.false { color: var(--incorrect); }
-    .trace-row.header { color: var(--ink); font-weight: 600; }
+
+    .trace-row.true {
+      color: var(--correct);
+    }
+
+    .trace-row.false {
+      color: var(--incorrect);
+    }
+
+    .trace-row.header {
+      color: var(--ink);
+      font-weight: 600;
+    }
 
     /* ── COLLAPSIBLE ENGLISH / HINT ────────────────────────────────────────── */
-    .toggle-row { margin-top: 0.4rem; }
+    .toggle-row {
+      margin-top: 0.4rem;
+    }
+
     .toggle-content {
       display: none;
       margin-top: 0.3rem;
@@ -176,7 +291,10 @@
       padding: 0.4rem 0.7rem;
       border-left: 3px solid var(--rule);
     }
-    .toggle-content.open { display: block; }
+
+    .toggle-content.open {
+      display: block;
+    }
 
     /* ── COMPLETION ────────────────────────────────────────────────────────── */
     #completion {
@@ -186,31 +304,43 @@
       border-radius: 4px;
       text-align: center;
     }
-    #completion h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    #completion p  { color: #555; margin: 0.3rem 0; }
+
+    #completion h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #completion p {
+      color: #555;
+      margin: 0.3rem 0;
+    }
   </style>
 </head>
+
 <body>
 
-<h1>Worksheet: Truth in a First-Order Model</h1>
-
-<!-- Model display (sticky) -->
-<div id="model-box">
-  <div id="model-text">
-    <h2>Current Model</h2>
-    <p><strong>Domain:</strong> {1, 2, 3}</p>
-    <p><strong>Names:</strong> <span id="names-display"></span></p>
-    <p><code id="relation-display"></code></p>
+  <div class="header-row">
+    <h1>Review: Truth in a First-Order Model</h1>
+    <button class="new-model-btn" onclick="location.reload()">Generate New Model</button>
   </div>
-  <div id="model-svg-wrap">
-    <svg id="model-svg" width="220" height="180"></svg>
+
+  <!-- Model display (sticky) -->
+  <div id="model-box">
+    <div id="model-text">
+      <h2>Current Model</h2>
+      <p><strong>Domain:</strong> {1, 2, 3}</p>
+      <p><strong>Names:</strong> <span id="names-display"></span></p>
+      <p><code id="relation-display"></code></p>
+    </div>
+    <div id="model-svg-wrap">
+      <svg id="model-svg" width="280" height="260"></svg>
+    </div>
   </div>
-</div>
 
-<div id="problems-container"></div>
-<div id="completion"></div>
+  <div id="problems-container"></div>
+  <div id="completion"></div>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════════════════════
      LAYER 1 — FOL CORE
      Pure logic.  No HTML, no DOM.  Only plain JavaScript objects and functions.
      ─────────────────────────────────────────────────────────────────────────
@@ -235,805 +365,783 @@
      "children" is an array of eval-nodes for sub-evaluations.
      This tree is everything we need to render the trace.
   ═══════════════════════════════════════════════════════════════════════════ -->
-<script>
-// ── Helpers ──────────────────────────────────────────────────────────────────
+  <script>
+    // ── Helpers ──────────────────────────────────────────────────────────────────
 
-// Resolve a "term" (either a name like "a" or a variable like "x") to its
-// domain object under the current model and assignment.
-function resolveTerm(term, model, assignment) {
-  if (assignment[term] !== undefined) return assignment[term];   // bound variable
-  if (model.names[term] !== undefined) return model.names[term]; // constant name
-  throw new Error("Unknown term: " + term);
-}
-
-// Check whether tuple (args resolved to domain objects) is in a relation.
-// Currently supports only unary and binary relations stored as arrays of arrays.
-function inRelation(relation, resolvedArgs, model) {
-  const ext = model[relation]; // e.g. model.R = [[1,2],[2,3]]
-  if (!ext) return false;
-  return ext.some(tuple =>
-    tuple.length === resolvedArgs.length &&
-    tuple.every((v, i) => v === resolvedArgs[i])
-  );
-}
-
-// Build a human-readable string for a formula node.
-// Used inside the trace so each row shows what's being evaluated.
-function formulaToString(f) {
-  switch (f.type) {
-    case "atomic":
-      return f.relation + f.args.join("");
-    case "not":
-      return "¬" + formulaToString(f.body);
-    case "and":
-      return "(" + formulaToString(f.left) + " ∧ " + formulaToString(f.right) + ")";
-    case "or":
-      return "(" + formulaToString(f.left) + " ∨ " + formulaToString(f.right) + ")";
-    case "implies":
-      return "(" + formulaToString(f.left) + " → " + formulaToString(f.right) + ")";
-    case "exists":
-      return "∃" + f.variable + formulaToString(f.body);
-    case "forall":
-      return "∀" + f.variable + formulaToString(f.body);
-    default:
-      return "?";
-  }
-}
-
-// Format an assignment as a compact string for trace display, e.g. {x:1, y:2}
-function assignmentToString(assignment) {
-  const entries = Object.entries(assignment);
-  if (entries.length === 0) return "{}";
-  return "{" + entries.map(([k,v]) => k + ":" + v).join(", ") + "}";
-}
-
-// ── Main Evaluator ───────────────────────────────────────────────────────────
-//
-// evaluate(formula, model, assignment) → EvalNode
-//
-// An EvalNode is:
-//   { formulaStr, assignmentStr, result: true|false, children: [EvalNode, ...] }
-//
-// The key design principle: this function ONLY does logic.
-// It never touches the DOM.  It just builds up a data structure.
-// The display layer (Layer 2) is responsible for turning EvalNodes into HTML.
-
-function evaluate(formula, model, assignment) {
-  const formulaStr    = formulaToString(formula);
-  const assignmentStr = assignmentToString(assignment);
-
-  // We'll fill these in the switch below.
-  let result;
-  let children = [];  // sub-evaluations, for the trace
-
-  switch (formula.type) {
-
-    // ── Atomic ────────────────────────────────────────────────────────────
-    // Rab is true iff <ref(a), ref(b)> ∈ R.
-    // No sub-evaluations; children stays empty.
-    case "atomic": {
-      const resolved = formula.args.map(t => resolveTerm(t, model, assignment));
-      result = inRelation(formula.relation, resolved, model);
-      break;
+    // Resolve a "term" (either a name like "a" or a variable like "x") to its
+    // domain object under the current model and assignment.
+    function resolveTerm(term, model, assignment) {
+      if (assignment[term] !== undefined) return assignment[term];   // bound variable
+      if (model.names[term] !== undefined) return model.names[term]; // constant name
+      throw new Error("Unknown term: " + term);
     }
 
-    // ── Negation ──────────────────────────────────────────────────────────
-    case "not": {
-      const child = evaluate(formula.body, model, assignment);
-      children.push(child);
-      result = !child.result;
-      break;
+    // Check whether tuple (args resolved to domain objects) is in a relation.
+    // Currently supports only unary and binary relations stored as arrays of arrays.
+    function inRelation(relation, resolvedArgs, model) {
+      const ext = model[relation]; // e.g. model.R = [[1,2],[2,3]]
+      if (!ext) return false;
+      return ext.some(tuple =>
+        tuple.length === resolvedArgs.length &&
+        tuple.every((v, i) => v === resolvedArgs[i])
+      );
     }
 
-    // ── Conjunction ───────────────────────────────────────────────────────
-    // Both sub-formulas are evaluated (we want the full trace, not short-circuit).
-    case "and": {
-      const left  = evaluate(formula.left,  model, assignment);
-      const right = evaluate(formula.right, model, assignment);
-      children.push(left, right);
-      result = left.result && right.result;
-      break;
-    }
-
-    // ── Disjunction ───────────────────────────────────────────────────────
-    case "or": {
-      const left  = evaluate(formula.left,  model, assignment);
-      const right = evaluate(formula.right, model, assignment);
-      children.push(left, right);
-      result = left.result || right.result;
-      break;
-    }
-
-    // ── Conditional ───────────────────────────────────────────────────────
-    case "implies": {
-      const left  = evaluate(formula.left,  model, assignment);
-      const right = evaluate(formula.right, model, assignment);
-      children.push(left, right);
-      result = !left.result || right.result;
-      break;
-    }
-
-    // ── Existential ───────────────────────────────────────────────────────
-    // ∃x φ is true iff φ is true under SOME extension of the assignment
-    // that maps x to a domain object.
-    // (This matches the forall x textbook definition: consider all ways of
-    //  extending the current assignment with a value for x.)
-    case "exists": {
-      result = false;
-      for (const obj of model.domain) {
-        // Build the extended assignment: add x → obj to whatever was there.
-        const extended = Object.assign({}, assignment, { [formula.variable]: obj });
-        const child = evaluate(formula.body, model, extended);
-        children.push(child);
-        if (child.result) result = true;
-        // Note: we do NOT break early — we want the full trace for all objects.
-      }
-      break;
-    }
-
-    // ── Universal ─────────────────────────────────────────────────────────
-    // ∀x φ is true iff φ is true under EVERY extension mapping x to a domain obj.
-    case "forall": {
-      result = true;
-      for (const obj of model.domain) {
-        const extended = Object.assign({}, assignment, { [formula.variable]: obj });
-        const child = evaluate(formula.body, model, extended);
-        children.push(child);
-        if (!child.result) result = false;
-      }
-      break;
-    }
-
-    default:
-      throw new Error("Unknown formula type: " + formula.type);
-  }
-
-  return { formulaStr, assignmentStr, result, children };
-}
-
-// ── Formula Constructor Helpers ──────────────────────────────────────────────
-// These are just convenience functions so we don't have to write out the
-// full object literal every time we define a problem formula.
-// e.g.  EXISTS("x", AND(ATOM("R","a","x"), ATOM("R","x","b")))
-
-const ATOM    = (rel, ...args)     => ({ type: "atomic",  relation: rel, args });
-const NOT     = (body)             => ({ type: "not",     body });
-const AND     = (left, right)      => ({ type: "and",     left, right });
-const OR      = (left, right)      => ({ type: "or",      left, right });
-const IMPLIES = (left, right)      => ({ type: "implies", left, right });
-const EXISTS  = (variable, body)   => ({ type: "exists",  variable, body });
-const FORALL  = (variable, body)   => ({ type: "forall",  variable, body });
-
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  LAYER 2 — DISPLAY / RENDERING
-//  Knows about HTML.  Does NOT contain any logical reasoning.
-//  Takes eval-nodes, models, and problems and turns them into DOM elements.
-// ═══════════════════════════════════════════════════════════════════════════
-
-// ── Trace Renderer ───────────────────────────────────────────────────────────
-//
-// renderTrace(evalNode) → a <div> containing the full indented trace.
-//
-// We walk the evalNode tree recursively, building one .trace-row span per node.
-// The CSS variable --depth controls indentation.
-
-function renderTrace(evalNode, depth = 0) {
-  const container = document.createDocumentFragment();
-
-  // One row for this node
-  const row = document.createElement("span");
-  row.className = "trace-row " + (evalNode.result ? "true" : "false");
-  row.style.setProperty("--depth", depth);
-
-  // Format: "φ is TRUE/FALSE on {x:1, y:2}"
-  const verdict = evalNode.result ? "TRUE" : "FALSE";
-  row.textContent =
-    evalNode.formulaStr + "  is " + verdict + "  on " + evalNode.assignmentStr;
-
-  container.appendChild(row);
-  container.appendChild(document.createTextNode("\n"));
-
-  // Recurse into children
-  for (const child of evalNode.children) {
-    container.appendChild(renderTrace(child, depth + 1));
-  }
-
-  return container;
-}
-
-// ── Model SVG Diagram ────────────────────────────────────────────────────────
-//
-// Draws the relation as an arrow diagram in the <svg id="model-svg"> element.
-// Objects are placed on a triangle; arrows represent relation pairs.
-// Self-loops are drawn as small circles above/beside the node.
-
-function drawModelSVG(model) {
-  const svg = document.getElementById("model-svg");
-  svg.innerHTML = ""; // clear previous drawing
-
-  const W = 220, H = 180;
-  const cx = W / 2, cy = H / 2 - 10;
-  const r = 70; // radius of triangle
-
-  // Position three domain objects on a triangle
-  const pos = {
-    [model.domain[0]]: { x: cx,             y: cy - r },           // top
-    [model.domain[1]]: { x: cx + r * 0.87,  y: cy + r * 0.5 },     // bottom-right
-    [model.domain[2]]: { x: cx - r * 0.87,  y: cy + r * 0.5 }      // bottom-left
-  };
-
-  // Arrowhead marker definition
-  const defs = svgEl("defs");
-  const marker = svgEl("marker");
-  marker.setAttribute("id", "arr");
-  marker.setAttribute("markerWidth", "8");
-  marker.setAttribute("markerHeight", "8");
-  marker.setAttribute("refX", "8");
-  marker.setAttribute("refY", "3");
-  marker.setAttribute("orient", "auto");
-  const poly = svgEl("polygon");
-  poly.setAttribute("points", "0 0, 8 3, 0 6");
-  poly.setAttribute("fill", "#1a1a2e");
-  marker.appendChild(poly);
-  defs.appendChild(marker);
-  svg.appendChild(defs);
-
-  const NODE_R = 18; // radius of node circles
-
-  // Draw arrows first (so they appear under nodes)
-  model.R.forEach(([from, to]) => {
-    if (from === to) {
-  // Self-loops are drawn as a near-complete arc using an SVG <path>.
-  // We can't use <circle> because marker-end only works on path/line elements.
-  //
-  // Strategy: compute the "outward" direction from the triangle center to this
-  // node, then place the loop center offset in that direction. Draw an arc
-  // that goes ~320° around, leaving a gap where the arrowhead will sit.
-
-  const p = pos[from];
-
-  // Vector from triangle center to this node — this is the "outward" direction.
-  // We normalize it (make it length 1) so we can use it for offsetting.
-  const dx = p.x - cx;   // cx, cy are the triangle center, defined earlier
-  const dy = p.y - cy;
-  const dist = Math.sqrt(dx*dx + dy*dy);
-  const ux = dx/dist;    // unit vector outward
-  const uy = dy/dist;
-
-  // Place the loop's center outside the node circle
-  const loopR = 12;      // radius of the self-loop arc
-  const offset = NODE_R + loopR + 2;
-  const loopCx = p.x + ux * offset;
-  const loopCy = p.y + uy * offset;
-
-  // We want two points on the loop circle that are close together —
-  // the arc will go the long way around between them (320°).
-  // Place them symmetrically either side of the "inward" direction
-  // (pointing back toward the node), separated by ~40°.
-  const gapAngle = 20 * Math.PI / 180;  // 20° either side of inward direction
-
-  // The inward direction angle (pointing from loop center back to node)
-  const inwardAngle = Math.atan2(p.y - loopCy, p.x - loopCx);
-
-  // Start point: inwardAngle - gapAngle
-  const startAngle = inwardAngle - gapAngle;
-  const startX = loopCx + Math.cos(startAngle) * loopR;
-  const startY = loopCy + Math.sin(startAngle) * loopR;
-
-  // End point: inwardAngle + gapAngle
-  const endAngle = inwardAngle + gapAngle;
-  const endX = loopCx + Math.cos(endAngle) * loopR;
-  const endY = loopCy + Math.sin(endAngle) * loopR;
-
-  // Arc command: A rx ry x-rotation large-arc-flag sweep-flag x y
-  // large-arc-flag=1 means go the long way (320°, not the 40° short way)
-  // sweep-flag=1 means clockwise
-  const path = svgEl("path");
-  path.setAttribute("d",
-    `M ${startX} ${startY} A ${loopR} ${loopR} 0 1 1 ${endX} ${endY}`);
-  path.setAttribute("fill", "none");
-  path.setAttribute("stroke", "#1a1a2e");
-  path.setAttribute("stroke-width", "1.5");
-  path.setAttribute("marker-end", "url(#arr)");
-  svg.appendChild(path);
-} else {
-      // Arrow between two nodes; offset start/end so arrows touch circle edge
-      const fp = pos[from], tp = pos[to];
-      const dx = tp.x - fp.x, dy = tp.y - fp.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      const ux = dx/dist, uy = dy/dist;
-
-      // Check if a reverse arrow also exists; if so, curve both
-      const hasReverse = model.R.some(([a,b]) => a===to && b===from);
-      let x1 = fp.x + ux*NODE_R, y1 = fp.y + uy*NODE_R;
-      let x2 = tp.x - ux*NODE_R, y2 = tp.y - uy*NODE_R;
-
-      if (hasReverse) {
-        // Offset perpendicular to avoid overlap
-        const perp = 10;
-        const px = -uy*perp, py = ux*perp;
-        const path = svgEl("path");
-        path.setAttribute("d",
-          `M ${x1+px} ${y1+py} Q ${(x1+x2)/2+px*2} ${(y1+y2)/2+py*2} ${x2+px} ${y2+py}`);
-        path.setAttribute("fill", "none");
-        path.setAttribute("stroke", "#1a1a2e");
-        path.setAttribute("stroke-width", "1.5");
-        path.setAttribute("marker-end", "url(#arr)");
-        svg.appendChild(path);
-      } else {
-        const line = svgEl("line");
-        line.setAttribute("x1", x1); line.setAttribute("y1", y1);
-        line.setAttribute("x2", x2); line.setAttribute("y2", y2);
-        line.setAttribute("stroke", "#1a1a2e");
-        line.setAttribute("stroke-width", "1.5");
-        line.setAttribute("marker-end", "url(#arr)");
-        svg.appendChild(line);
+    // Build a human-readable string for a formula node.
+    // Used inside the trace so each row shows what's being evaluated.
+    function formulaToString(f) {
+      switch (f.type) {
+        case "atomic":
+          return f.relation + f.args.join("");
+        case "not":
+          return "¬" + formulaToString(f.body);
+        case "and":
+          return "(" + formulaToString(f.left) + " ∧ " + formulaToString(f.right) + ")";
+        case "or":
+          return "(" + formulaToString(f.left) + " ∨ " + formulaToString(f.right) + ")";
+        case "implies":
+          return "(" + formulaToString(f.left) + " → " + formulaToString(f.right) + ")";
+        case "exists":
+          return "∃" + f.variable + formulaToString(f.body);
+        case "forall":
+          return "∀" + f.variable + formulaToString(f.body);
+        default:
+          return "?";
       }
     }
-  });
 
-  // Draw nodes on top of arrows
-  model.domain.forEach(obj => {
-    const p = pos[obj];
-
-    const circle = svgEl("circle");
-    circle.setAttribute("cx", p.x);
-    circle.setAttribute("cy", p.y);
-    circle.setAttribute("r", NODE_R);
-    circle.setAttribute("fill", "white");
-    circle.setAttribute("stroke", "#1a1a2e");
-    circle.setAttribute("stroke-width", "2");
-    svg.appendChild(circle);
-
-    // Domain element label (the number)
-    const label = svgEl("text");
-    label.setAttribute("x", p.x);
-    label.setAttribute("y", p.y);
-    label.setAttribute("text-anchor", "middle");
-    label.setAttribute("dominant-baseline", "central");
-    label.setAttribute("font-size", "14");
-    label.setAttribute("font-weight", "bold");
-    label.setAttribute("font-family", "JetBrains Mono, monospace");
-    label.textContent = obj;
-    svg.appendChild(label);
-
-    // Name labels (a, b) below each node that has a name
-    const names = Object.entries(model.names)
-      .filter(([, v]) => v === obj)
-      .map(([k]) => k);
-    if (names.length) {
-      const nameLabel = svgEl("text");
-      nameLabel.setAttribute("x", p.x);
-      nameLabel.setAttribute("y", p.y + NODE_R + 12);
-      nameLabel.setAttribute("text-anchor", "middle");
-      nameLabel.setAttribute("font-size", "11");
-      nameLabel.setAttribute("font-style", "italic");
-      nameLabel.setAttribute("fill", "#555");
-      nameLabel.setAttribute("font-family", "Libre Baskerville, serif");
-      nameLabel.textContent = names.join(", ");
-      svg.appendChild(nameLabel);
+    // Format an assignment as a compact string for trace display, e.g. {x:1, y:2}
+    function assignmentToString(assignment) {
+      const entries = Object.entries(assignment);
+      if (entries.length === 0) return "{}";
+      return "{" + entries.map(([k, v]) => k + ":" + v).join(", ") + "}";
     }
-  });
-}
 
-// Tiny helper: create an SVG element with the right namespace.
-// (SVG elements must use createElementNS, not createElement.)
-function svgEl(tag) {
-  return document.createElementNS("http://www.w3.org/2000/svg", tag);
-}
+    // ── Main Evaluator ───────────────────────────────────────────────────────────
+    //
+    // evaluate(formula, model, assignment) → EvalNode
+    //
+    // An EvalNode is:
+    //   { formulaStr, assignmentStr, result: true|false, children: [EvalNode, ...] }
+    //
+    // The key design principle: this function ONLY does logic.
+    // It never touches the DOM.  It just builds up a data structure.
+    // The display layer (Layer 2) is responsible for turning EvalNodes into HTML.
 
-// ── Model Text Display ────────────────────────────────────────────────────────
-function displayModelText(model) {
-  document.getElementById("names-display").textContent =
-    Object.entries(model.names).map(([k,v]) => `${k} = ${v}`).join(", ");
+    function evaluate(formula, model, assignment) {
+      const formulaStr = formulaToString(formula);
+      const assignmentStr = assignmentToString(assignment);
 
-  const pairs = model.R.map(([x,y]) => `⟨${x},${y}⟩`).join(", ");
-  document.getElementById("relation-display").textContent =
-    "R = { " + (pairs || "∅") + " }";
-}
+      // We'll fill these in the switch below.
+      let result;
+      let children = [];  // sub-evaluations, for the trace
 
-// ── Problem Renderer ──────────────────────────────────────────────────────────
-//
-// renderProblem(problem, model) → a .problem <div>
-//
-// A PROBLEM object (defined in Layer 3) has:
-//   { number, stage, stageLabel, formula, english, hint?, witnessVar? }
-//
-// After the student answers, we call evaluate() and show feedback + trace.
-// If the sentence is existential and true, we also ask for a witness.
-// If universal and false, we ask for a counterexample.
+      switch (formula.type) {
 
-function renderProblem(problem, model) {
-  const div = document.createElement("div");
-  div.className = "problem";
-  div.id = "prob-" + problem.number;
+        // ── Atomic ────────────────────────────────────────────────────────────
+        // Rab is true iff <ref(a), ref(b)> ∈ R.
+        // No sub-evaluations; children stays empty.
+        case "atomic": {
+          const resolved = formula.args.map(t => resolveTerm(t, model, assignment));
+          result = inRelation(formula.relation, resolved, model);
+          break;
+        }
 
-  // ── Header ──────────────────────────────────────────────────────────────
-  const header = document.createElement("div");
-  header.className = "problem-header";
-  header.innerHTML =
-    `<span class="problem-num">Problem ${problem.number}</span>` +
-    `<span class="stage-badge">${problem.stageLabel}</span>`;
-  div.appendChild(header);
+        // ── Negation ──────────────────────────────────────────────────────────
+        case "not": {
+          const child = evaluate(formula.body, model, assignment);
+          children.push(child);
+          result = !child.result;
+          break;
+        }
 
-  // ── Formula ─────────────────────────────────────────────────────────────
-  const formulaDiv = document.createElement("div");
-  formulaDiv.className = "formula-display";
-  // formulaToString() gives us the canonical text, but we also allow
-  // the problem to supply a nicer display string via problem.displayFormula.
-  formulaDiv.textContent = problem.displayFormula || formulaToString(problem.formula);
-  div.appendChild(formulaDiv);
+        // ── Conjunction ───────────────────────────────────────────────────────
+        // Both sub-formulas are evaluated (we want the full trace, not short-circuit).
+        case "and": {
+          const left = evaluate(formula.left, model, assignment);
+          const right = evaluate(formula.right, model, assignment);
+          children.push(left, right);
+          result = left.result && right.result;
+          break;
+        }
 
-  // ── English / Hint toggles ───────────────────────────────────────────────
-  div.appendChild(makeToggle("English: ", problem.english));
-  if (problem.hint) div.appendChild(makeToggle("Hint", problem.hint));
+        // ── Disjunction ───────────────────────────────────────────────────────
+        case "or": {
+          const left = evaluate(formula.left, model, assignment);
+          const right = evaluate(formula.right, model, assignment);
+          children.push(left, right);
+          result = left.result || right.result;
+          break;
+        }
 
-  // ── TRUE / FALSE buttons ─────────────────────────────────────────────────
-  const btnRow = document.createElement("div");
-  btnRow.className = "btn-row";
-  const trueBtn  = makeButton("TRUE");
-  const falseBtn = makeButton("FALSE");
-  btnRow.appendChild(trueBtn);
-  btnRow.appendChild(falseBtn);
-  div.appendChild(btnRow);
+        // ── Conditional ───────────────────────────────────────────────────────
+        case "implies": {
+          const left = evaluate(formula.left, model, assignment);
+          const right = evaluate(formula.right, model, assignment);
+          children.push(left, right);
+          result = !left.result || right.result;
+          break;
+        }
 
-  // Placeholder for witness/counterexample prompt
-  const witnessPart = document.createElement("div");
-  div.appendChild(witnessPart);
+        // ── Existential ───────────────────────────────────────────────────────
+        // ∃x φ is true iff φ is true under SOME extension of the assignment
+        // that maps x to a domain object.
+        // (This matches the forall x textbook definition: consider all ways of
+        //  extending the current assignment with a value for x.)
+        case "exists": {
+          result = false;
+          for (const obj of model.domain) {
+            // Build the extended assignment: add x → obj to whatever was there.
+            const extended = Object.assign({}, assignment, { [formula.variable]: obj });
+            const child = evaluate(formula.body, model, extended);
+            children.push(child);
+            if (child.result) result = true;
+            // Note: we do NOT break early — we want the full trace for all objects.
+          }
+          break;
+        }
 
-  // Placeholder for feedback text
-  const feedbackDiv = document.createElement("div");
-  div.appendChild(feedbackDiv);
+        // ── Universal ─────────────────────────────────────────────────────────
+        // ∀x φ is true iff φ is true under EVERY extension mapping x to a domain obj.
+        case "forall": {
+          result = true;
+          for (const obj of model.domain) {
+            const extended = Object.assign({}, assignment, { [formula.variable]: obj });
+            const child = evaluate(formula.body, model, extended);
+            children.push(child);
+            if (!child.result) result = false;
+          }
+          break;
+        }
 
-  // Placeholder for trace
-  const tracePart = document.createElement("div");
-  div.appendChild(tracePart);
-
-  // ── Button logic ─────────────────────────────────────────────────────────
-  // Run the evaluator once; we'll reuse the result for both feedback and trace.
-  let evalResult = null; // will be set when student answers
-
-  function handleTF(answer) {
-    // Run the evaluator now (not before — the model might have been reset)
-    evalResult = evaluate(problem.formula, model, {});
-    const correct = evalResult.result === answer;
-
-    // Visual selection state
-    trueBtn.classList.remove("selected-true", "selected-false");
-    falseBtn.classList.remove("selected-true", "selected-false");
-    if (answer) trueBtn.classList.add(correct ? "selected-true" : "selected-false");
-    else        falseBtn.classList.add(correct ? "selected-true" : "selected-false");
-
-    if (correct) {
-      trueBtn.disabled = true;
-      falseBtn.disabled = true;
-
-      // For true existentials: ask for witness
-      if (evalResult.result && problem.witnessVar) {
-        showWitnessPrompt("witness");
+        default:
+          throw new Error("Unknown formula type: " + formula.type);
       }
-      // For false universals: ask for counterexample
-      else if (!evalResult.result && problem.counterexVar) {
-        showWitnessPrompt("counterexample");
-      }
-      // Otherwise just show feedback + trace
-      else {
-        showFeedback(true, null);
-        showTrace();
-      }
-    } else {
-      showFeedback(false, null);
-      showTrace(); // always show trace on wrong answer — this is the teaching moment
+
+      return { formulaStr, assignmentStr, result, children };
     }
-  }
 
-  // ── Witness / counterexample buttons ──────────────────────────────────────
-  function showWitnessPrompt(kind) {
-    witnessPart.innerHTML = "";
+    // ── Formula Constructor Helpers ──────────────────────────────────────────────
+    // These are just convenience functions so we don't have to write out the
+    // full object literal every time we define a problem formula.
+    // e.g.  EXISTS("x", AND(ATOM("R","a","x"), ATOM("R","x","b")))
 
-    const prompt = document.createElement("p");
-    prompt.className = "witness-prompt";
+    const ATOM = (rel, ...args) => ({ type: "atomic", relation: rel, args });
+    const NOT = (body) => ({ type: "not", body });
+    const AND = (left, right) => ({ type: "and", left, right });
+    const OR = (left, right) => ({ type: "or", left, right });
+    const IMPLIES = (left, right) => ({ type: "implies", left, right });
+    const EXISTS = (variable, body) => ({ type: "exists", variable, body });
+    const FORALL = (variable, body) => ({ type: "forall", variable, body });
 
-    // Explain what a witness IS in terms of the textbook definition
-    if (kind === "witness") {
-      const varName = problem.witnessVar;
-      prompt.innerHTML =
-        `<strong>Find a witness</strong> for the existential. ` +
-        `According to the definition of truth for ∃, the sentence is true iff ` +
-        `there is some object <em>k</em> in the domain such that the body is true ` +
-        `when <em>${varName}</em> is assigned to <em>k</em>. ` +
-        `Which domain object works?`;
-    } else {
-      const varName = problem.counterexVar;
-      prompt.innerHTML =
-        `<strong>Find a counterexample</strong> to the universal. ` +
-        `∀${varName} φ is false iff there is some object <em>k</em> ` +
-        `such that φ is false when <em>${varName}</em> is assigned to <em>k</em>. ` +
-        `Which object is a counterexample?`;
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  LAYER 2 — DISPLAY / RENDERING
+    //  Knows about HTML.  Does NOT contain any logical reasoning.
+    //  Takes eval-nodes, models, and problems and turns them into DOM elements.
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    // ── Trace Renderer ───────────────────────────────────────────────────────────
+    //
+    // renderTrace(evalNode) → a <div> containing the full indented trace.
+    //
+    // We walk the evalNode tree recursively, building one .trace-row span per node.
+    // The CSS variable --depth controls indentation.
+
+    function renderTrace(evalNode, depth = 0) {
+      const container = document.createDocumentFragment();
+
+      // One row for this node
+      const row = document.createElement("span");
+      row.className = "trace-row " + (evalNode.result ? "true" : "false");
+      row.style.setProperty("--depth", depth);
+
+      // Format: "φ is TRUE/FALSE on {x:1, y:2}"
+      const verdict = evalNode.result ? "TRUE" : "FALSE";
+      row.textContent =
+        evalNode.formulaStr + "  is " + verdict + "  on " + evalNode.assignmentStr;
+
+      container.appendChild(row);
+      container.appendChild(document.createTextNode("\n"));
+
+      // Recurse into children
+      for (const child of evalNode.children) {
+        container.appendChild(renderTrace(child, depth + 1));
+      }
+
+      return container;
     }
-    witnessPart.appendChild(prompt);
 
-    const btnRow2 = document.createElement("div");
-    btnRow2.className = "btn-row";
-    model.domain.forEach(obj => {
-      const btn = makeButton(String(obj));
-      btn.className += " witness-btn";
-      btn.onclick = () => handleWitness(obj, kind, btn, btnRow2);
-      btnRow2.appendChild(btn);
-    });
-    witnessPart.appendChild(btnRow2);
-  }
+    // ── Model SVG Diagram ────────────────────────────────────────────────────────
+    //
+    // Draws the relation as an arrow diagram in the <svg id="model-svg"> element.
+    // Objects are placed on a triangle; arrows represent relation pairs.
+    // Self-loops are drawn as small circles above/beside the node.
 
-  function handleWitness(obj, kind, btn, row) {
-    // Check: is this object actually a witness / counterexample?
-    // Re-evaluate the formula body with this object assigned to the variable.
-    const varName = kind === "witness" ? problem.witnessVar : problem.counterexVar;
-    const bodyEval = evaluate(problem.formula.body, model, { [varName]: obj });
+    function drawModelSVG(model) {
+      const svg = document.getElementById("model-svg");
+      svg.innerHTML = ""; // clear previous drawing
 
-    const correct = kind === "witness" ? bodyEval.result : !bodyEval.result;
+      const W = 280, H = 260;
+      const cx = W / 2, cy = H / 2 + 10;
+      const r = 70; // radius of triangle
 
-    // Mark all buttons disabled; highlight chosen one
-    Array.from(row.children).forEach(b => {
-      b.disabled = true;
-      b.classList.remove("selected-true", "selected-false");
-    });
-    btn.classList.add(correct ? "selected-true" : "selected-false");
+      // Position three domain objects on a triangle
+      const pos = {
+        [model.domain[0]]: { x: cx, y: cy - r },           // top
+        [model.domain[1]]: { x: cx + r * 0.87, y: cy + r * 0.5 },     // bottom-right
+        [model.domain[2]]: { x: cx - r * 0.87, y: cy + r * 0.5 }      // bottom-left
+      };
 
-    // Build explanatory feedback
-    let msg;
-    if (correct && kind === "witness") {
-      msg = `✓ Correct! ${obj} is a witness: assigning ${varName} = ${obj} makes ` +
+      // Arrowhead marker definition
+      const defs = svgEl("defs");
+      const marker = svgEl("marker");
+      marker.setAttribute("id", "arr");
+      marker.setAttribute("markerWidth", "8");
+      marker.setAttribute("markerHeight", "8");
+      marker.setAttribute("refX", "8");
+      marker.setAttribute("refY", "3");
+      marker.setAttribute("orient", "auto");
+      const poly = svgEl("polygon");
+      poly.setAttribute("points", "0 0, 8 3, 0 6");
+      poly.setAttribute("fill", "#1a1a2e");
+      marker.appendChild(poly);
+      defs.appendChild(marker);
+      svg.appendChild(defs);
+
+      const NODE_R = 18; // radius of node circles
+
+      // Draw arrows first (so they appear under nodes)
+      model.R.forEach(([from, to]) => {
+        if (from === to) {
+          const p = pos[from];
+          const dx = p.x - cx;
+          const dy = p.y - cy;
+          let theta = Math.atan2(dy, dx);
+          if (dx === 0 && dy === 0) theta = -Math.PI / 2; // fallback
+
+          const angleOffset = 25 * Math.PI / 180;
+          const startAngle = theta - angleOffset;
+          const endAngle = theta + angleOffset;
+
+          // Loop starts and ends perfectly on the boundary of the node circle
+          const startX = p.x + Math.cos(startAngle) * NODE_R;
+          const startY = p.y + Math.sin(startAngle) * NODE_R;
+          const endX = p.x + Math.cos(endAngle) * NODE_R;
+          const endY = p.y + Math.sin(endAngle) * NODE_R;
+
+          // Control points extend outward radially
+          const loopDist = NODE_R * 2.5;
+          const cp1X = p.x + Math.cos(startAngle) * loopDist;
+          const cp1Y = p.y + Math.sin(startAngle) * loopDist;
+          const cp2X = p.x + Math.cos(endAngle) * loopDist;
+          const cp2Y = p.y + Math.sin(endAngle) * loopDist;
+
+          const path = svgEl("path");
+          path.setAttribute("d", `M ${startX} ${startY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${endX} ${endY}`);
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke", "#1a1a2e");
+          path.setAttribute("stroke-width", "1.5");
+          path.setAttribute("marker-end", "url(#arr)");
+          svg.appendChild(path);
+        } else {
+          // Arrow between two nodes; offset start/end so arrows touch circle edge
+          const fp = pos[from], tp = pos[to];
+          const dx = tp.x - fp.x, dy = tp.y - fp.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const ux = dx / dist, uy = dy / dist;
+
+          // Check if a reverse arrow also exists; if so, curve both
+          const hasReverse = model.R.some(([a, b]) => a === to && b === from);
+          let x1 = fp.x + ux * NODE_R, y1 = fp.y + uy * NODE_R;
+          let x2 = tp.x - ux * NODE_R, y2 = tp.y - uy * NODE_R;
+
+          if (hasReverse) {
+            // Offset perpendicular to avoid overlap
+            const perp = 10;
+            const px = -uy * perp, py = ux * perp;
+            const path = svgEl("path");
+            path.setAttribute("d",
+              `M ${x1 + px} ${y1 + py} Q ${(x1 + x2) / 2 + px * 2} ${(y1 + y2) / 2 + py * 2} ${x2 + px} ${y2 + py}`);
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", "#1a1a2e");
+            path.setAttribute("stroke-width", "1.5");
+            path.setAttribute("marker-end", "url(#arr)");
+            svg.appendChild(path);
+          } else {
+            const line = svgEl("line");
+            line.setAttribute("x1", x1); line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2); line.setAttribute("y2", y2);
+            line.setAttribute("stroke", "#1a1a2e");
+            line.setAttribute("stroke-width", "1.5");
+            line.setAttribute("marker-end", "url(#arr)");
+            svg.appendChild(line);
+          }
+        }
+      });
+
+      // Draw nodes on top of arrows
+      model.domain.forEach(obj => {
+        const p = pos[obj];
+
+        const circle = svgEl("circle");
+        circle.setAttribute("cx", p.x);
+        circle.setAttribute("cy", p.y);
+        circle.setAttribute("r", NODE_R);
+        circle.setAttribute("fill", "white");
+        circle.setAttribute("stroke", "#1a1a2e");
+        circle.setAttribute("stroke-width", "2");
+        svg.appendChild(circle);
+
+        // Domain element label (the number)
+        const label = svgEl("text");
+        label.setAttribute("x", p.x);
+        label.setAttribute("y", p.y);
+        label.setAttribute("text-anchor", "middle");
+        label.setAttribute("dominant-baseline", "central");
+        label.setAttribute("font-size", "14");
+        label.setAttribute("font-weight", "bold");
+        label.setAttribute("font-family", "JetBrains Mono, monospace");
+        label.textContent = obj;
+        svg.appendChild(label);
+
+        // Name labels (a, b) below each node that has a name
+        const names = Object.entries(model.names)
+          .filter(([, v]) => v === obj)
+          .map(([k]) => k);
+        if (names.length) {
+          const nameLabel = svgEl("text");
+          nameLabel.setAttribute("x", p.x);
+          nameLabel.setAttribute("y", p.y + NODE_R + 12);
+          nameLabel.setAttribute("text-anchor", "middle");
+          nameLabel.setAttribute("font-size", "11");
+          nameLabel.setAttribute("font-style", "italic");
+          nameLabel.setAttribute("fill", "#555");
+          nameLabel.setAttribute("font-family", "Libre Baskerville, serif");
+          nameLabel.textContent = names.join(", ");
+          svg.appendChild(nameLabel);
+        }
+      });
+    }
+
+    // Tiny helper: create an SVG element with the right namespace.
+    // (SVG elements must use createElementNS, not createElement.)
+    function svgEl(tag) {
+      return document.createElementNS("http://www.w3.org/2000/svg", tag);
+    }
+
+    // ── Model Text Display ────────────────────────────────────────────────────────
+    function displayModelText(model) {
+      document.getElementById("names-display").textContent =
+        Object.entries(model.names).map(([k, v]) => `${k} = ${v}`).join(", ");
+
+      const pairs = model.R.map(([x, y]) => `⟨${x},${y}⟩`).join(", ");
+      document.getElementById("relation-display").textContent =
+        "R = { " + (pairs || "∅") + " }";
+    }
+
+    // ── Problem Renderer ──────────────────────────────────────────────────────────
+    //
+    // renderProblem(problem, model) → a .problem <div>
+    //
+    // A PROBLEM object (defined in Layer 3) has:
+    //   { number, stage, stageLabel, formula, english, hint?, witnessVar? }
+    //
+    // After the student answers, we call evaluate() and show feedback + trace.
+    // If the sentence is existential and true, we also ask for a witness.
+    // If universal and false, we ask for a counterexample.
+
+    function renderProblem(problem, model) {
+      const div = document.createElement("div");
+      div.className = "problem";
+      div.id = "prob-" + problem.number;
+
+      // ── Header ──────────────────────────────────────────────────────────────
+      const header = document.createElement("div");
+      header.className = "problem-header";
+      header.innerHTML =
+        `<span class="problem-num">Problem ${problem.number}</span>` +
+        `<span class="stage-badge">${problem.stageLabel}</span>`;
+      div.appendChild(header);
+
+      // ── Formula ─────────────────────────────────────────────────────────────
+      const formulaDiv = document.createElement("div");
+      formulaDiv.className = "formula-display";
+      // formulaToString() gives us the canonical text, but we also allow
+      // the problem to supply a nicer display string via problem.displayFormula.
+      formulaDiv.textContent = problem.displayFormula || formulaToString(problem.formula);
+      div.appendChild(formulaDiv);
+
+      // ── English / Hint toggles ───────────────────────────────────────────────
+      div.appendChild(makeToggle("English: ", problem.english));
+      if (problem.hint) div.appendChild(makeToggle("Hint", problem.hint));
+
+      // ── TRUE / FALSE buttons ─────────────────────────────────────────────────
+      const btnRow = document.createElement("div");
+      btnRow.className = "btn-row";
+      const trueBtn = makeButton("TRUE");
+      const falseBtn = makeButton("FALSE");
+      btnRow.appendChild(trueBtn);
+      btnRow.appendChild(falseBtn);
+      div.appendChild(btnRow);
+
+      // Placeholder for witness/counterexample prompt
+      const witnessPart = document.createElement("div");
+      div.appendChild(witnessPart);
+
+      // Placeholder for feedback text
+      const feedbackDiv = document.createElement("div");
+      div.appendChild(feedbackDiv);
+
+      // Placeholder for trace
+      const tracePart = document.createElement("div");
+      div.appendChild(tracePart);
+
+      // ── Button logic ─────────────────────────────────────────────────────────
+      // Run the evaluator once; we'll reuse the result for both feedback and trace.
+      let evalResult = null; // will be set when student answers
+
+      function handleTF(answer) {
+        // Run the evaluator now (not before — the model might have been reset)
+        evalResult = evaluate(problem.formula, model, {});
+        const correct = evalResult.result === answer;
+
+        // Visual selection state
+        trueBtn.classList.remove("selected-true", "selected-false");
+        falseBtn.classList.remove("selected-true", "selected-false");
+        if (answer) trueBtn.classList.add(correct ? "selected-true" : "selected-false");
+        else falseBtn.classList.add(correct ? "selected-true" : "selected-false");
+
+        if (correct) {
+          trueBtn.disabled = true;
+          falseBtn.disabled = true;
+
+          // For true existentials: ask for witness
+          if (evalResult.result && problem.witnessVar) {
+            showWitnessPrompt("witness");
+          }
+          // For false universals: ask for counterexample
+          else if (!evalResult.result && problem.counterexVar) {
+            showWitnessPrompt("counterexample");
+          }
+          // Otherwise just show feedback + trace
+          else {
+            showFeedback(true, null);
+            showTrace();
+          }
+        } else {
+          showFeedback(false, null);
+          showTrace(); // always show trace on wrong answer — this is the teaching moment
+        }
+      }
+
+      // ── Witness / counterexample buttons ──────────────────────────────────────
+      function showWitnessPrompt(kind) {
+        witnessPart.innerHTML = "";
+
+        const prompt = document.createElement("p");
+        prompt.className = "witness-prompt";
+
+        // Explain what a witness IS in terms of the textbook definition
+        if (kind === "witness") {
+          const varName = problem.witnessVar;
+          prompt.innerHTML =
+            `<strong>Find a witness</strong> for the existential. ` +
+            `According to the definition of truth for ∃, the sentence is true iff ` +
+            `there is some object <em>k</em> in the domain such that the body is true ` +
+            `when <em>${varName}</em> is assigned to <em>k</em>. ` +
+            `Which domain object works?`;
+        } else {
+          const varName = problem.counterexVar;
+          prompt.innerHTML =
+            `<strong>Find a counterexample</strong> to the universal. ` +
+            `∀${varName} φ is false iff there is some object <em>k</em> ` +
+            `such that φ is false when <em>${varName}</em> is assigned to <em>k</em>. ` +
+            `Which object is a counterexample?`;
+        }
+        witnessPart.appendChild(prompt);
+
+        const btnRow2 = document.createElement("div");
+        btnRow2.className = "btn-row";
+        model.domain.forEach(obj => {
+          const btn = makeButton(String(obj));
+          btn.className += " witness-btn";
+          btn.onclick = () => handleWitness(obj, kind, btn, btnRow2);
+          btnRow2.appendChild(btn);
+        });
+        witnessPart.appendChild(btnRow2);
+      }
+
+      function handleWitness(obj, kind, btn, row) {
+        // Check: is this object actually a witness / counterexample?
+        // Re-evaluate the formula body with this object assigned to the variable.
+        const varName = kind === "witness" ? problem.witnessVar : problem.counterexVar;
+        const bodyEval = evaluate(problem.formula.body, model, { [varName]: obj });
+
+        const correct = kind === "witness" ? bodyEval.result : !bodyEval.result;
+
+        // Mark all buttons disabled; highlight chosen one
+        Array.from(row.children).forEach(b => {
+          b.disabled = true;
+          b.classList.remove("selected-true", "selected-false");
+        });
+        btn.classList.add(correct ? "selected-true" : "selected-false");
+
+        // Build explanatory feedback
+        let msg;
+        if (correct && kind === "witness") {
+          msg = `✓ Correct! ${obj} is a witness: assigning ${varName} = ${obj} makes ` +
             `the body "${formulaToString(problem.formula.body)}" true.`;
-    } else if (correct && kind === "counterexample") {
-      msg = `✓ Correct! ${obj} is a counterexample: assigning ${varName} = ${obj} makes ` +
+        } else if (correct && kind === "counterexample") {
+          msg = `✓ Correct! ${obj} is a counterexample: assigning ${varName} = ${obj} makes ` +
             `the body "${formulaToString(problem.formula.body)}" false.`;
-    } else if (!correct && kind === "witness") {
-      msg = `✗ Not a witness. Assigning ${varName} = ${obj} makes ` +
+        } else if (!correct && kind === "witness") {
+          msg = `✗ Not a witness. Assigning ${varName} = ${obj} makes ` +
             `"${formulaToString(problem.formula.body)}" false. Try again.`;
-    } else {
-      msg = `✗ Not a counterexample. Assigning ${varName} = ${obj} makes ` +
+        } else {
+          msg = `✗ Not a counterexample. Assigning ${varName} = ${obj} makes ` +
             `"${formulaToString(problem.formula.body)}" true. Try again.`;
+        }
+
+        // If wrong, re-enable buttons so they can try again
+        if (!correct) {
+          setTimeout(() => Array.from(row.children).forEach(b => b.disabled = false), 800);
+        }
+
+        showFeedback(correct, msg);
+        if (correct) showTrace();
+      }
+
+      // ── Feedback helper ────────────────────────────────────────────────────────
+      function showFeedback(correct, customMsg) {
+        feedbackDiv.className = "feedback " + (correct ? "correct" : "incorrect");
+        feedbackDiv.textContent = customMsg ||
+          (correct ? "✓ Correct!" : "✗ Not quite — try again.");
+      }
+
+      // ── Trace helper ───────────────────────────────────────────────────────────
+      function showTrace() {
+        if (!evalResult) return;
+        tracePart.innerHTML = "";
+
+        const toggleBtn = makeButton("▶ Show evaluation trace");
+        toggleBtn.className = "trace-toggle";
+
+        const traceBox = document.createElement("div");
+        traceBox.className = "trace-box";
+
+        // Use the renderTrace function from Layer 2 to build the content
+        traceBox.appendChild(renderTrace(evalResult, 0));
+
+        toggleBtn.onclick = () => {
+          traceBox.classList.toggle("open");
+          toggleBtn.textContent = traceBox.classList.contains("open")
+            ? "▼ Hide evaluation trace"
+            : "▶ Show evaluation trace";
+        };
+
+        tracePart.appendChild(toggleBtn);
+        tracePart.appendChild(traceBox);
+      }
+
+      // Hook up main T/F buttons
+      trueBtn.onclick = () => handleTF(true);
+      falseBtn.onclick = () => handleTF(false);
+
+      return div;
     }
 
-    // If wrong, re-enable buttons so they can try again
-    if (!correct) {
-      setTimeout(() => Array.from(row.children).forEach(b => b.disabled = false), 800);
+    // ── Small DOM helpers ─────────────────────────────────────────────────────────
+
+    function makeButton(text) {
+      const btn = document.createElement("button");
+      btn.textContent = text;
+      return btn;
     }
 
-    showFeedback(correct, msg);
-    if (correct) showTrace();
-  }
+    // Creates a small toggle-button + hidden content block.
+    function makeToggle(label, content) {
+      const wrap = document.createElement("div");
+      wrap.className = "toggle-row";
 
-  // ── Feedback helper ────────────────────────────────────────────────────────
-  function showFeedback(correct, customMsg) {
-    feedbackDiv.className = "feedback " + (correct ? "correct" : "incorrect");
-    feedbackDiv.textContent = customMsg ||
-      (correct ? "✓ Correct!" : "✗ Not quite — try again.");
-  }
+      const btn = makeButton(label + " ▶");
+      btn.style.cssText = "font-size:0.78rem;padding:2px 8px;margin-top:4px;";
 
-  // ── Trace helper ───────────────────────────────────────────────────────────
-  function showTrace() {
-    if (!evalResult) return;
-    tracePart.innerHTML = "";
+      const box = document.createElement("div");
+      box.className = "toggle-content";
+      box.textContent = content;
 
-    const toggleBtn = makeButton("▶ Show evaluation trace");
-    toggleBtn.className = "trace-toggle";
+      btn.onclick = () => {
+        box.classList.toggle("open");
+        btn.textContent = box.classList.contains("open")
+          ? label + " ▼"
+          : label + " ▶";
+      };
 
-    const traceBox = document.createElement("div");
-    traceBox.className = "trace-box";
-
-    // Use the renderTrace function from Layer 2 to build the content
-    traceBox.appendChild(renderTrace(evalResult, 0));
-
-    toggleBtn.onclick = () => {
-      traceBox.classList.toggle("open");
-      toggleBtn.textContent = traceBox.classList.contains("open")
-        ? "▼ Hide evaluation trace"
-        : "▶ Show evaluation trace";
-    };
-
-    tracePart.appendChild(toggleBtn);
-    tracePart.appendChild(traceBox);
-  }
-
-  // Hook up main T/F buttons
-  trueBtn.onclick  = () => handleTF(true);
-  falseBtn.onclick = () => handleTF(false);
-
-  return div;
-}
-
-// ── Small DOM helpers ─────────────────────────────────────────────────────────
-
-function makeButton(text) {
-  const btn = document.createElement("button");
-  btn.textContent = text;
-  return btn;
-}
-
-// Creates a small toggle-button + hidden content block.
-function makeToggle(label, content) {
-  const wrap = document.createElement("div");
-  wrap.className = "toggle-row";
-
-  const btn = makeButton(label + " ▶");
-  btn.style.cssText = "font-size:0.78rem;padding:2px 8px;margin-top:4px;";
-
-  const box = document.createElement("div");
-  box.className = "toggle-content";
-  box.textContent = content;
-
-  btn.onclick = () => {
-    box.classList.toggle("open");
-    btn.textContent = box.classList.contains("open")
-      ? label + " ▼"
-      : label + " ▶";
-  };
-
-  wrap.appendChild(btn);
-  wrap.appendChild(box);
-  return wrap;
-}
-
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  LAYER 3 — WORKSHEET CONTENT
-//  Defines the specific model and problems for this worksheet.
-//  This is the only layer you need to edit to create a new worksheet.
-//  No logic here, no display code — just data.
-// ═══════════════════════════════════════════════════════════════════════════
-
-// ── Model Generator ────────────────────────────────────────────────────────
-// Generates a random model with domain {1,2,3}, a binary relation R,
-// and two names a and b assigned to distinct domain objects.
-
-function generateModel() {
-  const domain = [1, 2, 3];
-  const R = [];
-  for (const i of domain) {
-    for (const j of domain) {
-      if (Math.random() < 0.45) R.push([i, j]);
+      wrap.appendChild(btn);
+      wrap.appendChild(box);
+      return wrap;
     }
-  }
-  if (R.length === 0) R.push([1, 2]); // guarantee at least one pair
-
-  const shuffled = [...domain].sort(() => Math.random() - 0.5);
-  return { domain, names: { a: shuffled[0], b: shuffled[1] }, R };
-}
-
-// ── Problem List ───────────────────────────────────────────────────────────
-// Each problem uses the constructor helpers (ATOM, AND, EXISTS, etc.)
-// from Layer 1 to build formula trees.
-//
-// Fields:
-//   number       — display number
-//   stageLabel   — badge text
-//   formula      — the formula tree (built with helpers)
-//   english      — English paraphrase (shown in toggle)
-//   hint         — optional hint text
-//   witnessVar   — if set, after a correct TRUE answer the student picks a witness
-//                  (should be the outermost existential variable)
-//   counterexVar — if set, after a correct FALSE answer student picks counterexample
-//                  (should be the outermost universal variable)
-
-const PROBLEMS = [
-
-  // ── Stage 0: Atomic ──────────────────────────────────────────────────────
-  {
-    number: 1,
-    stageLabel: "Stage 0 · Atomic",
-    formula: ATOM("R", "a", "b"),
-    english: "The object named a stands in R to the object named b.",
-  },
-  {
-    number: 2,
-    stageLabel: "Stage 0 · Atomic",
-    formula: ATOM("R", "a", "a"),
-    english: "The object named a stands in R to itself.",
-  },
-
-  // ── Stage 1: Simple Existential ───────────────────────────────────────────
-  {
-    number: 3,
-    stageLabel: "Stage 1 · Existential",
-    formula: EXISTS("x", ATOM("R", "a", "x")),
-    english: "There is something that a bears R to.",
-    hint: "Is there any arrow going OUT from a?",
-    witnessVar: "x",
-  },
-  {
-    number: 4,
-    stageLabel: "Stage 1 · Existential",
-    formula: EXISTS("x", ATOM("R", "x", "x")),
-    english: "Something bears R to itself.",
-    hint: "Is there any self-loop in the diagram?",
-    witnessVar: "x",
-  },
-  {
-    number: 5,
-    stageLabel: "Stage 1 · Existential",
-    formula: EXISTS("x", AND(ATOM("R","a","x"), ATOM("R","x","b"))),
-    english: "There is something that a bears R to, and which bears R to b.",
-    hint: "Look for a 'middleman' between a and b.",
-    witnessVar: "x",
-  },
-
-  // ── Stage 2: Simple Universal ─────────────────────────────────────────────
-  {
-    number: 6,
-    stageLabel: "Stage 2 · Universal",
-    formula: FORALL("x", ATOM("R", "x", "a")),
-    english: "Everything bears R to a.",
-    hint: "Does every node have an arrow TO a?",
-    counterexVar: "x",
-  },
-  {
-    number: 7,
-    stageLabel: "Stage 2 · Universal",
-    formula: FORALL("x", IMPLIES(ATOM("R","x","x"), ATOM("R","x","a"))),
-    english: "Anything that bears R to itself also bears R to a.",
-    hint: "Find something with a self-loop but no arrow to a.",
-    counterexVar: "x",
-  },
-
-  // ── Stage 3: Nested quantifiers ───────────────────────────────────────────
-  // These are the hard ones that the trace helps most with.
-  {
-    number: 8,
-    stageLabel: "Stage 3 · Nested",
-    formula: EXISTS("x", FORALL("y", ATOM("R","x","y"))),
-    english: "There is something that bears R to everything.",
-    hint: "Is there a node with arrows to ALL other nodes (including itself)?",
-    witnessVar: "x",
-  },
-  {
-    number: 9,
-    stageLabel: "Stage 3 · Nested",
-    formula: FORALL("x", EXISTS("y", ATOM("R","x","y"))),
-    english: "Everything bears R to something.",
-    hint: "Does every node have at least one outgoing arrow?",
-    counterexVar: "x",
-  },
-  {
-    number: 10,
-    stageLabel: "Stage 3 · Nested",
-    formula: EXISTS("x", FORALL("y", ATOM("R","y","x"))),
-    english: "There is something that everything bears R to.",
-    hint: "Is there a node that every other node (including itself) points to?",
-    witnessVar: "x",
-  },
-];
 
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  INITIALISATION
-//  Wires layers 1–3 together.  Runs once on page load, again on reset.
-// ═══════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  LAYER 3 — WORKSHEET CONTENT
+    //  Defines the specific model and problems for this worksheet.
+    //  This is the only layer you need to edit to create a new worksheet.
+    //  No logic here, no display code — just data.
+    // ═══════════════════════════════════════════════════════════════════════════
 
-let currentModel = null;
+    // ── Model Generator ────────────────────────────────────────────────────────
+    // Generates a random model with domain {1,2,3}, a binary relation R,
+    // and two names a and b assigned to distinct domain objects.
 
-function initWorksheet() {
-  currentModel = generateModel();
+    function generateModel() {
+      const domain = [1, 2, 3];
+      const R = [];
+      for (const i of domain) {
+        for (const j of domain) {
+          if (Math.random() < 0.45) R.push([i, j]);
+        }
+      }
+      if (R.length === 0) R.push([1, 2]); // guarantee at least one pair
 
-  // Render model
-  displayModelText(currentModel);
-  drawModelSVG(currentModel);
+      const shuffled = [...domain].sort(() => Math.random() - 0.5);
+      return { domain, names: { a: shuffled[0], b: shuffled[1] }, R };
+    }
 
-  // Render problems
-  const container = document.getElementById("problems-container");
-  container.innerHTML = "";
-  for (const prob of PROBLEMS) {
-    container.appendChild(renderProblem(prob, currentModel));
-  }
+    // ── Problem List ───────────────────────────────────────────────────────────
+    // Each problem uses the constructor helpers (ATOM, AND, EXISTS, etc.)
+    // from Layer 1 to build formula trees.
+    //
+    // Fields:
+    //   number       — display number
+    //   stageLabel   — badge text
+    //   formula      — the formula tree (built with helpers)
+    //   english      — English paraphrase (shown in toggle)
+    //   hint         — optional hint text
+    //   witnessVar   — if set, after a correct TRUE answer the student picks a witness
+    //                  (should be the outermost existential variable)
+    //   counterexVar — if set, after a correct FALSE answer student picks counterexample
+    //                  (should be the outermost universal variable)
 
-  // Clear any completion message
-  document.getElementById("completion").innerHTML = "";
-}
+    const PROBLEMS = [
 
-// Kick everything off
-initWorksheet();
-</script>
+      // ── Stage 0: Atomic ──────────────────────────────────────────────────────
+      {
+        number: 1,
+        stageLabel: "Stage 0 · Atomic",
+        formula: ATOM("R", "a", "b"),
+        english: "The object named a stands in R to the object named b.",
+      },
+      {
+        number: 2,
+        stageLabel: "Stage 0 · Atomic",
+        formula: ATOM("R", "a", "a"),
+        english: "The object named a stands in R to itself.",
+      },
+
+      // ── Stage 1: Simple Existential ───────────────────────────────────────────
+      {
+        number: 3,
+        stageLabel: "Stage 1 · Existential",
+        formula: EXISTS("x", ATOM("R", "a", "x")),
+        english: "There is something that a bears R to.",
+        hint: "Is there any arrow going OUT from a?",
+        witnessVar: "x",
+      },
+      {
+        number: 4,
+        stageLabel: "Stage 1 · Existential",
+        formula: EXISTS("x", ATOM("R", "x", "x")),
+        english: "Something bears R to itself.",
+        hint: "Is there any self-loop in the diagram?",
+        witnessVar: "x",
+      },
+      {
+        number: 5,
+        stageLabel: "Stage 1 · Existential",
+        formula: EXISTS("x", AND(ATOM("R", "a", "x"), ATOM("R", "x", "b"))),
+        english: "There is something that a bears R to, and which bears R to b.",
+        hint: "Look for a 'middleman' between a and b.",
+        witnessVar: "x",
+      },
+
+      // ── Stage 2: Simple Universal ─────────────────────────────────────────────
+      {
+        number: 6,
+        stageLabel: "Stage 2 · Universal",
+        formula: FORALL("x", ATOM("R", "x", "a")),
+        english: "Everything bears R to a.",
+        hint: "Does every node have an arrow TO a?",
+        counterexVar: "x",
+      },
+      {
+        number: 7,
+        stageLabel: "Stage 2 · Universal",
+        formula: FORALL("x", IMPLIES(ATOM("R", "x", "x"), ATOM("R", "x", "a"))),
+        english: "Anything that bears R to itself also bears R to a.",
+        hint: "Find something with a self-loop but no arrow to a.",
+        counterexVar: "x",
+      },
+
+      // ── Stage 3: Nested quantifiers ───────────────────────────────────────────
+      // These are the hard ones that the trace helps most with.
+      {
+        number: 8,
+        stageLabel: "Stage 3 · Nested",
+        formula: EXISTS("x", FORALL("y", ATOM("R", "x", "y"))),
+        english: "There is something that bears R to everything.",
+        hint: "Is there a node with arrows to ALL other nodes (including itself)?",
+        witnessVar: "x",
+      },
+      {
+        number: 9,
+        stageLabel: "Stage 3 · Nested",
+        formula: FORALL("x", EXISTS("y", ATOM("R", "x", "y"))),
+        english: "Everything bears R to something.",
+        hint: "Does every node have at least one outgoing arrow?",
+        counterexVar: "x",
+      },
+      {
+        number: 10,
+        stageLabel: "Stage 3 · Nested",
+        formula: EXISTS("x", FORALL("y", ATOM("R", "y", "x"))),
+        english: "There is something that everything bears R to.",
+        hint: "Is there a node that every other node (including itself) points to?",
+        witnessVar: "x",
+      },
+    ];
+
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  INITIALISATION
+    //  Wires layers 1–3 together.  Runs once on page load, again on reset.
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    let currentModel = null;
+
+    function initWorksheet() {
+      currentModel = generateModel();
+
+      // Render model
+      displayModelText(currentModel);
+      drawModelSVG(currentModel);
+
+      // Render problems
+      const container = document.getElementById("problems-container");
+      container.innerHTML = "";
+      for (const prob of PROBLEMS) {
+        container.appendChild(renderProblem(prob, currentModel));
+      }
+
+      // Clear any completion message
+      document.getElementById("completion").innerHTML = "";
+    }
+
+    // Kick everything off
+    initWorksheet();
+  </script>
 
 </body>
+
 </html>

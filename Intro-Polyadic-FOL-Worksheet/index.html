@@ -707,23 +707,31 @@
         if (from === to) {
           // Self-loop
           const pos = positions[from];
-          const loopRadius = 25;
+          const nodeRadius = 26; // tightly match node radius (25) + small gap
           const angle = from === 1 ? -90 : (from === 2 ? 30 : 150);
-          const angleRad = angle * Math.PI / 180;
-          const cx = pos.x + Math.cos(angleRad) * loopRadius;
-          const cy = pos.y + Math.sin(angleRad) * loopRadius;
           
           const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          const startAngle = angle - 90;
-          const endAngle = angle + 90;
-          const startRad = startAngle * Math.PI / 180;
-          const endRad = endAngle * Math.PI / 180;
-          const startX = cx + Math.cos(startRad) * loopRadius;
-          const startY = cy + Math.sin(startRad) * loopRadius;
-          const endX = cx + Math.cos(endRad) * loopRadius;
-          const endY = cy + Math.sin(endRad) * loopRadius;
           
-          path.setAttribute('d', `M ${startX} ${startY} A ${loopRadius} ${loopRadius} 0 1 1 ${endX} ${endY}`);
+          // Calculate start and end points on the edge of the node
+          const startAngle = (angle - 25) * Math.PI / 180;
+          const endAngle = (angle + 25) * Math.PI / 180;
+          
+          const startX = pos.x + Math.cos(startAngle) * nodeRadius;
+          const startY = pos.y + Math.sin(startAngle) * nodeRadius;
+          const endX = pos.x + Math.cos(endAngle) * nodeRadius;
+          const endY = pos.y + Math.sin(endAngle) * nodeRadius;
+          
+          // Calculate control points for the Bezier curve (teardrop shape)
+          const cpDistance = 80;
+          const cp1Angle = (angle - 45) * Math.PI / 180;
+          const cp2Angle = (angle + 45) * Math.PI / 180;
+          
+          const cp1X = pos.x + Math.cos(cp1Angle) * cpDistance;
+          const cp1Y = pos.y + Math.sin(cp1Angle) * cpDistance;
+          const cp2X = pos.x + Math.cos(cp2Angle) * cpDistance;
+          const cp2Y = pos.y + Math.sin(cp2Angle) * cpDistance;
+          
+          path.setAttribute('d', `M ${startX} ${startY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${endX} ${endY}`);
           path.setAttribute('stroke', '#2c3e50');
           path.setAttribute('stroke-width', '2');
           path.setAttribute('fill', 'none');
