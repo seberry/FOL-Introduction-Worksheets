@@ -1,0 +1,205 @@
+:root {
+  --bg: #f4efe4;
+  --panel: #fffdf8;
+  --ink: #1f1d1a;
+  --muted: #6b6459;
+  --accent: #0c6e6e;
+  --bad: #a11f2a;
+  --good: #146c2e;
+  --border: #d8cfbf;
+  --edu-bg: #eaf4f4;
+  --choice-hover: #f0f8f8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: linear-gradient(160deg, #f9f5eb 0%, #efe7d8 65%, #e6dcc9 100%);
+  min-height: 100vh;
+}
+
+.topbar {
+  padding: 1rem 1.2rem;
+  border-bottom: 2px solid var(--border);
+  background: #fff9ef;
+}
+
+.topbar h1 { margin: 0; font-size: 1.35rem; }
+.topbar p { margin: 0.35rem 0 0; color: var(--muted); }
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 800px;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.hidden { display: none !important; }
+
+.edu-box {
+  background: var(--edu-bg);
+  border-left: 4px solid var(--accent);
+  padding: 1rem;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.edu-box p { margin: 0 0 0.5rem 0; }
+.edu-box p:last-child { margin: 0; }
+.edu-box ol { margin: 0.5rem 0 0 0; padding-left: 1.5rem; }
+
+.question-block {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dotted var(--border);
+}
+
+.question-block h3 { margin: 0 0 0.5rem 0; font-size: 1.1rem; }
+
+.vertical-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+button.choice-btn {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: left;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button.choice-btn:hover {
+  background: var(--choice-hover);
+  border-color: var(--accent);
+}
+
+button.choice-btn.selected-correct {
+  background: #e6f4ea;
+  border-color: var(--good);
+  color: var(--good);
+  font-weight: bold;
+}
+
+button.choice-btn.selected-wrong {
+  background: #fce8e6;
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+button.choice-btn pre {
+  margin: 0;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.controls {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+button.primary-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+button.primary-btn:hover { background: #0a5c5c; }
+
+.feedback {
+  min-height: 1.5rem;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+.feedback.ok { color: var(--good); }
+.feedback.bad { color: var(--bad); }
+
+/* Builder CSS from logic-proof-game */
+.built, .step {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+.step-container { margin-top: 1.5rem; }
+
+.built ol {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.built-row {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.built-why { color: #666; font-size: 0.9rem; font-style: italic; }
+
+.horseshoe-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.diagram-panel {
+  flex: 0 0 240px;
+  background: #fdfdfd;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+.diagram-panel h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--muted);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+.diagram-pre {
+  margin: 0;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.proof-builder {
+  flex: 1 1 350px;
+  min-width: 0;
+}

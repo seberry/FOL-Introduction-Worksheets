@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rule Soundness Builder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Rule Soundness Builder</h1>
+    <p>Practice proving that TFL inference rules are <strong>shininess-preserving</strong>.</p>
+  </header>
+
+  <main class="layout">
+    
+    <!-- Rule Selection -->
+    <section id="ruleSelection" class="panel">
+      <h2>Select a Rule to Prove Sound</h2>
+      <div id="ruleButtons" class="controls">
+        <!-- populated by JS -->
+      </div>
+    </section>
+
+    <!-- Phase 1: Milking the Syntax -->
+    <section id="phase1" class="panel hidden">
+      <h2>Phase 1: Milking the Syntax</h2>
+      <div class="edu-box">
+        <p><strong>Boilerplate:</strong> Suppose all lines <i>m < n</i> are shiny, and line <i>n</i> is justified by <strong id="ruleNameDisplay">...</strong>. To show that this rule is rule-sound, we must show that line <i>n</i> is shiny (i.e. δₙ ⊨ φₙ).</p>
+      </div>
+
+      <div class="question-block">
+        <h3>1. The Syntactic Schema</h3>
+        <p>Which of the following describes the syntactic structure of a valid application of this rule?</p>
+        <div id="schemaOptions" class="vertical-choices"></div>
+      </div>
+
+      <div id="deltaBlock" class="question-block hidden">
+        <h3>2. Assumption Relationships</h3>
+        <p>Because we cannot reach into closed subproofs, how do the assumptions on the earlier cited lines relate to δₙ?</p>
+        <div id="deltaOptions" class="vertical-choices"></div>
+      </div>
+      
+      <p id="phase1Feedback" class="feedback"></p>
+    </section>
+
+    <!-- Phase 2: The Horseshoe -->
+    <section id="phase2" class="panel hidden">
+      <h2>Phase 2: The Horseshoe</h2>
+      <div class="edu-box">
+        <p>Now we execute the <strong>Horseshoe Method</strong>. We use script metavariables like 𝒜 and ℬ to stand in for arbitrary sentences, since this proof must apply generally to any valid application of the rule.</p>
+        <ol>
+          <li><strong>Start on Bottom Left (Assumption):</strong> Consider an arbitrary valuation <i>v</i> satisfying δₙ</li>
+          <li><strong>Up (By Rule Syntax):</strong> Inference about how <i>v</i> relates to δᵢ (via subset facts)</li>
+          <li><strong>Across (By Inductive Hypothesis):</strong> Inference about how <i>v</i> relates to φᵢ (via the Inductive Hypothesis)</li>
+          <li><strong>Down:</strong> Inference that <i>v</i> satisfies φₙ</li>
+        </ol>
+      </div>
+
+      <div class="horseshoe-layout">
+        <div class="diagram-panel">
+          <h3>Schema & Steps Guide</h3>
+          <pre id="horseshoeDiagramView" class="diagram-pre"></pre>
+        </div>
+
+        <div class="proof-builder">
+          <h3>Drafted Proof</h3>
+          <div id="ruleBuilt" class="built"></div>
+         
+          <div id="sentenceBankContainer" class="step-container">
+            <h4>Sentence Bank: Select the correct claim</h4>
+            <div id="sentenceBank" class="choices vertical-choices"></div>
+          </div>
+
+          <div id="justificationContainer" class="step-container hidden">
+            <div id="ruleStep" class="step"></div>
+            <div id="ruleChoices" class="choices vertical-choices"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="resetRuleBtn">Restart Proof</button>
+      </div>
+      <p id="ruleFeedback" class="feedback"></p>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
