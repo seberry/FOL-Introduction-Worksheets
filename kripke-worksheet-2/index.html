@@ -41,6 +41,7 @@
     .note { background: #fef3c7; color: #92400e; padding: 0.6rem 0.75rem; border-radius: 0.5rem; margin: 0.75rem 0; }
     .check-button { margin-top: 0.75rem; padding: 0.5rem 0.9rem; border-radius: 999px; border: none; background: #16a34a; color: white; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
     #result { margin-top: 0.75rem; background: #111827; color: #e5e7eb; padding: 0.75rem; border-radius: 0.5rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.85rem; white-space: pre-wrap; }
+    #result:empty { display: none; }
     #playground-panel { margin-top: 1.25rem; background: #ffffff; border-radius: 0.75rem; border: 1px solid #e5e7eb; overflow: hidden; }
     #playground-header { padding: 0.5rem 0.75rem; border-bottom: 1px solid #e5e7eb; font-size: 0.9rem; background: #f9fafb; }
     #playground-frame { border: none; width: 100%; height: 700px; }
@@ -63,23 +64,14 @@
     <ul id="constraint-list" class="constraint-list"></ul>
     <button class="check-button" onclick="checkCurrentProblem()">Check current model</button>
     <div id="result"></div>
-    <section id="playground-panel">
-      <div id="playground-header">Build a model for the active problem, then click "Check current model".</div>
-      <iframe id="playground-frame" src="../kripke-worksheet/modallogic/index.html" title="Modal Logic Playground"></iframe>
-      <div style="
-  text-align: right;
-  font-size: 0.85rem;
-  color: #374151;
-  padding: 0.6rem 0.85rem 0.75rem;
-  border-top: 1px solid #e5e7eb;
-  background: #f9fafb;
-">
-  <strong>Model editor based on</strong> 
+    <div id="playground-header">Build a model for the active problem, then click "Check current model".</div>
+    <strong>Note: This model editor is a tiny modification of</strong> 
   <a href="https://github.com/rkirsling/modallogic" target="_blank" 
      style="color: #2563eb; text-decoration: underline; font-weight: 600;">
     Ross Kirsling's Modal Logic Playground
   </a>
-</div>
+    <section id="playground-panel">
+      <iframe id="playground-frame" src="../kripke-worksheet/modallogic/index.html" title="Modal Logic Playground"></iframe>
     </section>
   </main>
 </div>
