@@ -153,7 +153,7 @@
 
           <div id="playground-header">
         Use the editor below to build a model for the active problem.
-        Then click “Check current model”.
+        Then click "Check current model".
       </div>
         <strong>Note: This model editor is a tiny modification of</strong> 
   <a href="https://github.com/rkirsling/modallogic" target="_blank" 
@@ -495,7 +495,7 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
         const ok = (val === c.expected);
         allOk = allOk && ok;
         lines.push(
-          `At w${c.world + 1}: ${c.formula} is ${val ? "T" : "F"} (expected ${c.expected ? "T" : "F"})`
+          `At w${c.world}: ${c.formula} is ${val ? "T" : "F"} (expected ${c.expected ? "T" : "F"})`
         );
       } else if (c.type === "different") {
         const fA = new MPL.Wff(c.formulaA);
@@ -550,7 +550,6 @@ document.getElementById('playground-frame').addEventListener('load', resizePlayg
 </script>
 
 </body>
-
 
 
 </html>
