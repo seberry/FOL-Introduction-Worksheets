@@ -432,7 +432,7 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
     }
 
     // Worlds: W: 1,2,...
-    const W = "W: " + (worldIndices.length ? worldIndices.map(i => i + 1).join(", ") : "—");
+    const W = "W: " + (worldIndices.length ? worldIndices.join(", ") : "—");
 
     // Accessibility relation R
     const pairs = [];
@@ -440,7 +440,7 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
       const succ = model.getSuccessorsOf(i);
       for (const j of succ) {
         if (worldIndices.includes(j)) {
-          pairs.push(`⟨${i + 1},${j + 1}⟩`);
+          pairs.push(`⟨${i },${j }⟩`);
         }
       }
     }
@@ -459,7 +459,7 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
       const st = states[i] || {};
       for (const v of vars) {
         const val = !!st[v];
-        nuParts.push(`ν${i + 1}(${v}) = ${val ? "T" : "F"}`);
+        nuParts.push(`ν${i }(${v}) = ${val ? "T" : "F"}`);
       }
     }
     const nu = "ν: " + (nuParts.length ? nuParts.join(", ") : "—");
