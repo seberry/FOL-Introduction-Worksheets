@@ -336,11 +336,233 @@ var MPL = (function (FormulaParser) {
     return _truth(model, state, wff.json());
   }
 
+  // ========================================================================
+  // ADDED: Truth evaluation with trace support
+  // ========================================================================
+
+  /**
+   * Evaluate the truth of an MPL wff (in JSON representation) at a given state within a given model,
+   * returning both the result and a detailed trace of the evaluation.
+   * @private
+   */
+  function _truth_with_trace(model, state, json, ascii) {
+    // Build trace node structure
+    var trace = {
+      formula: ascii,
+      world: state,
+      result: null,
+      type: null,
+      children: [],
+      details: {}
+    };
+
+    var result;
+
+    if (json.prop) {
+      trace.type = 'prop';
+      result = model.valuation(json.prop, state);
+      trace.details.prop = json.prop;
+      trace.details.value = result;
+    }
+    else if (json.neg) {
+      trace.type = 'neg';
+      var child = _truth_with_trace(model, state, json.neg, '~' + _jsonToASCII(json.neg));
+      result = !child.result;
+      trace.children.push(child);
+      trace.details.operand = child.result;
+    }
+    else if (json.conj) {
+      trace.type = 'conj';
+      var left = _truth_with_trace(model, state, json.conj[0], _jsonToASCII(json.conj[0]));
+      var right = _truth_with_trace(model, state, json.conj[1], _jsonToASCII(json.conj[1]));
+      result = (left.result && right.result);
+      trace.children.push(left, right);
+      trace.details.left = left.result;
+      trace.details.right = right.result;
+    }
+    else if (json.disj) {
+      trace.type = 'disj';
+      var left = _truth_with_trace(model, state, json.disj[0], _jsonToASCII(json.disj[0]));
+      var right = _truth_with_trace(model, state, json.disj[1], _jsonToASCII(json.disj[1]));
+      result = (left.result || right.result);
+      trace.children.push(left, right);
+      trace.details.left = left.result;
+      trace.details.right = right.result;
+    }
+    else if (json.impl) {
+      trace.type = 'impl';
+      var left = _truth_with_trace(model, state, json.impl[0], _jsonToASCII(json.impl[0]));
+      var right = _truth_with_trace(model, state, json.impl[1], _jsonToASCII(json.impl[1]));
+      result = (!left.result || right.result);
+      trace.children.push(left, right);
+      trace.details.left = left.result;
+      trace.details.right = right.result;
+    }
+    else if (json.equi) {
+      trace.type = 'equi';
+      var left = _truth_with_trace(model, state, json.equi[0], _jsonToASCII(json.equi[0]));
+      var right = _truth_with_trace(model, state, json.equi[1], _jsonToASCII(json.equi[1]));
+      result = (left.result === right.result);
+      trace.children.push(left, right);
+      trace.details.left = left.result;
+      trace.details.right = right.result;
+    }
+    else if (json.nec) {
+      trace.type = 'nec';
+      var successors = model.getSuccessorsOf(state);
+      var subResults = [];
+      
+      successors.forEach(function (succState) {
+        var child = _truth_with_trace(model, succState, json.nec, _jsonToASCII(json.nec));
+        subResults.push({ world: succState, result: child.result, trace: child.trace });
+      });
+      
+      result = subResults.every(function (sr) { return sr.result; });
+      trace.children = subResults;
+      trace.details.worldsChecked = successors;
+      trace.details.allSatisfy = result;
+    }
+    else if (json.poss) {
+      trace.type = 'poss';
+      var successors = model.getSuccessorsOf(state);
+      var subResults = [];
+      
+      successors.forEach(function (succState) {
+        var child = _truth_with_trace(model, succState, json.poss, _jsonToASCII(json.poss));
+        subResults.push({ world: succState, result: child.result, trace: child.trace });
+      });
+      
+      result = subResults.some(function (sr) { return sr.result; });
+      trace.children = subResults;
+      trace.details.worldsChecked = successors;
+      trace.details.someSatisfy = result;
+    }
+    else {
+      throw new Error('Invalid formula!');
+    }
+
+    trace.result = result;
+    return { result: result, trace: trace };
+  }
+
+  /**
+   * Evaluate the truth of an MPL wff at a given state within a given model,
+   * returning both the result and a detailed trace of the evaluation.
+   */
+  function truthWithTrace(model, state, wff) {
+    if (!(model instanceof MPL.Model)) throw new Error('Invalid model!');
+    if (!model.getStates()[state]) throw new Error('State ' + state + ' not found!');
+    if (!(wff instanceof MPL.Wff)) throw new Error('Invalid wff!');
+
+    return _truth_with_trace(model, state, wff.json(), wff.ascii());
+  }
+
+  /**
+   * Format a trace tree into a readable indented string.
+   */
+  function formatTrace(trace, indent) {
+    if (typeof indent === 'undefined') indent = 0;
+    var spaces = '  '.repeat(indent);
+    var prefix = indent === 0 ? '' : (indent === 1 ? '├─ ' : '│  ├─ ');
+    var resultSymbol = trace.result ? 'T' : 'F';
+    var checkMark = trace.result ? '✓' : '✗';
+
+    var line = '';
+    var subLines = [];
+
+    if (trace.type === 'prop') {
+      line = spaces + prefix + trace.formula + ' = ' + (trace.details.value ? 'T' : 'F');
+    }
+    else if (trace.type === 'neg') {
+      line = spaces + prefix + '~' + trace.children[0].formula + ' = ' + resultSymbol;
+      subLines.push(formatTrace(trace.children[0], indent + 1));
+    }
+    else if (trace.type === 'conj') {
+      var left = trace.children[0];
+      var right = trace.children[1];
+      line = spaces + prefix + '(' + left.formula + ' & ' + right.formula + ') = ' + resultSymbol;
+      subLines.push(formatTrace(left, indent + 1));
+      subLines.push(formatTrace(right, indent + 1));
+      subLines.push(spaces + '│  └→ ' + (left.result ? 'T' : 'F') + ' & ' + (right.result ? 'T' : 'F') + ' = ' + resultSymbol + ' ' + checkMark);
+    }
+    else if (trace.type === 'disj') {
+      var left = trace.children[0];
+      var right = trace.children[1];
+      line = spaces + prefix + '(' + left.formula + ' | ' + right.formula + ') = ' + resultSymbol;
+      subLines.push(formatTrace(left, indent + 1));
+      subLines.push(formatTrace(right, indent + 1));
+      subLines.push(spaces + '│  └→ ' + (left.result ? 'T' : 'F') + ' | ' + (right.result ? 'T' : 'F') + ' = ' + resultSymbol + ' ' + checkMark);
+    }
+    else if (trace.type === 'impl') {
+      var left = trace.children[0];
+      var right = trace.children[1];
+      line = spaces + prefix + '(' + left.formula + ' → ' + right.formula + ') = ' + resultSymbol;
+      subLines.push(formatTrace(left, indent + 1));
+      subLines.push(formatTrace(right, indent + 1));
+      subLines.push(spaces + '│  └→ (' + (left.result ? 'T' : 'F') + ' → ' + (right.result ? 'T' : 'F') + ') = ' + resultSymbol + ' ' + checkMark);
+    }
+    else if (trace.type === 'equi') {
+      var left = trace.children[0];
+      var right = trace.children[1];
+      line = spaces + prefix + '(' + left.formula + ' ↔ ' + right.formula + ') = ' + resultSymbol;
+      subLines.push(formatTrace(left, indent + 1));
+      subLines.push(formatTrace(right, indent + 1));
+      subLines.push(spaces + '│  └→ (' + (left.result ? 'T' : 'F') + ' ↔ ' + (right.result ? 'T' : 'F') + ') = ' + resultSymbol + ' ' + checkMark);
+    }
+    else if (trace.type === 'nec') {
+      var subFormula = trace.children[0] ? trace.children[0].trace.formula : '...';
+      var worldsStr = trace.details.worldsChecked.map(function (w) { return 'w' + w; }).join(', ');
+      line = spaces + prefix + '□(' + subFormula + ') = ' + resultSymbol;
+      subLines.push(spaces + '│  □: Checking all accessible worlds [' + worldsStr + ']');
+      trace.children.forEach(function (child) {
+        subLines.push(spaces + '│  │');
+        subLines.push(spaces + '│  ├─ At w' + child.world + ':');
+        subLines.push(formatTrace(child.trace, indent + 2));
+      });
+      subLines.push(spaces + '│  └→ ' + (trace.details.allSatisfy ? 'All worlds satisfy' : 'Not all worlds satisfy') + ' → ' + resultSymbol + ' ' + checkMark);
+    }
+    else if (trace.type === 'poss') {
+      var subFormula = trace.children[0] ? trace.children[0].trace.formula : '...';
+      var worldsStr = trace.details.worldsChecked.map(function (w) { return 'w' + w; }).join(', ');
+      line = spaces + prefix + '◇(' + subFormula + ') = ' + resultSymbol;
+      subLines.push(spaces + '│  ◇: Checking some accessible world [' + worldsStr + ']');
+      trace.children.forEach(function (child) {
+        subLines.push(spaces + '│  │');
+        subLines.push(spaces + '│  ├─ At w' + child.world + ':');
+        subLines.push(formatTrace(child.trace, indent + 2));
+      });
+      subLines.push(spaces + '│  └→ ' + (trace.details.someSatisfy ? 'Some world satisfies' : 'No world satisfies') + ' → ' + resultSymbol + ' ' + checkMark);
+    }
+
+    var output = line;
+    if (subLines.length > 0) {
+      output = subLines.join('\n');
+      if (indent > 0) {
+        output = line + '\n' + output;
+      }
+    }
+
+    return output;
+  }
+
+  /**
+   * Format a trace result into a complete readable string with header.
+   */
+  function formatTraceResult(traceResult) {
+    var header = 'Evaluating: ' + traceResult.trace.formula + ' at w' + traceResult.trace.world;
+    var traceText = formatTrace(traceResult.trace, 0);
+    var footer = '→ Result: ' + (traceResult.result ? 'TRUE' : 'FALSE');
+    return header + '\n' + traceText + '\n' + footer;
+  }
+
   // export public methods
   return {
     Wff: Wff,
     Model: Model,
-    truth: truth
+    truth: truth,
+    truthWithTrace: truthWithTrace,
+    formatTrace: formatTrace,
+    formatTraceResult: formatTraceResult
   };
 
 })(FormulaParser);

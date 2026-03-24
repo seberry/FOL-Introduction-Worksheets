@@ -514,6 +514,27 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
     p.solved = allOk;
     renderProblemList();
 
+    
+    // Build trace for each constraint
+    let traceLines = [];
+    for (const c of p.constraints) {
+      if (c.type === "truth") {
+        const wff = new MPL.Wff(c.formula);
+        const tr = MPL.truthWithTrace(model, c.world, wff);
+        traceLines.push(tr.trace);
+        traceLines.push("");  // blank line between traces
+      } else if (c.type === "different") {
+        const fA = new MPL.Wff(c.formulaA);
+        const fB = new MPL.Wff(c.formulaB);
+        const trA = MPL.truthWithTrace(model, c.world, fA);
+        const trB = MPL.truthWithTrace(model, c.world, fB);
+        traceLines.push(trA.trace);
+        traceLines.push("");
+        traceLines.push(trB.trace);
+        traceLines.push("");
+      }
+    }
+
     let out = lines.join("\n") + "\n\n";
     if (allOk) {
       out += "✅ Solved!\n\nModel in Forall x style:\n";
@@ -521,9 +542,10 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
     } else {
       out += "❌ Not yet — adjust your model and try again.";
     }
-
+    out += "\n\n--- Evaluation Trace ---\n\n";
+    out += traceLines.join("\n");
     document.getElementById("result").textContent = out;
-  }
+}
 
   // --- Init ------------------------------------------------------------------
 

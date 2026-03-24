@@ -12,7 +12,7 @@
 /**
  * Modal Logic Playground -- application code
  *
- * Dependencies: D3, MathJax, MPL
+ * Dependencies: D3, MathJax, MPL-trace
  *
  * Copyright (c) 2013 Ross Kirsling
  * Released under the MIT License.
@@ -25,11 +25,11 @@ var MODE = {
     },
     appMode = MODE.EDIT;
 
-// set up initial MPL model (loads saved model if available, default otherwise)
+// set up initial MPL-trace model (loads saved model if available, default otherwise)
 var propvars = ['P','Q','R','S','T'],
     varCount = 2;
 
-var model = new MPL.Model(),
+var model = new MPL-trace.Model(),
     modelString = 'AS1;ApS1,2;AqS;';
 
 var modelParam = window.location.search.match(/\?model=(.*)/);
@@ -37,7 +37,7 @@ if(modelParam) modelString = modelParam[1];
 
 model.loadFromModelString(modelString);
 
-// set up initial nodes and links (edges) of graph, based on MPL model
+// set up initial nodes and links (edges) of graph, based on MPL-trace model
 var lastNodeId = -1,
     nodes = [],
     links = [];
@@ -202,7 +202,7 @@ function evaluateFormula() {
   // parse formula and catch bad input
   var wff = null;
   try {
-    wff = new MPL.Wff(formula);
+    wff = new MPL-trace.Wff(formula);
   } catch(e) {
     evalOutput
       .html('<div class="alert">Invalid formula!</div>')
@@ -215,7 +215,7 @@ function evaluateFormula() {
       falseStates = [];
   nodes.forEach(function(node, index) {
     var id = node.id,
-        truthVal = MPL.truth(model, id, wff);
+        truthVal = MPL-trace.truth(model, id, wff);
 
     if(truthVal) trueStates.push(id);
     else falseStates.push(id);
