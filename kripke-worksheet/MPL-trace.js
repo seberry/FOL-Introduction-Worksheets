@@ -465,8 +465,9 @@ var MPL = (function (FormulaParser) {
    * result and a human-readable trace string.
    */
   function truthWithTrace(model, state, wff) {
-    if (!(model instanceof MPL.Model)) throw new Error('Invalid model!');
-    if (!model.getStates()[state]) throw new Error('State ' + state + ' not found!');
+    // Allow models from other MPL instances (e.g. iframe)
+    if (typeof model.valuation !== 'function') throw new Error('Invalid model!');
+    if (typeof model.getSuccessorsOf !== 'function') throw new Error('Invalid model!');
     if (!(wff instanceof MPL.Wff)) throw new Error('Invalid wff!');
 
     var traceResult = _trace(model, state, wff.json(), 0);
@@ -474,8 +475,8 @@ var MPL = (function (FormulaParser) {
       result: traceResult.result,
       trace: traceResult.lines.join('\n')
     };
-  }
-
+}
+ 
   // export public methods
   return {
     Wff: Wff,

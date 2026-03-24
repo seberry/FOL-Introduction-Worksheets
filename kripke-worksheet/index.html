@@ -129,6 +129,8 @@
         border: none;
     }
   </style>
+  <script src="formula-parser.min.js"></script>
+<script src="MPL-trace.js"></script>
 </head>
 <body>
 
@@ -480,7 +482,7 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
 
     const p = problems[activeIndex];
     const model = win.model;
-    const MPL = win.MPL;
+    const iframeMPL = win.MPL;
 
     // Persist model so when we switch away and back, we reload it
     p.modelString = model.getModelString();
@@ -490,18 +492,18 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
 
     for (const c of p.constraints) {
       if (c.type === "truth") {
-        const wff = new MPL.Wff(c.formula);
-        const val = MPL.truth(model, c.world, wff);
+        const wff = new iframeMPL.Wff(c.formula);
+        const val = iframeMPL.truth(model, c.world, wff);
         const ok = (val === c.expected);
         allOk = allOk && ok;
         lines.push(
           `At w${c.world}: ${c.formula} is ${val ? "T" : "F"} (expected ${c.expected ? "T" : "F"})`
         );
       } else if (c.type === "different") {
-        const fA = new MPL.Wff(c.formulaA);
-        const fB = new MPL.Wff(c.formulaB);
-        const valA = MPL.truth(model, c.world, fA);
-        const valB = MPL.truth(model, c.world, fB);
+        const fA = new iframeMPL.Wff(c.formulaA);
+        const fB = new iframeMPL.Wff(c.formulaB);
+        const valA = iframeMPL.truth(model, c.world, fA);
+        const valB = iframeMPL.truth(model, c.world, fB);
         const ok = (valA !== valB);
         allOk = allOk && ok;
         lines.push(
