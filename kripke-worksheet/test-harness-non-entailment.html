@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Non-Entailment Harness</title>
+</head>
+<body>
+  <pre id="status">booting</pre>
+  <iframe id="sheet" src="non-entailment.html" style="width: 1200px; height: 1800px;"></iframe>
+  <script>
+    (function () {
+      var status = document.getElementById('status');
+      var sheet = document.getElementById('sheet');
+      var timeoutMs = 15000;
+      var started = Date.now();
+
+      function fail(message) {
+        status.textContent = 'ERROR\n' + message;
+      }
+
+      function tryRun() {
+        if (Date.now() - started > timeoutMs) {
+          fail('Timed out waiting for nested iframes.');
+          return;
+        }
+
+        try {
+          var appWin = sheet.contentWindow;
+          if (!appWin || !appWin.document) {
+            setTimeout(tryRun, 200);
+            return;
+          }
+
+          var playgroundFrame = appWin.document.getElementById('playground-frame');
+          if (!playgroundFrame || !playgroundFrame.contentWindow || !playgroundFrame.contentWindow.model || !playgroundFrame.contentWindow.MPL) {
+            setTimeout(tryRun, 200);
+            return;
+          }
+
+          var playWin = playgroundFrame.contentWindow;
+          playWin.model.loadFromModelString('AS1,2;AQS;APS;');
+          appWin.worksheetApp.checkCurrentProblem();
+
+          var result = appWin.document.getElementById('result');
+          status.textContent = result ? result.textContent : 'ERROR\nNo result node found.';
+        } catch (err) {
+          setTimeout(tryRun, 200);
+        }
+      }
+
+      sheet.addEventListener('load', function () {
+        setTimeout(tryRun, 200);
+      });
+    })();
+  </script>
+</body>
+</html>

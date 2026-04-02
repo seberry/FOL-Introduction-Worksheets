@@ -65,6 +65,15 @@ var MPL = (function (FormulaParser) {
   }
 
   /**
+   * Converts an MPL wff from JSON to trace display notation.
+   * Uses 'v' for disjunction while preserving parser-facing ASCII elsewhere.
+   * @private
+   */
+  function _jsonToTraceDisplay(json) {
+    return _jsonToASCII(json).replace(/ \| /g, ' v ');
+  }
+
+  /**
    * Converts an MPL wff from ASCII to LaTeX.
    * @private
    */
@@ -336,11 +345,151 @@ var MPL = (function (FormulaParser) {
     return _truth(model, state, wff.json());
   }
 
+  // ========================================================================
+  // Truth evaluation with trace (discovery-order, lines-based)
+  // ========================================================================
+
+  /**
+   * Helper: truth value as readable string.
+   * @private
+   */
+  function _tv(b) { return b ? 'TRUE' : 'FALSE'; }
+
+  /**
+   * Helper: connective symbol for summary lines.
+   * @private
+   */
+  var _sym = {
+    conj: '&', disj: 'v', impl: '->', equi: '<->'
+  };
+
+  /**
+   * Evaluate an MPL wff at a state, returning the boolean result
+   * and an array of human-readable trace lines.
+   *
+   * Each recursive call adds its own lines; the caller indents.
+   * @private
+   */
+  function _trace(model, state, json, indent) {
+    var pad = new Array(indent + 1).join('  ');
+    var lines = [];
+    var result;
+    var ascii = _jsonToTraceDisplay(json);
+
+    if (json.prop) {
+      result = model.valuation(json.prop, state);
+      lines.push(pad + json.prop + ' is ' + _tv(result) + ' at w' + state);
+    }
+
+    else if (json.neg) {
+      lines.push(pad + 'Evaluating ' + ascii + ' at w' + state + ':');
+      var child = _trace(model, state, json.neg, indent + 1);
+      lines = lines.concat(child.lines);
+      result = !child.result;
+      lines.push(pad + '  ~(' + _tv(child.result) + ') = ' + _tv(result));
+    }
+
+    else if (json.conj || json.disj || json.impl || json.equi) {
+      var key  = json.conj ? 'conj' : json.disj ? 'disj' : json.impl ? 'impl' : 'equi';
+      var pair = json[key];
+      var sym  = _sym[key];
+
+      lines.push(pad + 'Evaluating ' + ascii + ' at w' + state + ':');
+      var left  = _trace(model, state, pair[0], indent + 1);
+      var right = _trace(model, state, pair[1], indent + 1);
+      lines = lines.concat(left.lines);
+      lines = lines.concat(right.lines);
+
+      if (key === 'conj') result = left.result && right.result;
+      else if (key === 'disj') result = left.result || right.result;
+      else if (key === 'impl') result = !left.result || right.result;
+      else result = left.result === right.result;
+
+      lines.push(pad + '  ' + _tv(left.result) + ' ' + sym + ' ' + _tv(right.result) +
+                 ' = ' + _tv(result));
+    }
+
+    else if (json.nec) {
+      var successors = model.getSuccessorsOf(state);
+      var worldList = successors.map(function (s) { return 'w' + s; }).join(', ');
+      lines.push(pad + 'Evaluating ' + ascii + ' at w' + state + ':');
+      lines.push(pad + '  Worlds accessible from w' + state + ': ' +
+                 (successors.length ? worldList : '(none)'));
+
+      var allTrue = true;
+      successors.forEach(function (succ) {
+        var child = _trace(model, succ, json.nec, indent + 1);
+        lines = lines.concat(child.lines);
+        if (!child.result) allTrue = false;
+      });
+      result = allTrue;
+
+      if (successors.length === 0) {
+        lines.push(pad + '  No accessible worlds, so []' +
+                   _jsonToTraceDisplay(json.nec) + ' is vacuously TRUE');
+      } else {
+        lines.push(pad + '  ' + (result ? 'All' : 'Not all') +
+                   ' accessible worlds satisfy ' + _jsonToTraceDisplay(json.nec) +
+                   ' so []' + _jsonToTraceDisplay(json.nec) + ' is ' + _tv(result) +
+                   ' at w' + state);
+      }
+    }
+
+    else if (json.poss) {
+      var successors = model.getSuccessorsOf(state);
+      var worldList = successors.map(function (s) { return 'w' + s; }).join(', ');
+      lines.push(pad + 'Evaluating ' + ascii + ' at w' + state + ':');
+      lines.push(pad + '  Worlds accessible from w' + state + ': ' +
+                 (successors.length ? worldList : '(none)'));
+
+      var someTrue = false;
+      successors.forEach(function (succ) {
+        var child = _trace(model, succ, json.poss, indent + 1);
+        lines = lines.concat(child.lines);
+        if (child.result) someTrue = true;
+      });
+      result = someTrue;
+
+      if (successors.length === 0) {
+        lines.push(pad + '  No accessible worlds, so <>' +
+                   _jsonToTraceDisplay(json.poss) + ' is FALSE');
+      } else {
+        var verdict = result ? 'Found a world satisfying' : 'No accessible world satisfies';
+        lines.push(pad + '  ' + verdict + ' ' + _jsonToTraceDisplay(json.poss) +
+                   ' so <>' + _jsonToTraceDisplay(json.poss) + ' is ' + _tv(result) +
+                   ' at w' + state);
+      }
+    }
+
+    else {
+      throw new Error('Invalid formula!');
+    }
+
+    return { result: result, lines: lines };
+  }
+
+  /**
+   * Evaluate an MPL wff at a state within a model, returning the boolean
+   * result and a human-readable trace string.
+   */
+  function truthWithTrace(model, state, wff) {
+    if (typeof model.valuation !== 'function') throw new Error('Invalid model!');
+    if (typeof model.getSuccessorsOf !== 'function') throw new Error('Invalid model!');
+    if (!(wff instanceof MPL.Wff)) throw new Error('Invalid wff!');
+
+    var traceResult = _trace(model, state, wff.json(), 0);
+    return {
+      result: traceResult.result,
+      trace: traceResult.lines.join('\n')
+    };
+  }
+
   // export public methods
   return {
     Wff: Wff,
     Model: Model,
-    truth: truth
+    truth: truth,
+    truthWithTrace: truthWithTrace
   };
 
 })(FormulaParser);

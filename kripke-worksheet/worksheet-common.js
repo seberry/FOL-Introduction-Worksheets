@@ -8,7 +8,6 @@
 
     var problems = config.problems;
     var activeIndex = 0;
-    var traceMPL = config.traceMPL || null;
     var worldOffset = config.worldOffset || 0;
 
     function worldLabel(world) {
@@ -141,28 +140,28 @@
       throw new Error('Unsupported constraint type: ' + constraint.type);
     }
 
-    function buildTraceSections(problem, model) {
+    function buildTraceSections(problem, model, iframeMPL) {
       if (!config.useTrace) return [];
-      if (!traceMPL || typeof traceMPL.truthWithTrace !== 'function') {
-        throw new Error('Trace mode requires traceMPL.truthWithTrace.');
+      if (!iframeMPL || typeof iframeMPL.truthWithTrace !== 'function') {
+        throw new Error('Trace mode requires MPL.truthWithTrace in the iframe.');
       }
 
       var traceLines = [];
       problem.constraints.forEach(function (constraint) {
         if (constraint.type === 'truth') {
-          var wff = new traceMPL.Wff(constraint.formula);
-          var trace = traceMPL.truthWithTrace(model, constraint.world, wff);
+          var wff = new iframeMPL.Wff(constraint.formula);
+          var trace = iframeMPL.truthWithTrace(model, constraint.world, wff);
           traceLines.push(trace.trace);
           traceLines.push('');
           return;
         }
 
         if (constraint.type === 'different') {
-          var formulaA = new traceMPL.Wff(constraint.formulaA);
-          var formulaB = new traceMPL.Wff(constraint.formulaB);
-          traceLines.push(traceMPL.truthWithTrace(model, constraint.world, formulaA).trace);
+          var formulaA = new iframeMPL.Wff(constraint.formulaA);
+          var formulaB = new iframeMPL.Wff(constraint.formulaB);
+          traceLines.push(iframeMPL.truthWithTrace(model, constraint.world, formulaA).trace);
           traceLines.push('');
-          traceLines.push(traceMPL.truthWithTrace(model, constraint.world, formulaB).trace);
+          traceLines.push(iframeMPL.truthWithTrace(model, constraint.world, formulaB).trace);
           traceLines.push('');
         }
       });
@@ -207,7 +206,7 @@
 
       if (config.useTrace) {
         out += '\n\n--- Evaluation Trace ---\n\n';
-        out += buildTraceSections(problem, model).join('\n');
+        out += buildTraceSections(problem, model, iframeMPL).join('\n');
       }
 
       document.getElementById('result').textContent = out;

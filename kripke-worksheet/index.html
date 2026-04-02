@@ -129,8 +129,6 @@
         border: none;
     }
   </style>
-  <script src="formula-parser.min.js"></script>
-  <script src="MPL-trace.js"></script>
   <script src="worksheet-common.js"></script>
 </head>
 <body>
@@ -375,7 +373,6 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
   window.worksheetApp = createWorksheetApp({
     problems,
     useTrace: true,
-    traceMPL: MPL,
     worldOffset: 0,
     playgroundSrc: "modallogic/index.html"
   });
