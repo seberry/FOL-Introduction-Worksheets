@@ -170,15 +170,6 @@ A quick worksheet smoke test:
 5. solved problems show the model summary
 6. trace-enabled pages show an `Evaluation Trace` section
 
-## Notes On The Extra Files
-
-There are still top-level files such as `MPL.js`, `MPL-trace.js`, and
-`test-trace.html` in this folder from earlier development stages.
-They are not part of the current worksheet runtime path.
-
-Treat `modallogic/js/MPL.js` as the authoritative logic engine unless
-and until those older files are deliberately removed.
-
 ## Adding A New Worksheet
 
 For a third or fourth worksheet, prefer a thin page wrapper rather than
