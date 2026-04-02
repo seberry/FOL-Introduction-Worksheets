@@ -65,6 +65,15 @@ var MPL = (function (FormulaParser) {
   }
 
   /**
+   * Converts an MPL wff from JSON to trace display notation.
+   * Uses 'v' for disjunction while preserving parser-facing ASCII elsewhere.
+   * @private
+   */
+  function _jsonToTraceDisplay(json) {
+    return _jsonToASCII(json).replace(/ \| /g, ' v ');
+  }
+
+  /**
    * Converts an MPL wff from ASCII to LaTeX.
    * @private
    */
@@ -351,7 +360,7 @@ var MPL = (function (FormulaParser) {
    * @private
    */
   var _sym = {
-    conj: '&', disj: '|', impl: '->', equi: '<->'
+    conj: '&', disj: 'v', impl: '->', equi: '<->'
   };
 
   /**
@@ -365,7 +374,7 @@ var MPL = (function (FormulaParser) {
     var pad = new Array(indent + 1).join('  ');
     var lines = [];
     var result;
-    var ascii = _jsonToASCII(json);
+    var ascii = _jsonToTraceDisplay(json);
 
     if (json.prop) {
       result = model.valuation(json.prop, state);
@@ -418,11 +427,11 @@ var MPL = (function (FormulaParser) {
 
       if (successors.length === 0) {
         lines.push(pad + '  No accessible worlds, so []' +
-                   _jsonToASCII(json.nec) + ' is vacuously TRUE');
+                   _jsonToTraceDisplay(json.nec) + ' is vacuously TRUE');
       } else {
         lines.push(pad + '  ' + (result ? 'All' : 'Not all') +
-                   ' accessible worlds satisfy ' + _jsonToASCII(json.nec) +
-                   ' so []' + _jsonToASCII(json.nec) + ' is ' + _tv(result) +
+                   ' accessible worlds satisfy ' + _jsonToTraceDisplay(json.nec) +
+                   ' so []' + _jsonToTraceDisplay(json.nec) + ' is ' + _tv(result) +
                    ' at w' + state);
       }
     }
@@ -444,11 +453,11 @@ var MPL = (function (FormulaParser) {
 
       if (successors.length === 0) {
         lines.push(pad + '  No accessible worlds, so <>' +
-                   _jsonToASCII(json.poss) + ' is FALSE');
+                   _jsonToTraceDisplay(json.poss) + ' is FALSE');
       } else {
         var verdict = result ? 'Found a world satisfying' : 'No accessible world satisfies';
-        lines.push(pad + '  ' + verdict + ' ' + _jsonToASCII(json.poss) +
-                   ' so <>' + _jsonToASCII(json.poss) + ' is ' + _tv(result) +
+        lines.push(pad + '  ' + verdict + ' ' + _jsonToTraceDisplay(json.poss) +
+                   ' so <>' + _jsonToTraceDisplay(json.poss) + ' is ' + _tv(result) +
                    ' at w' + state);
       }
     }
