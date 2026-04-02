@@ -130,7 +130,8 @@
     }
   </style>
   <script src="formula-parser.min.js"></script>
-<script src="MPL-trace.js"></script>
+  <script src="MPL-trace.js"></script>
+  <script src="worksheet-common.js"></script>
 </head>
 <body>
 
@@ -149,7 +150,7 @@
     <h3>Constraints to satisfy</h3>
     <ul id="constraint-list" class="constraint-list"></ul>
 
-    <button class="check-button" onclick="checkCurrentProblem()">Check current model</button>
+    <button class="check-button" onclick="worksheetApp.checkCurrentProblem()">Check current model</button>
 
     <div id="result"></div>
 
@@ -371,206 +372,17 @@ Create a Kripke model where ◇□φ → □φ is false at w₀.
   }
 ];
 
-  let activeIndex = 0;
-
-  // --- Helper: render problem list ------------------------------------------
-
-  function renderProblemList() {
-    const list = document.getElementById("problem-list");
-    list.innerHTML = "";
-    problems.forEach((p, idx) => {
-      const btn = document.createElement("button");
-      btn.className = "problem-button" + (idx === activeIndex ? " active" : "");
-      const status = p.solved ? "✅" : "⬜";
-      btn.innerHTML = `<span class="status">${status}</span>${p.title}`;
-      btn.onclick = () => setActiveProblem(idx);
-      list.appendChild(btn);
-    });
-  }
-
-  // --- Helper: render active problem ----------------------------------------
-
-  function setActiveProblem(index) {
-    activeIndex = index;
-    renderProblemList();
-
-    const p = problems[activeIndex];
-
-    document.getElementById("problem-title").textContent = p.title;
-    document.getElementById("problem-description").textContent = p.description.trim();
-
-    const ul = document.getElementById("constraint-list");
-    ul.innerHTML = "";
-    for (const c of p.constraints) {
-      const li = document.createElement("li");
-      if (c.type === "truth") {
-        li.textContent = `At w0: ${c.formula} should be ${c.expected ? "true" : "false"}.`;
-      } else if (c.type === "different") {
-        li.textContent = `At w0: ${c.formulaA} and ${c.formulaB} must have different truth values.`;
-      }
-      ul.appendChild(li);
-    }
-
-    document.getElementById("result").textContent = "";
-
-    // Load model into iframe: either the stored one or the default
-    const frame = document.getElementById("playground-frame");
-    let url = "modallogic/index.html";
-    if (p.modelString) {
-      url += "?model=" + encodeURIComponent(p.modelString);
-    }
-    frame.src = url;
-  }
-
-  // --- Forall x style pretty-print ------------------------------------------
-
-  function formatModelForForallX(model) {
-    const states = model.getStates();
-    const worldIndices = [];
-    for (let i = 0; i < states.length; i++) {
-      if (states[i] !== null && states[i] !== undefined) {
-        worldIndices.push(i);
-      }
-    }
-
-    // Worlds: W: 1,2,...
-    const W = "W: " + (worldIndices.length ? worldIndices.join(", ") : "—");
-
-    // Accessibility relation R
-    const pairs = [];
-    for (const i of worldIndices) {
-      const succ = model.getSuccessorsOf(i);
-      for (const j of succ) {
-        if (worldIndices.includes(j)) {
-          pairs.push(`⟨${i },${j }⟩`);
-        }
-      }
-    }
-    const R = "R: " + (pairs.length ? pairs.join(", ") : "—");
-
-    // Valuation ν
-    const varsSet = new Set();
-    for (const st of states) {
-      if (st) {
-        for (const v in st) varsSet.add(v);
-      }
-    }
-    const vars = Array.from(varsSet).sort();
-    const nuParts = [];
-    for (const i of worldIndices) {
-      const st = states[i] || {};
-      for (const v of vars) {
-        const val = !!st[v];
-        nuParts.push(`ν${i }(${v}) = ${val ? "T" : "F"}`);
-      }
-    }
-    const nu = "ν: " + (nuParts.length ? nuParts.join(", ") : "—");
-
-    return `${W}\n${R}\n${nu}`;
-  }
-
-  // --- Core: check current model against constraints ------------------------
-
-  function checkCurrentProblem() {
-    const frame = document.getElementById("playground-frame");
-    const win = frame.contentWindow;
-
-    if (!win || !win.MPL || !win.model) {
-      alert("Playground not ready yet — try again in a moment.");
-      return;
-    }
-
-    const p = problems[activeIndex];
-    const model = win.model;
-    const iframeMPL = win.MPL;
-
-    // Persist model so when we switch away and back, we reload it
-    p.modelString = model.getModelString();
-
-    let allOk = true;
-    const lines = [];
-
-    for (const c of p.constraints) {
-      if (c.type === "truth") {
-        const wff = new iframeMPL.Wff(c.formula);
-        const val = iframeMPL.truth(model, c.world, wff);
-        const ok = (val === c.expected);
-        allOk = allOk && ok;
-        lines.push(
-          `At w${c.world}: ${c.formula} is ${val ? "T" : "F"} (expected ${c.expected ? "T" : "F"})`
-        );
-      } else if (c.type === "different") {
-        const fA = new iframeMPL.Wff(c.formulaA);
-        const fB = new iframeMPL.Wff(c.formulaB);
-        const valA = iframeMPL.truth(model, c.world, fA);
-        const valB = iframeMPL.truth(model, c.world, fB);
-        const ok = (valA !== valB);
-        allOk = allOk && ok;
-        lines.push(
-          `At w${c.world }: ${c.formulaA} = ${valA ? "T" : "F"}, ` +
-          `${c.formulaB} = ${valB ? "T" : "F"} (need them to differ)`
-        );
-      }
-    }
-
-    p.solved = allOk;
-    renderProblemList();
-
-    
-    // Build trace for each constraint
-    let traceLines = [];
-    for (const c of p.constraints) {
-      if (c.type === "truth") {
-        const wff = new MPL.Wff(c.formula);
-        const tr = MPL.truthWithTrace(model, c.world, wff);
-        traceLines.push(tr.trace);
-        traceLines.push("");  // blank line between traces
-      } else if (c.type === "different") {
-        const fA = new MPL.Wff(c.formulaA);
-        const fB = new MPL.Wff(c.formulaB);
-        const trA = MPL.truthWithTrace(model, c.world, fA);
-        const trB = MPL.truthWithTrace(model, c.world, fB);
-        traceLines.push(trA.trace);
-        traceLines.push("");
-        traceLines.push(trB.trace);
-        traceLines.push("");
-      }
-    }
-
-    let out = lines.join("\n") + "\n\n";
-    if (allOk) {
-      out += "✅ Solved!\n\nModel in Forall x style:\n";
-      out += formatModelForForallX(model);
-    } else {
-      out += "❌ Not yet — adjust your model and try again.";
-    }
-    out += "\n\n--- Evaluation Trace ---\n\n";
-    out += traceLines.join("\n");
-    document.getElementById("result").textContent = out;
-}
-
-  // --- Init ------------------------------------------------------------------
+  window.worksheetApp = createWorksheetApp({
+    problems,
+    useTrace: true,
+    traceMPL: MPL,
+    worldOffset: 0,
+    playgroundSrc: "modallogic/index.html"
+  });
 
   window.addEventListener("load", () => {
-    renderProblemList();
-    setActiveProblem(0);
+    worksheetApp.init();
   });
-</script>
-
-<script>
-function resizePlayground() {
-  const iframe = document.getElementById('playground-frame');
-  if (!iframe) return;
-  try {
-    const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-    iframe.style.height = innerDoc.body.scrollHeight + "px";
-  } catch (e) {
-    // silently fail if cross-origin (should not happen here)
-  }
-}
-
-// Resize once when iframe loads
-document.getElementById('playground-frame').addEventListener('load', resizePlayground);
 </script>
 
 </body>

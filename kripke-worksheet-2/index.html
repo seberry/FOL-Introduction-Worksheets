@@ -76,8 +76,8 @@
   </main>
 </div>
 
-<script src="../kripke-worksheet/MPL.js"></script>
 <script src="../kripke-worksheet/formula-parser.min.js"></script>
+<script src="../kripke-worksheet/MPL-trace.js"></script>
 <script src="accessibility-utils.js"></script>
 <script>
   const problems = [
@@ -252,7 +252,7 @@
 
     const p = problems[activeIndex];
     const model = win.model;
-    const MPL = win.MPL;
+    const MPL = window.MPL;
     p.modelString = model.getModelString();
 
     let allOk = true;
@@ -296,6 +296,20 @@
     } else {
       out += "❌ Not yet — adjust your model and try again.";
     }
+    
+    // Build trace for each truth constraint
+    let traceLines = [];
+    for (const c of p.constraints) {
+      if (c.type === "truth") {
+        const wff = new MPL.Wff(c.formula);
+        const tr = MPL.truthWithTrace(model, c.world, wff);
+        traceLines.push(tr.trace);
+        traceLines.push("");  // blank line between traces
+      }
+    }
+    
+    out += "\n\n--- Evaluation Trace ---\n\n";
+    out += traceLines.join("\n");
     document.getElementById("result").textContent = out;
   }
 
