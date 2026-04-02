@@ -211,3 +211,19 @@ Evaluate the truth of an MPL wff at a given state within a given model.
 MPL.truth(model, 0, wff);
 // => true
 ```
+
+### MPL.truthWithTrace( <i>model</i>, <i>state</i>, <i>wff</i> )
+
+Evaluate the truth of an MPL wff at a given state within a given model,
+returning both the truth value and a human-readable trace.
+
+```javascript
+var traced = MPL.truthWithTrace(model, 0, wff);
+// => { result: true, trace: "..." }
+```
+
+Notes:
+
+* `trace` is intended for explanation / UI display rather than for parsing.
+* Trace output uses `v` to display disjunction, although input syntax
+  remains `|`.
