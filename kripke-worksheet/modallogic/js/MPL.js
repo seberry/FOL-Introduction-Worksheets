@@ -6,6 +6,10 @@
  *
  * Copyright (c) 2013-2015 Ross Kirsling
  * Released under the MIT License.
+ *
+ * Local modifications in this project:
+ * - added truthWithTrace() and trace-display helpers
+ * - trace output uses 'v' for disjunction in explanatory text
  */
 var MPL = (function (FormulaParser) {
   'use strict';
