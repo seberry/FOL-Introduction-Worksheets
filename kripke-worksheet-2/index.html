@@ -232,6 +232,22 @@
       solved: false,
     },
     {
+      id: "S53",
+      title: "S5: [](Q v R), (Q -> []P) ⊭ <>P",
+      frame: "S5 (reflexive + symmetric + transitive)",
+      description: "Make [](Q v R) and (Q -> []P) true while <>P is false at w₀, using a reflexive, symmetric, and transitive frame.",
+      constraints: [
+        { type: "truth", world: 0, formula: "[](Q | R)", expected: true },
+        { type: "truth", world: 0, formula: "(Q -> []P)", expected: true },
+        { type: "truth", world: 0, formula: "<>P", expected: false },
+        { type: "relation", property: "reflexive", expected: true },
+        { type: "relation", property: "symmetric", expected: true },
+        { type: "relation", property: "transitive", expected: true },
+      ],
+      modelString: null,
+      solved: false,
+    },
+    {
       id: "Diag14",
       title: "Diagnosis: []<>P ⊢ <>P",
       frame: "Find the strongest logic where this fails.",
