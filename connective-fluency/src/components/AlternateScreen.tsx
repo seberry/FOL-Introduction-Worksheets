@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CONNECTIVES, getCases, type ConnectiveId } from "../domain/connectives";
 import { recordAnswer, type ProgressState } from "../domain/progress";
-import { LogicExpression, TruthValueToken } from "./LogicExpression";
+import { practicePresentation } from "../domain/presentation";
+import { CompactCasePrompt, ExpandedCasePrompt } from "./CasePrompts";
+import { FormulaExpression, TruthValueToken } from "./LogicExpression";
 import { TruthNotationInfo } from "./TruthNotationInfo";
 
 interface AlternateScreenProps {
@@ -72,20 +74,24 @@ export function AlternateScreen({ connectiveIds, progress, setProgress, onBack, 
     );
   }
 
-  const useWords = progress.settings.truthDisplay === "words";
+  const presentation = practicePresentation(progress, [connective.id]);
+  const expanded = presentation === "expanded";
   return (
     <main className="focus-shell" id="main-content">
       <button className="back-button" type="button" onClick={onBack}><ArrowLeft aria-hidden="true" /> Menu</button>
-      <section className="practice alternate-practice" aria-labelledby="alternate-practice-title">
+      <section className={`practice alternate-practice ${expanded ? "expanded-practice" : ""}`} aria-labelledby="alternate-practice-title">
         <p className="eyebrow">{connective.shortName} in alternate notation</p>
-        <h1 id="alternate-practice-title" className="alternate-problem-line"><LogicExpression connective={connective} a={truthCase.a} b={truthCase.b} symbol={alternate} words={useWords} /> = ? {!useWords && <TruthNotationInfo />}</h1>
+        <h1 id="alternate-practice-title" className="sr-only">Evaluate the truth value</h1>
+        <div className="problem-line alternate-problem-line">
+          {expanded ? <ExpandedCasePrompt connective={connective} a={truthCase.a} b={truthCase.b} symbol={alternate} /> : <><CompactCasePrompt connective={connective} a={truthCase.a} b={truthCase.b} symbol={alternate} /><span aria-hidden="true">= ?</span><TruthNotationInfo /></>}
+        </div>
         <div className="answer-buttons">
-          <button type="button" onClick={() => answer(true)} disabled={feedback === "correct"}><TruthValueToken value={true} words={useWords} /><kbd>T</kbd></button>
-          <button type="button" onClick={() => answer(false)} disabled={feedback === "correct"}><TruthValueToken value={false} words={useWords} /><kbd>F</kbd></button>
+          <button type="button" onClick={() => answer(true)} disabled={feedback === "correct"}><TruthValueToken value={true} words /><kbd>T</kbd></button>
+          <button type="button" onClick={() => answer(false)} disabled={feedback === "correct"}><TruthValueToken value={false} words /><kbd>F</kbd></button>
         </div>
         <div className={`feedback-region ${feedback ? "visible" : ""}`} aria-live="assertive">
           {feedback === "correct" && <p className="feedback-correct"><span aria-hidden="true">✓</span> Correct. It works exactly like {connective.primarySymbol}.</p>}
-          {feedback === "incorrect" && <p className="feedback-incorrect"><span aria-hidden="true">×</span> Not quite. {connective.rule}</p>}
+          {feedback === "incorrect" && <><p className="feedback-incorrect"><span aria-hidden="true">×</span> Not quite. {connective.rule}</p>{expanded ? <p className="feedback-expanded"><FormulaExpression connective={connective} symbol={alternate} /> is <TruthValueToken value={expected} words />.</p> : <p className="feedback-equation"><CompactCasePrompt connective={connective} a={truthCase.a} b={truthCase.b} symbol={alternate} /> = <TruthValueToken value={expected} /></p>}</>}
         </div>
       </section>
     </main>

@@ -17,12 +17,13 @@ interface LogicExpressionProps {
   symbol: string;
   words?: boolean;
   className?: string;
+  accessibleLabel?: string;
 }
 
-export function LogicExpression({ connective, a, b, symbol, words = false, className }: LogicExpressionProps) {
+export function LogicExpression({ connective, a, b, symbol, words = false, className, accessibleLabel }: LogicExpressionProps) {
   const classes = ["logic-expression", className].filter(Boolean).join(" ");
   return (
-    <span className={classes} aria-label={spokenExpression(connective, a, b)}>
+    <span className={classes} aria-label={accessibleLabel ?? spokenExpression(connective, a, b)}>
       {connective.arity === 1 ? (
         <>
           <span className="connective-symbol" aria-hidden="true">{symbol}</span>
@@ -37,4 +38,16 @@ export function LogicExpression({ connective, a, b, symbol, words = false, class
       )}
     </span>
   );
+}
+
+interface FormulaExpressionProps {
+  connective: Connective;
+  symbol: string;
+  className?: string;
+}
+
+export function FormulaExpression({ connective, symbol, className }: FormulaExpressionProps) {
+  const classes = ["formula-expression", className].filter(Boolean).join(" ");
+  const spoken = connective.arity === 1 ? `${connective.spokenName} P` : `P ${connective.spokenName} Q`;
+  return <span className={classes} aria-label={spoken}>{connective.arity === 1 ? <><span className="connective-symbol">{symbol}</span>P</> : <>P <span className="connective-symbol">{symbol}</span> Q</>}</span>;
 }

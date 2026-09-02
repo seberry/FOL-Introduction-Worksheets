@@ -20,7 +20,7 @@ export interface RecentAnswer {
 }
 
 export interface Settings {
-  truthDisplay: "letters" | "words";
+  practicePresentation: "guided" | "expanded" | "compact";
   autoAdvance: boolean;
 }
 
@@ -31,6 +31,7 @@ export interface ProgressState {
   learnedConnectives: ConnectiveId[];
   completedStages: string[];
   alternateIntroduced: ConnectiveId[];
+  compactIntroduced: ConnectiveId[];
   settings: Settings;
 }
 
@@ -41,7 +42,8 @@ export const DEFAULT_PROGRESS: ProgressState = {
   learnedConnectives: [],
   completedStages: [],
   alternateIntroduced: [],
-  settings: { truthDisplay: "words", autoAdvance: true },
+  compactIntroduced: [],
+  settings: { practicePresentation: "guided", autoAdvance: true },
 };
 
 function validProgress(value: unknown): value is ProgressState {
@@ -56,10 +58,17 @@ export function loadProgress(storage: Pick<Storage, "getItem"> = localStorage): 
     if (!stored) return structuredClone(DEFAULT_PROGRESS);
     const parsed: unknown = JSON.parse(stored);
     if (!validProgress(parsed)) return structuredClone(DEFAULT_PROGRESS);
+    const legacySettings = parsed.settings as Partial<Settings & { truthDisplay: "letters" | "words" }> | undefined;
+    const practicePresentation = legacySettings?.practicePresentation
+      ?? (legacySettings?.truthDisplay === "letters" ? "compact" : legacySettings?.truthDisplay === "words" ? "expanded" : "guided");
     return {
       ...structuredClone(DEFAULT_PROGRESS),
       ...parsed,
-      settings: { ...DEFAULT_PROGRESS.settings, ...parsed.settings },
+      compactIntroduced: Array.isArray(parsed.compactIntroduced) ? parsed.compactIntroduced : [],
+      settings: {
+        practicePresentation,
+        autoAdvance: typeof legacySettings?.autoAdvance === "boolean" ? legacySettings.autoAdvance : DEFAULT_PROGRESS.settings.autoAdvance,
+      },
     };
   } catch {
     return structuredClone(DEFAULT_PROGRESS);

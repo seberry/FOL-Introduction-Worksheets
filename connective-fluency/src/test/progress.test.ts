@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_PROGRESS, STORAGE_KEY, loadProgress, resetProgress, saveProgress } from "../domain/progress";
 
 describe("local progress persistence", () => {
-  it("uses word notation for fresh progress", () => {
-    expect(loadProgress().settings.truthDisplay).toBe("words");
+  it("uses Guided presentation for fresh progress", () => {
+    expect(loadProgress().settings.practicePresentation).toBe("guided");
   });
 
   it("survives a reload from localStorage", () => {
@@ -28,13 +28,18 @@ describe("local progress persistence", () => {
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
     const migrated = loadProgress();
-    expect(migrated.settings).toEqual({ truthDisplay: "words", autoAdvance: false });
+    expect(migrated.settings).toEqual({ practicePresentation: "guided", autoAdvance: false });
     expect(migrated.skills).toEqual(legacy.skills);
     expect(migrated.recentAnswers).toEqual(legacy.recentAnswers);
   });
 
-  it("keeps an explicit T/F preference across reloads", () => {
-    saveProgress({ ...structuredClone(DEFAULT_PROGRESS), settings: { truthDisplay: "letters", autoAdvance: true } });
-    expect(loadProgress().settings.truthDisplay).toBe("letters");
+  it("migrates existing display preferences without losing the explicit choice", () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...structuredClone(DEFAULT_PROGRESS), settings: { truthDisplay: "letters", autoAdvance: true } }));
+    expect(loadProgress().settings.practicePresentation).toBe("compact");
+  });
+
+  it("keeps an explicit presentation preference across reloads", () => {
+    saveProgress({ ...structuredClone(DEFAULT_PROGRESS), settings: { practicePresentation: "compact", autoAdvance: true } });
+    expect(loadProgress().settings.practicePresentation).toBe("compact");
   });
 });

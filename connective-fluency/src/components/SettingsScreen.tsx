@@ -25,10 +25,11 @@ export function SettingsScreen({ progress, setProgress, onBack, onReset, onInstr
       </section>
       <section className="settings-list" aria-label="Practice settings">
         <div className="setting-row">
-          <div><h2>Truth values</h2><p>Standard letters are used in truth tables either way.</p></div>
-          <div className="segmented-control" aria-label="Truth value display">
-            <button type="button" aria-pressed={progress.settings.truthDisplay === "letters"} onClick={() => updateSetting("truthDisplay", "letters")}>T / F</button>
-            <button type="button" aria-pressed={progress.settings.truthDisplay === "words"} onClick={() => updateSetting("truthDisplay", "words")}>TRUE / FALSE <span className="recommended-label">Recommended</span></button>
+          <div><h2>Practice presentation</h2><p>Truth-table reconstruction always uses conventional T/F cells.</p></div>
+          <div className="segmented-control presentation-control" aria-label="Practice presentation">
+            <button type="button" aria-pressed={progress.settings.practicePresentation === "guided"} onClick={() => updateSetting("practicePresentation", "guided")}>Guided <span className="recommended-label">Recommended</span><span className="setting-choice-description">Start with full truth assignments, then introduce shorthand.</span></button>
+            <button type="button" aria-pressed={progress.settings.practicePresentation === "expanded"} onClick={() => updateSetting("practicePresentation", "expanded")}>Expanded <span className="setting-choice-description">Always show the sentence and its assigned truth value.</span></button>
+            <button type="button" aria-pressed={progress.settings.practicePresentation === "compact"} onClick={() => updateSetting("practicePresentation", "compact")}>Compact <span className="setting-choice-description">Use T/F shorthand for faster practice.</span></button>
           </div>
         </div>
         <div className="setting-row">
