@@ -184,9 +184,11 @@ h1, h2, p { overflow-wrap: anywhere; }
 .stage-number { display: grid; width: 40px; height: 40px; place-items: center; border: 2px solid var(--line); border-radius: 50%; font-weight: 750; }
 .stage-number.complete { color: #fff; border-color: var(--correct); background: var(--correct); }
 .stage-number svg { width: 18px; height: 18px; }
-.stage-copy strong, .stage-copy span { display: block; }
-.stage-copy strong { margin-bottom: 0.3rem; font-size: 1.05rem; }
+.stage-copy > strong, .stage-copy span { display: block; }
+.stage-copy > strong { margin-bottom: 0.3rem; font-size: 1.05rem; }
 .stage-copy span { color: var(--muted); line-height: 1.45; }
+.stage-copy .stage-hint { margin-top: 0.22rem; font-size: 0.86rem; }
+.stage-hint strong { display: inline; color: var(--ink); font-size: inherit; }
 .stage-row:disabled .stage-copy span { color: #7e8886; }
 .stage-arrow { width: 20px; }
 
@@ -317,12 +319,28 @@ kbd { min-width: 28px; padding: 0.25rem 0.45rem; border: 1px solid #98a29f; bord
 .page-heading > p:last-child { max-width: 650px; color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
 .progress-groups { border-top: 1px solid var(--line); }
 .progress-group { border-bottom: 1px solid var(--line); }
-.progress-group summary { display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 1rem; min-height: 88px; padding: 0.8rem; cursor: pointer; }
+.progress-group summary { display: grid; grid-template-columns: 50px minmax(120px, 1fr) minmax(190px, 240px) auto; align-items: center; gap: 1rem; min-height: 96px; padding: 0.8rem; cursor: pointer; }
 .progress-group summary:hover { background: var(--wash); }
 .progress-group-symbol { font-family: Georgia, "Times New Roman", serif; font-size: 2rem; text-align: center; }
 .progress-group summary strong, .progress-group summary small { display: block; }
 .progress-group summary small { margin-top: 0.2rem; color: var(--muted); }
 .mastery-badge { padding: 0.35rem 0.55rem; border: 1px solid var(--line); background: #fff; font-size: 0.82rem; font-weight: 750; }
+.mastery-overview { display: grid; gap: 0.35rem; }
+.case-progress-copy { color: var(--muted); font-size: 0.76rem; }
+.mastery-overview progress { width: 100%; height: 10px; border: 0; border-radius: 0; background: #dfe5e2; accent-color: var(--muted); }
+.mastery-overview progress::-webkit-progress-bar { background: #dfe5e2; }
+.mastery-overview progress::-webkit-progress-value { background: var(--muted); }
+.mastery-overview progress::-moz-progress-bar { background: var(--muted); }
+.mastery-overview progress.mastery-needs-practice::-webkit-progress-value { background: var(--error); }
+.mastery-overview progress.mastery-needs-practice::-moz-progress-bar { background: var(--error); }
+.mastery-overview progress.mastery-learning::-webkit-progress-value { background: #a06b00; }
+.mastery-overview progress.mastery-learning::-moz-progress-bar { background: #a06b00; }
+.mastery-overview progress.mastery-comfortable::-webkit-progress-value { background: var(--correct); }
+.mastery-overview progress.mastery-comfortable::-moz-progress-bar { background: var(--correct); }
+.mastery-badge.mastery-needs-practice, .case-mastery-label.mastery-needs-practice { color: var(--error); border-color: #d9aab3; }
+.mastery-badge.mastery-learning, .case-mastery-label.mastery-learning { color: #805500; border-color: #d8bd78; }
+.mastery-badge.mastery-comfortable, .case-mastery-label.mastery-comfortable { color: var(--correct); border-color: #9bc8ba; }
+.case-mastery-label { font-weight: 750; }
 .case-list { padding: 0 1rem 1rem 4.8rem; }
 .case-row { display: grid; grid-template-columns: 1fr 140px 150px; gap: 1rem; padding: 0.75rem; border-top: 1px solid var(--line); }
 .case-row > span:first-child { font-family: Georgia, "Times New Roman", serif; font-size: 1.18rem; }
@@ -388,6 +406,8 @@ footer { display: flex; justify-content: space-between; gap: 1rem; padding: 1.3r
   .table-workspace { grid-template-columns: 1fr; gap: 1.5rem; }
   .table-heading { grid-column: auto; }
   .instructor-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
+  .progress-group summary { grid-template-columns: 50px 1fr auto; }
+  .mastery-overview { grid-column: 2 / -1; }
 }
 
 @media (max-width: 620px) {
@@ -437,6 +457,7 @@ footer { display: flex; justify-content: space-between; gap: 1rem; padding: 1.3r
   .home-intro h1 { font-size: 2.35rem; }
   .answer-buttons button { flex-direction: column; justify-content: center; }
   .progress-group summary { grid-template-columns: 40px 1fr; }
+  .mastery-overview { grid-column: 2; }
   .mastery-badge { grid-column: 2; justify-self: start; }
   .instructor-grid { grid-template-columns: 1fr; }
 }

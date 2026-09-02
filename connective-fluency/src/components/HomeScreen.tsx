@@ -57,7 +57,7 @@ export function HomeScreen({ progress, unlockAll, onSelect }: HomeScreenProps) {
                   type="button"
                   onClick={() => onSelect(stage)}
                   disabled={!unlocked}
-                  aria-label={`${index + 1}. ${stage.title}${completed ? ", complete" : unlocked ? "" : ", locked"}`}
+                  aria-label={`${index + 1}. ${stage.title}. ${stage.description}${stage.hint ? ` Hint: ${stage.hint}` : ""}${completed ? " Complete." : unlocked ? "" : " Locked."}`}
                 >
                   <span className={`stage-number ${completed ? "complete" : ""}`} aria-hidden="true">
                     {completed ? <Check /> : unlocked ? index + 1 : <LockKeyhole />}
@@ -65,6 +65,7 @@ export function HomeScreen({ progress, unlockAll, onSelect }: HomeScreenProps) {
                   <span className="stage-copy">
                     <strong>{stage.title}</strong>
                     <span>{stage.description}</span>
+                    {stage.hint && <span className="stage-hint"><strong>Hint:</strong> {stage.hint}</span>}
                   </span>
                   {unlocked && <ArrowRight className="stage-arrow" aria-hidden="true" />}
                 </button>

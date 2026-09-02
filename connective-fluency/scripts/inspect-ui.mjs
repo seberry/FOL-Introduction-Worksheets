@@ -81,18 +81,24 @@ try {
   await page.getByRole("button", { name: /Try two cases/i }).click();
   await page.screenshot({ path: "artifacts/desktop-alternate-compact.png", fullPage: true });
   await goHome();
-  await page.getByRole("button", { name: /^8\. Build truth tables/ }).click();
+  await page.getByRole("button", { name: /^8\. Complete truth tables/ }).click();
   await page.screenshot({ path: "artifacts/desktop-table.png", fullPage: true });
 
   await goHome();
+  await page.locator(".app-header").getByRole("button", { name: "Progress", exact: true }).click();
+  await assertNoHorizontalOverflow("desktop progress");
+  await page.screenshot({ path: "artifacts/desktop-progress.png", fullPage: true });
+  await goHome();
   await page.setViewportSize({ width: 390, height: 844 });
+  await assertNoHorizontalOverflow("mobile home");
+  await page.screenshot({ path: "artifacts/mobile-home.png", fullPage: true });
   await page.getByRole("button", { name: /^2\. NOT/ }).click();
   await page.getByRole("button", { name: /Start practice/i }).click();
   await assertNoHorizontalOverflow("mobile compact NOT");
   await page.screenshot({ path: "artifacts/mobile-compact-not.png", fullPage: true });
 
   assert(browserErrors.length === 0, `Browser errors: ${browserErrors.join(" | ")}`);
-  console.log(JSON.stringify({ passed: true, flows: ["guided", "transition", "expanded", "compact", "mixed", "alternate", "table"], screenshots: 13, browserErrors: browserErrors.length }, null, 2));
+  console.log(JSON.stringify({ passed: true, flows: ["guided", "transition", "expanded", "compact", "mixed", "alternate", "table", "progress"], screenshots: 15, browserErrors: browserErrors.length }, null, 2));
 } finally {
   await browser.close();
 }

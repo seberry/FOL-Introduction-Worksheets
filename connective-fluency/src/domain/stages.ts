@@ -7,6 +7,7 @@ export interface StageDefinition {
   id: string;
   title: string;
   description: string;
+  hint?: string;
   kind: StageKind;
   connectiveIds: ConnectiveId[];
   prerequisite?: string;
@@ -23,7 +24,8 @@ export const STAGES: StageDefinition[] = [
   {
     id: "not",
     title: "NOT",
-    description: "Learn how NOT flips a truth value.",
+    description: "Practice NOT.",
+    hint: "NOT flips the truth value.",
     kind: "connective",
     connectiveIds: ["not"],
     prerequisite: "symbols",
@@ -31,7 +33,8 @@ export const STAGES: StageDefinition[] = [
   {
     id: "and",
     title: "AND",
-    description: "Practice all four AND cases.",
+    description: "Practice AND.",
+    hint: "AND is true only when both sides are true.",
     kind: "connective",
     connectiveIds: ["and"],
     prerequisite: "not",
@@ -39,7 +42,8 @@ export const STAGES: StageDefinition[] = [
   {
     id: "or",
     title: "OR",
-    description: "Practice inclusive OR, including the both-true case.",
+    description: "Practice OR.",
+    hint: "This class uses inclusive OR: it is false only when both sides are false.",
     kind: "connective",
     connectiveIds: ["or"],
     prerequisite: "and",
@@ -47,7 +51,8 @@ export const STAGES: StageDefinition[] = [
   {
     id: "iff",
     title: "IFF",
-    description: "Compare whether both sides have the same truth value.",
+    description: "Practice IFF.",
+    hint: "Look for matching truth values.",
     kind: "connective",
     connectiveIds: ["iff"],
     prerequisite: "or",
@@ -55,7 +60,8 @@ export const STAGES: StageDefinition[] = [
   {
     id: "conditional",
     title: "IF…THEN",
-    description: "Focus on the conditional's one false case.",
+    description: "Practice the material conditional.",
+    hint: "There is only one false case.",
     kind: "connective",
     connectiveIds: ["conditional"],
     prerequisite: "iff",
@@ -63,15 +69,15 @@ export const STAGES: StageDefinition[] = [
   {
     id: "mixed",
     title: "Mixed practice",
-    description: "Retrieve the truth functions without knowing which comes next.",
+    description: "Practice all five connectives at once.",
     kind: "mixed",
     connectiveIds: ["not", "and", "or", "iff", "conditional"],
     prerequisite: "conditional",
   },
   {
     id: "tables",
-    title: "Build truth tables",
-    description: "Reconstruct each characteristic table one output at a time.",
+    title: "Complete truth tables",
+    description: "Fill in characteristic truth tables one row at a time.",
     kind: "tables",
     connectiveIds: ["and", "or", "iff", "conditional", "not"],
     prerequisite: "mixed",
@@ -79,15 +85,15 @@ export const STAGES: StageDefinition[] = [
   {
     id: "alternate",
     title: "Alternate notation",
-    description: "Connect familiar operations with symbols used in other books.",
+    description: "Learn the alternate symbols used in other logic books.",
     kind: "alternate",
     connectiveIds: ["not", "and", "or", "conditional", "iff"],
     prerequisite: "tables",
   },
   {
     id: "review",
-    title: "Mixed review",
-    description: "Keep every connective available with both notation systems.",
+    title: "Final review",
+    description: "Practice every connective with primary and alternate notation.",
     kind: "review",
     connectiveIds: ["not", "and", "or", "iff", "conditional"],
     prerequisite: "alternate",
