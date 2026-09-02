@@ -22,7 +22,7 @@ npm run build
 
 `npm run build` writes a self-contained static site to `dist/`. The Vite base path is relative, so the build can be hosted at a GitHub Pages project subpath without changing the code.
 
-For GitHub Pages, configure a workflow or another Pages publishing method to build this directory and publish `connective-fluency/dist`. No server-side routes, environment variables, or backend services are required.
+The repository's `deploy-pages.yml` workflow builds this app and publishes `dist/` at the `/connective-fluency/` project path while retaining the other static worksheets. In the repository's Pages settings, select **GitHub Actions** as the publishing source. No server-side routes, environment variables, or backend services are required.
 
 ## Content and progression
 
