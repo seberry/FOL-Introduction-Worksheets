@@ -41,7 +41,7 @@ export const DEFAULT_PROGRESS: ProgressState = {
   learnedConnectives: [],
   completedStages: [],
   alternateIntroduced: [],
-  settings: { truthDisplay: "letters", autoAdvance: true },
+  settings: { truthDisplay: "words", autoAdvance: true },
 };
 
 function validProgress(value: unknown): value is ProgressState {

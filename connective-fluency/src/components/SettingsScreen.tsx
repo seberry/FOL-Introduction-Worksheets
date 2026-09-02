@@ -28,7 +28,7 @@ export function SettingsScreen({ progress, setProgress, onBack, onReset, onInstr
           <div><h2>Truth values</h2><p>Standard letters are used in truth tables either way.</p></div>
           <div className="segmented-control" aria-label="Truth value display">
             <button type="button" aria-pressed={progress.settings.truthDisplay === "letters"} onClick={() => updateSetting("truthDisplay", "letters")}>T / F</button>
-            <button type="button" aria-pressed={progress.settings.truthDisplay === "words"} onClick={() => updateSetting("truthDisplay", "words")}>TRUE / FALSE</button>
+            <button type="button" aria-pressed={progress.settings.truthDisplay === "words"} onClick={() => updateSetting("truthDisplay", "words")}>TRUE / FALSE <span className="recommended-label">Recommended</span></button>
           </div>
         </div>
         <div className="setting-row">

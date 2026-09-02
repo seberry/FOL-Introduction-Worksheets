@@ -18,6 +18,7 @@ export function HomeScreen({ progress, unlockAll, onSelect }: HomeScreenProps) {
         <p className="eyebrow">Characteristic truth functions</p>
         <h1 id="home-title">Practice one case at a time.</h1>
         <p>Build reliable recall without racing a clock or holding a whole truth table in mind.</p>
+        <p>Build comfort with every case in a level to unlock the next.</p>
         <button className="primary-button continue-button" type="button" onClick={() => onSelect(nextStage)}>
           {progress.completedStages.length ? "Continue learning" : "Start with symbols"}
           <ArrowRight aria-hidden="true" />

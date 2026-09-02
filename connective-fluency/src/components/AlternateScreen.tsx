@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { CONNECTIVES, getCases, truthLabel, type ConnectiveId } from "../domain/connectives";
+import { CONNECTIVES, getCases, type ConnectiveId } from "../domain/connectives";
 import { recordAnswer, type ProgressState } from "../domain/progress";
+import { LogicExpression, TruthValueToken } from "./LogicExpression";
+import { TruthNotationInfo } from "./TruthNotationInfo";
 
 interface AlternateScreenProps {
   connectiveIds: ConnectiveId[];
@@ -70,18 +72,16 @@ export function AlternateScreen({ connectiveIds, progress, setProgress, onBack, 
     );
   }
 
-  const expression = connective.arity === 1
-    ? `${alternate}${truthLabel(truthCase.a)}`
-    : `${truthLabel(truthCase.a)} ${alternate} ${truthLabel(Boolean(truthCase.b))}`;
+  const useWords = progress.settings.truthDisplay === "words";
   return (
     <main className="focus-shell" id="main-content">
       <button className="back-button" type="button" onClick={onBack}><ArrowLeft aria-hidden="true" /> Menu</button>
       <section className="practice alternate-practice" aria-labelledby="alternate-practice-title">
         <p className="eyebrow">{connective.shortName} in alternate notation</p>
-        <h1 id="alternate-practice-title" className="problem-expression" aria-label={`${connective.spokenName} case equals what?`}>{expression} = ?</h1>
+        <h1 id="alternate-practice-title" className="alternate-problem-line"><LogicExpression connective={connective} a={truthCase.a} b={truthCase.b} symbol={alternate} words={useWords} /> = ? {!useWords && <TruthNotationInfo />}</h1>
         <div className="answer-buttons">
-          <button type="button" onClick={() => answer(true)} disabled={feedback === "correct"}><span>TRUE</span><kbd>T</kbd></button>
-          <button type="button" onClick={() => answer(false)} disabled={feedback === "correct"}><span>FALSE</span><kbd>F</kbd></button>
+          <button type="button" onClick={() => answer(true)} disabled={feedback === "correct"}><TruthValueToken value={true} words={useWords} /><kbd>T</kbd></button>
+          <button type="button" onClick={() => answer(false)} disabled={feedback === "correct"}><TruthValueToken value={false} words={useWords} /><kbd>F</kbd></button>
         </div>
         <div className={`feedback-region ${feedback ? "visible" : ""}`} aria-live="assertive">
           {feedback === "correct" && <p className="feedback-correct"><span aria-hidden="true">✓</span> Correct. It works exactly like {connective.primarySymbol}.</p>}

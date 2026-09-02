@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { CONNECTIVES, caseCode, getCases, truthLabel, type ConnectiveId } from "../domain/connectives";
 import { recordAnswer, type ProgressState } from "../domain/progress";
+import { TruthValueToken } from "./LogicExpression";
+import { TruthNotationInfo } from "./TruthNotationInfo";
 
 interface TableScreenProps {
   connectiveIds: ConnectiveId[];
@@ -20,7 +22,6 @@ export function TableScreen({ connectiveIds, progress, setProgress, onBack, onCo
   const connective = CONNECTIVES[connectiveIds[connectiveIndex]];
   const cases = getCases(connective);
   const activeCase = cases[activeCell];
-  const useWords = progress.settings.truthDisplay === "words";
   const tableComplete = filled.length === cases.length;
 
   const answer = (value: boolean) => {
@@ -71,6 +72,7 @@ export function TableScreen({ connectiveIds, progress, setProgress, onBack, onCo
           <p className="eyebrow">Characteristic table</p>
           <h1 id="table-title">Build the table for {connective.shortName}</h1>
           <p>{connective.rule}</p>
+          <TruthNotationInfo />
         </div>
         <div className="truth-table-wrap">
           <table className="truth-table">
@@ -87,10 +89,10 @@ export function TableScreen({ connectiveIds, progress, setProgress, onBack, onCo
             <tbody>
               {cases.map((truthCase, index) => (
                 <tr key={caseCode(truthCase.a, truthCase.b)} className={index === activeCell ? "active-row" : ""}>
-                  <td>{truthLabel(truthCase.a)}</td>
-                  {connective.arity === 2 && <td>{truthLabel(Boolean(truthCase.b))}</td>}
+                  <td><TruthValueToken value={truthCase.a} /></td>
+                  {connective.arity === 2 && <td><TruthValueToken value={Boolean(truthCase.b)} /></td>}
                   <td className="output-cell" aria-current={index === activeCell ? "true" : undefined}>
-                    {index < filled.length ? <><Check aria-hidden="true" /> {truthLabel(filled[index])}</> : index === activeCell ? <span className="cell-question">?</span> : <span aria-label="Not answered">·</span>}
+                    {index < filled.length ? <><Check aria-hidden="true" /> <TruthValueToken value={filled[index]} /></> : index === activeCell ? <span className="cell-question">?</span> : <span aria-label="Not answered">·</span>}
                   </td>
                 </tr>
               ))}
@@ -101,8 +103,8 @@ export function TableScreen({ connectiveIds, progress, setProgress, onBack, onCo
           <div className="table-controls">
             <p>Choose the highlighted cell.</p>
             <div className="answer-buttons compact" aria-label="Choose the active cell truth value">
-              <button type="button" onClick={() => answer(true)} disabled={feedback === "correct"}><span>{truthLabel(true, useWords)}</span><kbd>T</kbd></button>
-              <button type="button" onClick={() => answer(false)} disabled={feedback === "correct"}><span>{truthLabel(false, useWords)}</span><kbd>F</kbd></button>
+              <button type="button" onClick={() => answer(true)} disabled={feedback === "correct"}><TruthValueToken value={true} /><kbd>T</kbd></button>
+              <button type="button" onClick={() => answer(false)} disabled={feedback === "correct"}><TruthValueToken value={false} /><kbd>F</kbd></button>
             </div>
             <div className="table-feedback" aria-live="assertive">
               {feedback === "incorrect" && <p className="feedback-incorrect"><span aria-hidden="true">×</span> Not quite. {connective.rule}</p>}

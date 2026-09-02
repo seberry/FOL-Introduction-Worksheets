@@ -26,11 +26,14 @@ async function assertNoHorizontalOverflow(label) {
 
 async function answerCurrentProblem(correct = true) {
   const text = (await page.locator(".problem-expression").first().innerText()).replaceAll(" ", "");
+  const values = text.match(/TRUE|FALSE|T|F/g) ?? [];
+  assert(values.length >= 1, `Could not read truth values from ${text}`);
+  const isTrue = (value) => value === "TRUE" || value === "T";
   let expected;
-  if (text.startsWith("¬") || text.startsWith("~")) expected = text.includes("F");
+  if (text.startsWith("¬") || text.startsWith("~")) expected = !isTrue(values[0]);
   else {
-    const left = text[0] === "T";
-    const right = text.at(-1) === "T";
+    const left = isTrue(values[0]);
+    const right = isTrue(values.at(-1));
     if (text.includes("∧") || text.includes("&")) expected = left && right;
     else if (text.includes("∨") || text.includes("v")) expected = left || right;
     else if (text.includes("↔") || text.includes("≡")) expected = left === right;
@@ -69,14 +72,16 @@ try {
   const repeatedExpression = (await page.locator(".problem-expression").innerText()).replaceAll(" ", "");
   assert(repeatedExpression === missedExpression, "The missed unary case did not recur after an intervening question.");
 
-  await page.getByRole("button", { name: "Home", exact: true }).click();
+  await page.locator(".app-header").getByRole("button", { name: "Home", exact: true }).click();
   await page.getByRole("button", { name: /^7\. Mixed practice/ }).click();
+  await assertNoHorizontalOverflow("desktop binary practice");
+  await page.screenshot({ path: "artifacts/desktop-binary-words.png", fullPage: true });
   for (let index = 0; index < 3; index += 1) {
     await answerCurrentProblem(true);
     await page.waitForTimeout(850);
   }
 
-  await page.getByRole("button", { name: "Home", exact: true }).click();
+  await page.locator(".app-header").getByRole("button", { name: "Home", exact: true }).click();
   await page.getByRole("button", { name: /^8\. Build truth tables/ }).click();
   for (const key of ["t", "f", "f", "f"]) {
     await page.keyboard.press(key);
@@ -96,18 +101,31 @@ try {
   await page.getByText(/You already know AND/).waitFor();
 
   await page.getByRole("button", { name: "Home", exact: true }).click();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await page.getByRole("button", { name: "T / F" }).click();
+  await page.locator(".app-header").getByRole("button", { name: "Home", exact: true }).click();
+  await page.getByRole("button", { name: /^7\. Mixed practice/ }).click();
+  await page.getByRole("button", { name: "About T and F" }).click();
+  await assertNoHorizontalOverflow("T/F notation dialog");
+  await page.screenshot({ path: "artifacts/desktop-tf-information.png", fullPage: true });
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Home", exact: true }).click();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await page.getByRole("button", { name: /TRUE \/ FALSE/ }).click();
+  await page.locator(".app-header").getByRole("button", { name: "Home", exact: true }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   await assertNoHorizontalOverflow("mobile home");
   await page.screenshot({ path: "artifacts/mobile-home.png", fullPage: true });
-  await page.getByRole("button", { name: /^7\. Mixed practice/ }).click();
-  await assertNoHorizontalOverflow("mobile practice");
-  await page.screenshot({ path: "artifacts/mobile-practice.png", fullPage: true });
+  await page.getByRole("button", { name: /^2\. NOT/ }).click();
+  await page.getByRole("button", { name: /Start practice/i }).click();
+  await assertNoHorizontalOverflow("mobile NOT practice");
+  await page.screenshot({ path: "artifacts/mobile-not-words.png", fullPage: true });
 
   assert(browserErrors.length === 0, `Browser errors: ${browserErrors.join(" | ")}`);
   console.log(JSON.stringify({
     passed: true,
     flows: ["recognition", "lesson", "single-case", "miss-and-spaced-retry", "mixed", "table", "alternate"],
-    screenshots: 6,
+    screenshots: 9,
     browserErrors: browserErrors.length,
   }, null, 2));
 } finally {

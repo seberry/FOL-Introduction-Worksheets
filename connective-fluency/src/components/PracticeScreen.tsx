@@ -1,12 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Volume2 } from "lucide-react";
-import {
-  CONNECTIVES,
-  formatExpression,
-  spokenExpression,
-  truthLabel,
-  type ConnectiveId,
-} from "../domain/connectives";
+import { CONNECTIVES, spokenExpression, type ConnectiveId } from "../domain/connectives";
+import { LogicExpression, TruthValueToken } from "./LogicExpression";
+import { TruthNotationInfo } from "./TruthNotationInfo";
 import { recordAnswer, type ProgressState } from "../domain/progress";
 import { choosePracticeItem, createItems, isConnectiveLearned, type PracticeItem } from "../domain/scheduler";
 
@@ -53,7 +49,6 @@ export function PracticeScreen({
       : connective.primarySymbol;
   const useWords = progress.settings.truthDisplay === "words";
   const expected = connective.evaluate(current.a, current.b);
-  const expression = formatExpression(connective, current.a, current.b, symbol, useWords);
 
   const nextQuestion = useCallback((nextProgress: ProgressState) => {
     const nextAnswered = answered + 1;
@@ -138,8 +133,9 @@ export function PracticeScreen({
         <p className="eyebrow">{title}</p>
         <h1 id="practice-title" className="sr-only">Evaluate the truth value</h1>
         <div className="problem-line">
-          <span className="problem-expression" aria-label={spokenExpression(connective, current.a, current.b)}>{expression}</span>
+          <LogicExpression className="problem-expression" connective={connective} a={current.a} b={current.b} symbol={symbol} words={useWords} />
           <span aria-hidden="true">= ?</span>
+          {!useWords && <TruthNotationInfo />}
           <button className="listen-button" type="button" onClick={speak} aria-label="Read problem aloud" title="Read problem aloud">
             <Volume2 aria-hidden="true" />
           </button>
@@ -147,10 +143,10 @@ export function PracticeScreen({
 
         <div className="answer-buttons" aria-label="Choose the truth value">
           <button type="button" onClick={() => answer(true)} disabled={Boolean(feedback)}>
-            <span>{truthLabel(true, useWords)}</span><kbd>T</kbd>
+            <TruthValueToken value={true} words={useWords} /><kbd>T</kbd>
           </button>
           <button type="button" onClick={() => answer(false)} disabled={Boolean(feedback)}>
-            <span>{truthLabel(false, useWords)}</span><kbd>F</kbd>
+            <TruthValueToken value={false} words={useWords} /><kbd>F</kbd>
           </button>
         </div>
 
@@ -160,7 +156,7 @@ export function PracticeScreen({
               <p className={feedback.correct ? "feedback-correct" : "feedback-incorrect"}>
                 <span aria-hidden="true">{feedback.correct ? "✓" : "×"}</span> {feedback.correct ? "Correct" : "Not quite"}
               </p>
-              <p className="feedback-equation">{expression} = {truthLabel(feedback.expected, useWords)}</p>
+              <p className="feedback-equation"><LogicExpression connective={connective} a={current.a} b={current.b} symbol={symbol} words={useWords} /> = <TruthValueToken value={feedback.expected} words={useWords} /></p>
               {!feedback.correct && <p className="feedback-rule">{connective.rule}</p>}
               {(!progress.settings.autoAdvance || !feedback.correct) && (
                 <button className="next-button" type="button" onClick={() => nextQuestion(latestProgress.current)}>
