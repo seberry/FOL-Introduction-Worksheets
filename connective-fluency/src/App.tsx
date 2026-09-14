@@ -9,7 +9,7 @@ import { ProgressScreen } from "./components/ProgressScreen";
 import { RecognitionScreen } from "./components/RecognitionScreen";
 import { SettingsScreen } from "./components/SettingsScreen";
 import { TableScreen } from "./components/TableScreen";
-import type { ConnectiveId } from "./domain/connectives";
+import { CONNECTIVE_ORDER, type ConnectiveId } from "./domain/connectives";
 import { resetProgress, type ProgressState } from "./domain/progress";
 import { type StageDefinition } from "./domain/stages";
 import { useProgress } from "./hooks/useProgress";
@@ -28,7 +28,11 @@ function addUnique<T>(values: T[], value: T): T[] {
 
 export default function App() {
   const [progress, setProgress] = useProgress();
-  const [screen, setScreen] = useState<Screen>({ type: "home" });
+  const [screen, setScreen] = useState<Screen>(() => {
+    const practice = new URLSearchParams(window.location.search).get("practice");
+    const id = CONNECTIVE_ORDER.find((connectiveId) => connectiveId === practice);
+    return id ? { type: "focused", id, notation: "primary" } : { type: "home" };
+  });
   const [unlockAll, setUnlockAll] = useState(() => new URLSearchParams(window.location.search).get("instructor") === "1");
 
   const home = () => setScreen({ type: "home" });

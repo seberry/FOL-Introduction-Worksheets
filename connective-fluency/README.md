@@ -31,3 +31,5 @@ Connective definitions live in `src/domain/connectives.ts`; the stage order and 
 A connective stage becomes comfortable after every input case has been recalled correctly several times. Mixed practice offers a stopping point after 12 answers. Errors are weighted for additional practice and are delayed by other questions before recurring.
 
 Open `?instructor=1` to unlock every stage immediately. Instructor tools are also available from Settings for focused connective practice and inspection of recent locally stored responses.
+
+Use `?practice=conditional` or `?practice=iff` to open focused practice directly, using the primary notation (`→` or `↔`). The other supported values are `not`, `and`, and `or`. Unknown values open the normal home screen. Combine parameters, for example `?instructor=1&practice=conditional`, to also unlock all stages when returning home. A practice link does not reset saved progress.

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quiz 2 retake study guide: targeted answers to common mistakes with main connectives, one- and three-atom tables, conditionals, and validity.">
+  <title>Quiz 2 Retake Study Guide · Truth Tables</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="page.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">T / F</span> Intro Logic</div>
+      <span class="header-note">Quiz 2 retake · Truth tables</span>
+    </div>
+  </header>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Common quiz errors">
+      <p class="eyebrow">Where did you lose points?</p>
+      <ol>
+        <li><a href="#main-connective"><span class="nav-number">01</span> Finding the main connective</a></li>
+        <li><a href="#eight-rows"><span class="nav-number">02</span> Tables for 3 and 1 atoms</a></li>
+        <li><a href="#conditionals"><span class="nav-number">03</span> Conditional &amp; biconditional</a></li>
+        <li><a href="#arguments"><span class="nav-number">04</span> Tables for checking validity</a></li>
+      </ol>
+      <p class="sidebar-note">Have paper handy. Try each problem before opening <strong>Show answer</strong>.</p>
+    </nav>
+    <main id="main-content" tabindex="-1">
+      <div class="hero">
+        <p class="eyebrow">Truth tables / Common errors FAQ</p>
+        <h1>Quiz 2 Retake<br>Study Guide</h1>
+        <p>Lost points on a truth-table question? Find the part that tripped you up below. Each answer focuses on what you need to get right for the retake, with a quick problem to check that you’ve got it.</p>
+      </div>
+
+      <section class="topic" id="main-connective" aria-labelledby="heading-connective">
+        <span class="section-label">01 / Wrong main connective</span>
+        <h2 id="heading-connective">How do I find the main connective?</h2>
+        <p>The <strong>main connective</strong> is the connective that operates on the sentence as a whole. Parentheses help you see what each connective applies to.</p>
+        <div class="principle"><p>The main connective is the <strong>last connective you would add</strong> if you were building the sentence in Formula Factory.</p></div>
+        <a class="resource" href="https://seberry.github.io/Formula-Creator-Game/"><span><strong>Play Formula Factory</strong><small>Build formulas and pay attention to which connective you add last.</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+        <div class="comparison">
+          <div class="example">
+            <p class="display-formula formula"><span class="main-mark">¬</span>(P &amp; Q)</p>
+            <p class="step">1. Combine P and Q: <span class="formula">P &amp; Q</span></p>
+            <p class="step">2. Negate the result: <span class="formula">¬(P &amp; Q)</span></p>
+            <p>Main connective: <strong class="formula">¬</strong>. The <span class="formula">&amp;</span> was added earlier.</p>
+          </div>
+          <div class="example">
+            <p class="display-formula formula">¬P <span class="main-mark">&amp;</span> Q</p>
+            <p class="step">1. Negate P: <span class="formula">¬P</span></p>
+            <p class="step">2. Join it to Q: <span class="formula">¬P &amp; Q</span></p>
+            <p>Main connective: <strong class="formula">&amp;</strong>. It joins the two sides.</p>
+          </div>
+        </div>
+        <div class="practice">
+          <span class="practice-label">Try it first</span>
+          <h3>What is the main connective?</h3>
+          <p>Find the main connective in each sentence before revealing its answer.</p>
+          <div class="question"><p>a. <span class="formula">¬(P → Q)</span></p><details><summary>Show answer<span class="sr-only"> for 1a</span></summary><div class="answer"><p><strong class="formula">¬</strong>. Build <span class="formula">P → Q</span> first, then negate the whole result.</p></div></details></div>
+          <div class="question"><p>b. <span class="formula">(¬P) → Q</span></p><details><summary>Show answer<span class="sr-only"> for 1b</span></summary><div class="answer"><p><strong class="formula">→</strong>. Build <span class="formula">¬P</span> first, then join it to Q with the conditional.</p></div></details></div>
+          <div class="question"><p>c. <span class="formula">(P ↔ Q) &amp; R</span></p><details><summary>Show answer<span class="sr-only"> for 1c</span></summary><div class="answer"><p><strong class="formula">&amp;</strong>. It joins <span class="formula">P ↔ Q</span> to R.</p></div></details></div>
+          <div class="question"><p>d. <span class="formula">P ↔ (Q &amp; ¬R)</span></p><details><summary>Show answer<span class="sr-only"> for 1d</span></summary><div class="answer"><p><strong class="formula">↔</strong>. Build the right-hand side, then join it to P with the biconditional.</p></div></details></div>
+        </div>
+      </section>
+
+      <section class="topic" id="eight-rows" aria-labelledby="heading-rows">
+        <span class="section-label">02 / Missing or repeated rows</span>
+        <h2 id="heading-rows">Truth tables for 3 and 1 atomic sentences</h2>
+        <p>If a formula contains three <strong>different atomic sentences</strong>—for example P, Q, and R—your truth table needs <strong>8 rows</strong>. Each atom can be true or false, so there are <span class="formula">2 × 2 × 2 = 8</span> possible assignments.</p>
+        <h3>How do I set up the rows for three atoms?</h3>
+        <p><strong>On your paper, just write P, Q, R, draw a horizontal line under them, and fill in the T’s and F’s.</strong> The colored version beside it shows the <strong>4–2–1 pattern</strong> that helps you include every combination exactly once.</p>
+        <div class="row-pattern-comparison">
+          <figure class="row-example">
+            <figcaption><strong>What to write</strong><span>A heading, a line, and eight rows.</span></figcaption>
+            <div class="table-scroll atom-table-wrap plain-atoms-wrap" tabindex="0" role="region" aria-label="Plain table to write on paper"><table class="atom-table plain-atoms" data-check="atoms3"><caption class="sr-only">Plain eight-row table for P, Q, and R</caption><thead><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col">R</th></tr></thead><tbody>
+              <tr><td>T</td><td>T</td><td>T</td></tr><tr><td>T</td><td>T</td><td>F</td></tr><tr><td>T</td><td>F</td><td>T</td></tr><tr><td>T</td><td>F</td><td>F</td></tr><tr><td>F</td><td>T</td><td>T</td></tr><tr><td>F</td><td>T</td><td>F</td></tr><tr><td>F</td><td>F</td><td>T</td></tr><tr><td>F</td><td>F</td><td>F</td></tr>
+            </tbody></table></div>
+          </figure>
+          <figure class="row-example">
+            <figcaption><strong>See the pattern</strong><span>Blue = T. Orange = F. Lines mark switches.</span></figcaption>
+        <div class="table-scroll atom-table-wrap" tabindex="0" role="region" aria-label="Eight-row setup table"><table class="atom-table" data-check="atoms3"><caption class="sr-only">Annotated eight-row table for P, Q, and R</caption><thead><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col">R</th></tr></thead><tbody>
+          <tr><td class="value-t">T</td><td class="value-t">T</td><td class="value-t">T</td></tr>
+          <tr><td class="value-t">T</td><td class="value-t">T</td><td class="value-f switch">F</td></tr>
+          <tr><td class="value-t">T</td><td class="value-f switch">F</td><td class="value-t switch">T</td></tr>
+          <tr><td class="value-t">T</td><td class="value-f">F</td><td class="value-f switch">F</td></tr>
+          <tr><td class="value-f switch">F</td><td class="value-t switch">T</td><td class="value-t switch">T</td></tr>
+          <tr><td class="value-f">F</td><td class="value-t">T</td><td class="value-f switch">F</td></tr>
+          <tr><td class="value-f">F</td><td class="value-f switch">F</td><td class="value-t switch">T</td></tr>
+          <tr><td class="value-f">F</td><td class="value-f">F</td><td class="value-f switch">F</td></tr>
+        </tbody></table></div>
+          </figure>
+        </div>
+        <div class="pattern"><p><strong>P:</strong> four T’s, then four F’s.</p><p><strong>Q:</strong> two T’s, two F’s, then repeat.</p><p><strong>R:</strong> alternate T and F on every row.</p></div>
+        <div class="practice"><span class="practice-label">Try it first</span><h3>Set up the rows</h3><p>Without looking above, write all eight rows for a table containing A, B, and C.</p>
+          <details><summary>Show answer<span class="sr-only"> for the A, B, C row setup</span></summary><div class="answer"><div class="table-scroll atom-table-wrap" tabindex="0" role="region" aria-label="A B C answer table"><table class="atom-table" data-check="atoms3"><caption>Eight assignments: A, B, C</caption><thead><tr><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th></tr></thead><tbody>
+          <tr><td class="value-t">T</td><td class="value-t">T</td><td class="value-t">T</td></tr>
+          <tr><td class="value-t">T</td><td class="value-t">T</td><td class="value-f switch">F</td></tr>
+          <tr><td class="value-t">T</td><td class="value-f switch">F</td><td class="value-t switch">T</td></tr>
+          <tr><td class="value-t">T</td><td class="value-f">F</td><td class="value-f switch">F</td></tr>
+          <tr><td class="value-f switch">F</td><td class="value-t switch">T</td><td class="value-t switch">T</td></tr>
+          <tr><td class="value-f">F</td><td class="value-t">T</td><td class="value-f switch">F</td></tr>
+          <tr><td class="value-f">F</td><td class="value-f switch">F</td><td class="value-t switch">T</td></tr>
+          <tr><td class="value-f">F</td><td class="value-f">F</td><td class="value-f switch">F</td></tr>
+          </tbody></table></div></div></details>
+        </div>
+
+
+        <h3>What if there’s only one atomic sentence?</h3>
+        <p>One atomic sentence can be T or F, so you need <strong>just two rows</strong>.</p>
+        <div class="practice"><span class="practice-label">Try it first</span><h3>Make a truth table for P</h3><p>Write the column heading and all possible truth values for the atomic sentence P.</p>
+          <details><summary>Show answer<span class="sr-only"> for the one-atom truth table</span></summary><div class="answer"><div class="table-scroll atom-table-wrap single-atom-wrap" tabindex="0" role="region" aria-label="One-atom answer table"><table class="atom-table" data-check="atoms1"><caption>P: two rows</caption><thead><tr><th scope="col">P</th></tr></thead><tbody><tr><td class="value-t">T</td></tr><tr><td class="value-f switch">F</td></tr></tbody></table></div><p>One T row and one F row include every possibility.</p></div></details>
+        </div>
+      </section>
+
+      <section class="topic" id="conditionals" aria-labelledby="heading-conditionals">
+        <span class="section-label">03 / Incorrect → or ↔ values</span>
+        <h2 id="heading-conditionals">When are → and ↔ true?</h2>
+        <p>If your rows were set up correctly but your conditional or biconditional values were wrong, these are the cases to check. Here T means true and F means false.</p>
+        <div class="connectives">
+          <div class="example"><h3>Conditional <span class="formula">P → Q</span></h3><div class="table-scroll" tabindex="0" role="region" aria-label="Conditional truth table"><table data-check="conditional"><caption>Exactly one false case</caption><thead><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col"><span class="formula">P → Q</span></th></tr></thead><tbody><tr><td>T</td><td>T</td><td>T</td></tr><tr><td>T</td><td>F</td><td>F</td></tr><tr><td>F</td><td>T</td><td>T</td></tr><tr><td>F</td><td>F</td><td>T</td></tr></tbody></table></div><p><strong class="formula">TRUE → FALSE is FALSE.</strong></p><p>Ask: “Is this the bad <span class="formula">T → F</span> case?” If yes, it’s false. Otherwise, it’s true.</p></div>
+          <div class="example"><h3>Biconditional <span class="formula">P ↔ Q</span></h3><div class="table-scroll" tabindex="0" role="region" aria-label="Biconditional truth table"><table data-check="iff"><caption>True when the two sides match</caption><thead><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col"><span class="formula">P ↔ Q</span></th></tr></thead><tbody><tr><td>T</td><td>T</td><td>T</td></tr><tr><td>T</td><td>F</td><td>F</td></tr><tr><td>F</td><td>T</td><td>F</td></tr><tr><td>F</td><td>F</td><td>T</td></tr></tbody></table></div><p><strong class="formula">↔ = SAME</strong></p><p>The biconditional is true when the two sides have the same truth value—including when both are false.</p></div>
+        </div>
+        <div class="practice"><span class="practice-label">Try it first</span><h3>Quick check: conditional</h3>
+          <div class="question"><p>a. <span class="formula">T → F</span></p><details><summary>Show answer<span class="sr-only"> for conditional a</span></summary><div class="answer"><p><strong>False.</strong> This is the one false case.</p></div></details></div>
+          <div class="question"><p>b. <span class="formula">F → F</span></p><details><summary>Show answer<span class="sr-only"> for conditional b</span></summary><div class="answer"><p><strong>True.</strong> This is not the <span class="formula">T → F</span> case.</p></div></details></div>
+          <div class="question"><p>c. <span class="formula">F → T</span></p><details><summary>Show answer<span class="sr-only"> for conditional c</span></summary><div class="answer"><p><strong>True.</strong> This is not the <span class="formula">T → F</span> case.</p></div></details></div>
+        </div>
+        <div class="practice"><span class="practice-label">Try it first</span><h3>Quick check: biconditional</h3>
+          <div class="question"><p>a. <span class="formula">T ↔ F</span></p><details><summary>Show answer<span class="sr-only"> for biconditional a</span></summary><div class="answer"><p><strong>False.</strong> The sides have different truth values.</p></div></details></div>
+          <div class="question"><p>b. <span class="formula">F ↔ F</span></p><details><summary>Show answer<span class="sr-only"> for biconditional b</span></summary><div class="answer"><p><strong>True.</strong> The sides have the same truth value.</p></div></details></div>
+        </div>
+        <h3>Targeted practice</h3><p>If these are shaky, practice the connectives themselves before adding them to larger formulas.</p>
+        <a class="resource" href="https://seberry.github.io/FOL-Introduction-Worksheets/connective-fluency/?instructor=1&amp;practice=conditional"><span><strong>Practice → in Connective Fluency</strong><small>Go straight to conditional practice. All exercises unlocked.</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+        <a class="resource" href="https://seberry.github.io/FOL-Introduction-Worksheets/connective-fluency/?instructor=1&amp;practice=iff"><span><strong>Practice ↔ in Connective Fluency</strong><small>Go straight to biconditional practice. All exercises unlocked.</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+      </section>
+
+      <section class="topic" id="arguments" aria-labelledby="heading-arguments">
+        <span class="section-label">04 / Conclusion or table setup unclear</span>
+        <h2 id="heading-arguments">Truth tables for checking validity</h2>
+        <p>If you weren’t sure which sentence was the conclusion, start there. Then write the premises and conclusion side by side so you can compare their truth values on each row.</p>
+        <p class="display-formula formula">P → Q, Q ∴ P</p>
+        <h3>What is the conclusion of this argument? What are the premises?</h3>
+        <p>The symbol <span class="formula">∴</span> means <strong>therefore</strong>. The sentence after it is the conclusion: <strong class="formula">P</strong>. There are <strong>two premises</strong> before it: <span class="formula">P → Q</span> and <span class="formula">Q</span>.</p>
+        <div class="argument-labels"><p><strong>Premise 1</strong><span class="formula">P → Q</span></p><p><strong>Premise 2</strong><span class="formula">Q</span></p><p><strong>Conclusion</strong><span class="formula">P</span></p></div>
+        <h3>Here’s the layout to write</h3>
+        <p>Put the atoms on the left, then a short-form table for each premise and the conclusion. Use a single line between sentences and a <strong>double line before the conclusion</strong>.</p>
+        <div class="table-scroll shortform-wrap" tabindex="0" role="region" aria-label="Set up: P → Q, Q ∴ P"><table class="shortform-table" data-check="affirming-blank"><caption>Set up: P → Q, Q ∴ P</caption><thead><tr class="group-headings"><th scope="colgroup" colspan="2">Atoms</th><th scope="colgroup" colspan="3" class="premise-start">Premise 1</th><th scope="colgroup" colspan="1" class="premise-start">Premise 2</th><th scope="colgroup" colspan="1" class="conclusion-start">Conclusion</th></tr><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col" class="premise-start">P</th><th scope="col" class="">→</th><th scope="col" class="">Q</th><th scope="col" class="premise-start">Q</th><th scope="col" class="conclusion-start">P</th></tr></thead><tbody><tr><td class="">T</td><td class="">T</td><td class="premise-start" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="premise-start" aria-label="To be filled in"></td><td class="conclusion-start" aria-label="To be filled in"></td></tr>
+<tr><td class="">T</td><td class="">F</td><td class="premise-start" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="premise-start" aria-label="To be filled in"></td><td class="conclusion-start" aria-label="To be filled in"></td></tr>
+<tr><td class="">F</td><td class="">T</td><td class="premise-start" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="premise-start" aria-label="To be filled in"></td><td class="conclusion-start" aria-label="To be filled in"></td></tr>
+<tr><td class="">F</td><td class="">F</td><td class="premise-start" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="" aria-label="To be filled in"></td><td class="premise-start" aria-label="To be filled in"></td><td class="conclusion-start" aria-label="To be filled in"></td></tr>
+</tbody></table></div>
+        <h3>And here it is filled in</h3>
+        <p>Each value sits under the symbol it belongs to. <strong>For checking validity, only the value under each sentence’s main connective matters.</strong> Those columns are outlined below; the other values are muted scratchwork used to calculate them. If a sentence is just an atom, use its own column.</p>
+        <div class="table-scroll shortform-wrap" tabindex="0" role="region" aria-label="Filled in: P → Q, Q ∴ P"><table class="shortform-table" data-check="affirming-condensed"><caption>Filled in: P → Q, Q ∴ P</caption><thead><tr class="group-headings"><th scope="colgroup" colspan="2">Atoms</th><th scope="colgroup" colspan="3" class="premise-start">Premise 1</th><th scope="colgroup" colspan="1" class="premise-start">Premise 2</th><th scope="colgroup" colspan="1" class="conclusion-start">Conclusion</th></tr><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col" class="premise-start">P</th><th scope="col" class="main-value">→</th><th scope="col" class="">Q</th><th scope="col" class="premise-start main-value">Q</th><th scope="col" class="conclusion-start main-value">P</th></tr></thead><tbody><tr><td class="">T</td><td class="">T</td><td class="premise-start">T</td><td class="main-value">T</td><td class="">T</td><td class="premise-start main-value">T</td><td class="conclusion-start main-value">T</td></tr>
+<tr><td class="">T</td><td class="">F</td><td class="premise-start">T</td><td class="main-value">F</td><td class="">F</td><td class="premise-start main-value">F</td><td class="conclusion-start main-value">T</td></tr>
+<tr class="counterexample"><td class="">F</td><td class="">T</td><td class="premise-start">F</td><td class="main-value"><span class="result-circle">T</span></td><td class="">T</td><td class="premise-start main-value"><span class="result-circle">T</span></td><td class="conclusion-start main-value"><span class="result-circle">F</span></td></tr>
+<tr><td class="">F</td><td class="">F</td><td class="premise-start">F</td><td class="main-value">T</td><td class="">F</td><td class="premise-start main-value">F</td><td class="conclusion-start main-value">F</td></tr>
+</tbody></table></div>
+        <div class="principle"><p>Once you’ve filled in your short-form truth table, check for a row where <strong>all premises are true and the conclusion is false</strong>. If you find one, the argument is <strong>invalid (not valid)</strong>. If there is no such row, it is <strong>valid</strong>.</p></div>
+        <p class="row-note"><strong>The circled T, T, F in the third row shows this argument is invalid (not valid).</strong> Read only the whole-sentence values: both premises are T and the conclusion is F. With three premises, the pattern would be T, T, T, F.</p>
+        <div class="practice">
+          <span class="practice-label">Check your reading of a finished table</span>
+          <h3>Is this argument valid?</h3>
+          <p class="display-formula formula">P ∨ Q, ¬P ∴ Q</p>
+          <p>If your answer is no, highlight a row in your notes that shows it is not valid. Check the outlined columns for both premises and the conclusion.</p>
+          <div class="table-scroll shortform-wrap" tabindex="0" role="region" aria-label="Finished short-form table: P ∨ Q, ¬P ∴ Q"><table class="shortform-table" data-check="disjunctive-condensed"><caption>Finished short-form table: P ∨ Q, ¬P ∴ Q</caption><thead><tr class="group-headings"><th scope="colgroup" colspan="2">Atoms</th><th scope="colgroup" colspan="3" class="premise-start">Premise 1</th><th scope="colgroup" colspan="2" class="premise-start">Premise 2</th><th scope="colgroup" colspan="1" class="conclusion-start">Conclusion</th></tr><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col" class="premise-start">P</th><th scope="col" class="main-value">∨</th><th scope="col" class="">Q</th><th scope="col" class="premise-start main-value">¬</th><th scope="col" class="">P</th><th scope="col" class="conclusion-start main-value">Q</th></tr></thead><tbody><tr><td class="">T</td><td class="">T</td><td class="premise-start">T</td><td class="main-value">T</td><td class="">T</td><td class="premise-start main-value">F</td><td class="">T</td><td class="conclusion-start main-value">T</td></tr>
+<tr><td class="">T</td><td class="">F</td><td class="premise-start">T</td><td class="main-value">T</td><td class="">F</td><td class="premise-start main-value">F</td><td class="">T</td><td class="conclusion-start main-value">F</td></tr>
+<tr><td class="">F</td><td class="">T</td><td class="premise-start">F</td><td class="main-value">T</td><td class="">T</td><td class="premise-start main-value">T</td><td class="">F</td><td class="conclusion-start main-value">T</td></tr>
+<tr><td class="">F</td><td class="">F</td><td class="premise-start">F</td><td class="main-value">F</td><td class="">F</td><td class="premise-start main-value">T</td><td class="">F</td><td class="conclusion-start main-value">F</td></tr>
+</tbody></table></div>
+          <details><summary>Check your work<span class="sr-only"> for P or Q, not P, therefore Q</span></summary><div class="answer"><p><strong>Valid.</strong> Both premises are true together only in the third row, where the conclusion is true too. There is no row to highlight with both premises true and the conclusion false.</p></div></details>
+        </div>
+        <div class="practice">
+          <span class="practice-label">One more</span>
+          <h3>Is this argument valid?</h3>
+          <p class="display-formula formula">P ∨ Q, P ∴ Q</p>
+          <p>If your answer is no, highlight a row in your notes that shows it is not valid before checking your work.</p>
+          <div class="table-scroll shortform-wrap" tabindex="0" role="region" aria-label="Finished short-form table: P ∨ Q, P ∴ Q"><table class="shortform-table" data-check="or-argument-condensed"><caption>Finished short-form table: P ∨ Q, P ∴ Q</caption><thead><tr class="group-headings"><th scope="colgroup" colspan="2">Atoms</th><th scope="colgroup" colspan="3" class="premise-start">Premise 1</th><th scope="colgroup" colspan="1" class="premise-start">Premise 2</th><th scope="colgroup" colspan="1" class="conclusion-start">Conclusion</th></tr><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col" class="premise-start">P</th><th scope="col" class="main-value">∨</th><th scope="col" class="">Q</th><th scope="col" class="premise-start main-value">P</th><th scope="col" class="conclusion-start main-value">Q</th></tr></thead><tbody><tr><td class="">T</td><td class="">T</td><td class="premise-start">T</td><td class="main-value">T</td><td class="">T</td><td class="premise-start main-value">T</td><td class="conclusion-start main-value">T</td></tr>
+<tr><td class="">T</td><td class="">F</td><td class="premise-start">T</td><td class="main-value">T</td><td class="">F</td><td class="premise-start main-value">T</td><td class="conclusion-start main-value">F</td></tr>
+<tr><td class="">F</td><td class="">T</td><td class="premise-start">F</td><td class="main-value">T</td><td class="">T</td><td class="premise-start main-value">F</td><td class="conclusion-start main-value">T</td></tr>
+<tr><td class="">F</td><td class="">F</td><td class="premise-start">F</td><td class="main-value">F</td><td class="">F</td><td class="premise-start main-value">F</td><td class="conclusion-start main-value">F</td></tr>
+</tbody></table></div>
+          <details><summary>Check your work<span class="sr-only"> for P or Q, P, therefore Q</span></summary><div class="answer"><p><strong>Invalid (not valid).</strong> Highlight the second row: both premises are true and the conclusion is false.</p><div class="table-scroll shortform-wrap" tabindex="0" role="region" aria-label="Second row: both premises T, conclusion F"><table class="shortform-table" data-check="or-argument-condensed"><caption>Second row: both premises T, conclusion F</caption><thead><tr class="group-headings"><th scope="colgroup" colspan="2">Atoms</th><th scope="colgroup" colspan="3" class="premise-start">Premise 1</th><th scope="colgroup" colspan="1" class="premise-start">Premise 2</th><th scope="colgroup" colspan="1" class="conclusion-start">Conclusion</th></tr><tr><th scope="col">P</th><th scope="col">Q</th><th scope="col" class="premise-start">P</th><th scope="col" class="main-value">∨</th><th scope="col" class="">Q</th><th scope="col" class="premise-start main-value">P</th><th scope="col" class="conclusion-start main-value">Q</th></tr></thead><tbody><tr><td class="">T</td><td class="">T</td><td class="premise-start">T</td><td class="main-value">T</td><td class="">T</td><td class="premise-start main-value">T</td><td class="conclusion-start main-value">T</td></tr>
+<tr class="counterexample"><td class="">T</td><td class="">F</td><td class="premise-start">T</td><td class="main-value"><span class="result-circle">T</span></td><td class="">F</td><td class="premise-start main-value"><span class="result-circle">T</span></td><td class="conclusion-start main-value"><span class="result-circle">F</span></td></tr>
+<tr><td class="">F</td><td class="">T</td><td class="premise-start">F</td><td class="main-value">T</td><td class="">T</td><td class="premise-start main-value">F</td><td class="conclusion-start main-value">T</td></tr>
+<tr><td class="">F</td><td class="">F</td><td class="premise-start">F</td><td class="main-value">F</td><td class="">F</td><td class="premise-start main-value">F</td><td class="conclusion-start main-value">F</td></tr>
+</tbody></table></div></div></details>
+        </div>
+        <h3>Need help filling in a short-form table?</h3>
+        <a class="resource" href="https://www.youtube.com/watch?v=-z3fRn9V3jM"><span><strong>Watch: How to Do Short-Form Truth Tables</strong><small>Review how to write and fill in a short-form table.</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+        <a class="resource" href="short-form-truth-tables.pdf"><span><strong>Review the short-form examples from the lecture handout</strong><small>Lecture handout excerpt · Pages 1–2 · PDF</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+  </div>
+  <footer><span>Intro Logic · Quiz 2 retake study guide</span><a href="#main-content">Back to top ↑</a></footer>
+</body>
+</html>
