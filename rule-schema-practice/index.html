@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f3a">
+  <title>Match the Pattern — Fitch Rule Practice</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to the lesson</a>
+
+  <header class="site-header">
+    <button class="brand" id="home-button" type="button" aria-label="Return to level selection">
+      <span class="brand-mark" aria-hidden="true">A<br><span>∴</span></span>
+      <span>
+        <strong>Match the Pattern</strong>
+        <small>Fitch rule practice</small>
+      </span>
+    </button>
+    <div class="header-progress" id="header-progress" hidden>
+      <span id="progress-label">Problem 1 of 6</span>
+      <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
+    </div>
+    <button class="text-button" id="how-button" type="button">How it works</button>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <dialog id="help-dialog">
+    <div class="dialog-heading">
+      <h2>How to use this practice</h2>
+      <button class="close-button" id="close-help" type="button" aria-label="Close">×</button>
+    </div>
+    <p>Look for whole formulas that match the placeholders <span class="meta-letter">𝔄</span> and <span class="meta-letter">𝔅</span>. Select an answer, then choose <strong>Check answer</strong>.</p>
+    <p>After a correct answer, the same colors and labels connect each placeholder in the rule to the formula playing that role in the proof.</p>
+    <div class="role-key" aria-label="Placeholder color key">
+      <span class="role role-a"><b class="meta-letter">𝔄</b> first formula</span>
+      <span class="role role-b"><b class="meta-letter">𝔅</b> second formula</span>
+    </div>
+    <p class="fine-print">Color is never the only cue: every highlighted formula is also labeled A or B.</p>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
