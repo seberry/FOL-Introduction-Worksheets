@@ -239,9 +239,9 @@ function renderHome() {
   app.innerHTML = `
     <section class="page-shell">
       <div class="hero">
-        <p class="eyebrow">Three rules · one big idea</p>
-        <h1>See the <span>whole</span> formula.</h1>
-        <p class="hero-copy"><span class="meta-letter">𝔄</span> and <span class="meta-letter">𝔅</span> are placeholders for complete formulas. Learn to match those placeholders, then practice the first three Fitch inference rules.</p>
+        <p class="eyebrow">Fitch rule practice</p>
+        <h1>Recognize the first three <span>inference rules.</span></h1>
+        <p class="hero-copy">Learn to identify concrete instances of &amp;I, &amp;E, and →E by matching formulas to their rule schemas.</p>
       </div>
       <div class="lesson-path" aria-label="Choose a level">
         ${LEVELS.map((level, index) => `
