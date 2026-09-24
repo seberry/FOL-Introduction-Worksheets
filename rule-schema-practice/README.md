@@ -7,5 +7,6 @@ To use it, copy this entire folder and open `index.html` in a browser. It does n
 - `index.html` contains the page shell.
 - `styles.css` contains the responsive layout and visual design.
 - `app.js` contains the lesson text, rule schemas, exercises, feedback, and interaction logic.
+- `ERROR_FEEDBACK.md` provides an instructor-facing overview of every incorrect-answer explanation.
 
 The `LEVELS` array near the top of `app.js` is the problem bank. Add or revise exercises there; the interface and progress display are generated from that data.

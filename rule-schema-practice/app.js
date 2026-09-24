@@ -98,12 +98,12 @@ const LEVELS = [
         "~P": "That uses only one premise. &I combines both formulas."
       }),
       ex("Now each placeholder is replaced by a more complex formula.", "andI", [line("P → Q"), line("~R"), blank("&I 1, 2")], ["(P → Q) & ~R", "P → (Q & ~R)", "Q & ~R", "(P & Q) → ~R"], "(P → Q) & ~R", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|(P → Q)}", "{B|~R}", "{A|(P → Q)} & {B|~R}"]), {
-        "P → (Q & ~R)": "That places only Q together with ~R. The whole formula P → Q is playing the role of A.",
+        "P → (Q & ~R)": "That places only Q together with ~R. The whole formula P → Q is playing the role of 𝔄.",
         "Q & ~R": "Q is only part of line 1. &I uses the whole formula P → Q.",
         "(P & Q) → ~R": "&I puts an & between the two whole formulas; it does not rearrange their insides."
       }),
       ex("Choose the formula that belongs on line 3.", "andI", [line("P & Q"), line("R → S"), blank("&I 1, 2")], ["(P & Q) & (R → S)", "Q & R", "P & (Q → R)", "(P & Q) → (R → S)"], "(P & Q) & (R → S)", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|(P & Q)}", "{B|(R → S)}", "{A|(P & Q)} & {B|(R → S)}"]), {
-        "Q & R": "That takes pieces from inside the premises. A and B stand for the two whole formulas.",
+        "Q & R": "That takes pieces from inside the premises. 𝔄 and 𝔅 stand for the two whole formulas.",
         "P & (Q → R)": "This changes both premises. &I preserves them and adds a new main &.",
         "(P & Q) → (R → S)": "The rule here is &I, so the new main connective must be &."
       }),
@@ -138,26 +138,26 @@ const LEVELS = [
     ...RULES.arrowE,
     exercises: [
       ex("Choose the formula that belongs on line 3.", "arrowE", [line("P → Q"), line("P"), blank("→E 1, 2")], ["Q", "P", "P → Q", "Q → P"], "Q", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|P} → {B|Q}", "{A|P}", "{B|Q}"])),
-      ex("Here A is a conjunction. Follow the same pattern.", "arrowE", [line("(P & Q) → R"), line("P & Q"), blank("→E 1, 2")], ["R", "Q", "P", "P & Q"], "R", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P & Q)} → {B|R}", "{A|(P & Q)}", "{B|R}"]), {
+      ex("Here 𝔄 is a conjunction. Follow the same pattern.", "arrowE", [line("(P & Q) → R"), line("P & Q"), blank("→E 1, 2")], ["R", "Q", "P", "P & Q"], "R", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P & Q)} → {B|R}", "{A|(P & Q)}", "{B|R}"]), {
         "Q": "The second premise matches the whole antecedent P & Q, so →E gives the consequent R.",
         "P": "P is only part of the antecedent. Once the whole antecedent is present, conclude R.",
         "P & Q": "That repeats the antecedent. →E takes you to the consequent R."
       }),
-      ex("Here B is a conjunction. What may you conclude?", "arrowE", [line("P → (Q & R)"), line("P"), blank("→E 1, 2")], ["Q & R", "Q", "R", "P & Q"], "Q & R", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|P} → {B|(Q & R)}", "{A|P}", "{B|(Q & R)}"]), {
-        "Q": "B is the whole consequent Q & R. →E gives all of B, not just its first part.",
-        "R": "B is the whole consequent Q & R. →E gives all of B, not just its second part.",
+      ex("Here 𝔅 is a conjunction. What may you conclude?", "arrowE", [line("P → (Q & R)"), line("P"), blank("→E 1, 2")], ["Q & R", "Q", "R", "P & Q"], "Q & R", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|P} → {B|(Q & R)}", "{A|P}", "{B|(Q & R)}"]), {
+        "Q": "𝔅 is the whole consequent Q & R. →E gives all of 𝔅, not just its first part.",
+        "R": "𝔅 is the whole consequent Q & R. →E gives all of 𝔅, not just its second part.",
         "P & Q": "→E copies the consequent of line 1; it does not build a new conjunction."
       }),
       ex("Which formula is needed on line 2 to make →E apply?", "arrowE", [line("(P → Q) → (R & S)"), blank(), line("R & S", "→E 1, 2")], ["P → Q", "Q", "R", "R & S"], "P → Q", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P → Q)} → {B|(R & S)}", "{A|(P → Q)}", "{B|(R & S)}"]), {
-        "Q": "The antecedent A is the entire formula P → Q, not merely its consequent Q.",
-        "R": "R is part of B. The missing premise must match A, the whole left side of the conditional.",
-        "R & S": "That is B. →E requires A as the second premise in order to conclude B."
+        "Q": "The antecedent 𝔄 is the entire formula P → Q, not merely its consequent Q.",
+        "R": "R is part of 𝔅. The missing premise must match 𝔄, the whole left side of the conditional.",
+        "R & S": "That is 𝔅. →E requires 𝔄 as the second premise in order to conclude 𝔅."
       }),
       roleEx("What whole formula is playing the role of 𝔅?", "arrowE", [line("(P & Q) → (R → S)"), line("P & Q"), line("R → S", "→E 1, 2")], ["R", "S", "R → S", "P & Q"], "R → S", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P & Q)} → {B|(R → S)}", "{A|(P & Q)}", "{B|(R → S)}"]), "𝔅 is the entire consequent R → S. A placeholder may stand for a conditional."),
       ex("Which second premise makes the displayed inference work?", "arrowE", [line("~P → (Q & R)"), blank(), line("Q & R", "→E 1, 2")], ["~P", "P", "Q", "Q & R"], "~P", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|~P} → {B|(Q & R)}", "{A|~P}", "{B|(Q & R)}"]), {
         "P": "The antecedent is ~P. P and ~P do not match.",
         "Q": "Q is only part of the consequent. The needed second premise is the antecedent ~P.",
-        "Q & R": "That is the result B. To reach it by →E, the other premise must be A, which is ~P."
+        "Q & R": "That is the result 𝔅. To reach it by →E, the other premise must be 𝔄, which is ~P."
       })
     ]
   },
@@ -167,10 +167,10 @@ const LEVELS = [
     symbol: "Mix",
     name: "Mixed Rule Practice",
     short: "Name the rule that fits",
-    explanation: "Now the rule name is missing. Compare the proof with all three schemas and choose the rule that licenses its final line.",
-    note: "Ask what changed: were two formulas joined, was one conjunct taken out, or was a conditional followed?",
-    everyday: ["Two facts become an ‘and.’", "One side comes out of an ‘and.’", "The ‘if’ part leads to the ‘then’ part."],
-    callout: "Match the shape before you match the rule name.",
+    explanation: "Compare the proof with all three schemas and choose the rule that licenses its final line.",
+    note: "",
+    everyday: [],
+    callout: "",
     schema: [],
     exercises: [
       mixedEx([line("P"), line("Q"), line("P & Q", "?")], "&I", "andI", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|P}", "{B|Q}", "{A|P} & {B|Q}"])),
@@ -266,14 +266,14 @@ function renderIntro() {
           <p class="eyebrow">${level.label} · Meet the rule</p>
           <h1>${level.name} <span class="sr-only">${level.symbol}</span></h1>
           <div class="plain-language"><strong>In plain language</strong>${level.explanation}</div>
-          <div class="example-card">
+          ${level.everyday.length ? `<div class="example-card">
             <h2>Everyday example</h2>
             <dl class="everyday-lines">
               ${level.everyday.map((text, index) => text ? `<dt>${index === level.everyday.length - 1 ? '<span class="therefore">∴</span>' : index + 1}</dt><dd>${text}</dd>` : "").join("")}
             </dl>
             ${level.callout ? `<p class="callout">${level.callout}</p>` : ""}
-          </div>
-          <p class="placeholder-note">${level.note}</p>
+          </div>` : ""}
+          ${level.note ? `<p class="placeholder-note">${level.note}</p>` : ""}
           ${level.demo ? renderSchemaDemo(level) : ""}
           <div class="intro-actions">
             <button class="primary-button" type="button" data-begin-practice>Practice ${level.symbol}<span class="arrow" aria-hidden="true">→</span></button>
