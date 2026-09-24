@@ -1,107 +1,266 @@
 # Error-feedback reference
 
-This page collects the explanations shown after an incorrect answer in **Match the Pattern**.
+> **Status:** Approved and implemented in `app.js`.
 
-## Shared fallback messages
+## Feedback policy
 
-Some early or routine exercises use a shared message instead of a different explanation for every distractor.
+Error feedback should direct the student back to the relevant schema without supplying the answer.
 
-- Formula-completion fallback: “Compare the whole formulas in the proof with each line of the rule schema.”
-- Metavariable-question fallback: “Look for the complete formula occupying that placeholder—not just a letter inside it.”
+1. Identify an observable structural mismatch: wrong main connective, omitted cited line, altered cited sentence, incomplete conjunct, or the wrong half of a conditional.
+2. Restate only as much of the rule as the student needs for another attempt.
+3. Do not state the missing formula or name the correct choice.
+4. Refer to the cited line numbers rather than “the available lines.” Other earlier proof lines may also be available.
+5. Do not imply that `&I` requires two distinct sentences or lines. The same line may be cited twice; from `P`, one may infer `P & P` by `&I`.
+6. Use the following student-facing glosses when helpful:
+   - **Conjunct:** one of the complete sentences joined by the main `&`.
+   - **Antecedent:** the complete front half of a conditional.
+   - **Consequent:** the complete back half of a conditional.
 
 ## Level 1: Conjunction Introduction (`&I`)
 
-### Problem 1 — correct answer: `P & Q`
+General reminder for this level:
 
-- If `P → Q`: “That makes a conditional. &I joins the two available formulas with &.”
-- If `Q`: “That repeats line 2. &I should put both available formulas together.”
-- If `P`: “That repeats line 1. &I should put both available formulas together.”
-
-### Problem 2 — correct answer: `~P & R`
-
-- If `~(P & R)`: “The negation belongs only to P on line 1. &I does not move it outside the new conjunction.”
-- If `P & R`: “Line 1 is ~P, not P. Keep each complete formula unchanged when you join them.”
-- If `~P`: “That uses only one premise. &I combines both formulas.”
-
-### Problem 3 — correct answer: `(P → Q) & ~R`
-
-- If `P → (Q & ~R)`: “That places only Q together with ~R. The whole formula P → Q is playing the role of 𝔄.”
-- If `Q & ~R`: “Q is only part of line 1. &I uses the whole formula P → Q.”
-- If `(P & Q) → ~R`: “&I puts an & between the two whole formulas; it does not rearrange their insides.”
-
-### Problem 4 — correct answer: `(P & Q) & (R → S)`
-
-- If `Q & R`: “That takes pieces from inside the premises. 𝔄 and 𝔅 stand for the two whole formulas.”
-- If `P & (Q → R)`: “This changes both premises. &I preserves them and adds a new main &.”
-- If `(P & Q) → (R → S)`: “The rule here is &I, so the new main connective must be &.”
-
-### Problems 5–6
-
-- Problem 5 uses the metavariable-question fallback.
-- Problem 6 uses the formula-completion fallback.
-
-## Level 2: Conjunction Elimination (`&E`)
-
-### Problems 1–3
-
-These introductory exercises use the formula-completion fallback.
-
-### Problem 4 — correct answer: `P → Q`
-
-- If `Q`: “Q is only a part of the first conjunct. &E takes out one of the two complete conjuncts.”
-- If `P`: “P is buried inside the first conjunct. The whole first conjunct is P → Q.”
-- If `Q & R`: “Those pieces are not the two conjuncts shown by the main &: they are (P → Q) and R.”
-
-### Problem 5
-
-This exercise uses the metavariable-question fallback.
-
-### Problem 6 — correct answer: `R & S`
-
-- If `S`: “S is only part of the second conjunct. The whole second conjunct is R & S.”
-- If `P → Q`: “The first conjunct is ~(P → Q), including its negation. &E cannot drop the ~.”
-- If `~R & S`: “&E copies a whole conjunct exactly; it does not move a negation into it.”
-
-## Level 3: Conditional Elimination (`→E`)
+> `&I` lets us infer a conjunction (`&`) of the exact sentences on the cited line number(s).
 
 ### Problem 1
 
-This introductory exercise uses the formula-completion fallback.
+Proof: `P`, `Q`, therefore `[blank]` by `&I 1, 2`
+Correct answer for instructor reference: `P & Q`
 
-### Problem 2 — correct answer: `R`
+| Incorrect choice | Student feedback |
+|---|---|
+| `P → Q` | Careful: `&I` lets us infer a conjunction (`&`) of the sentences on the two cited lines. |
+| `Q` | This omits the first cited line. `&I 1, 2` must use the complete sentence on each cited line. |
+| `P` | This omits the second cited line. `&I 1, 2` must use the complete sentence on each cited line. |
 
-- If `Q`: “The second premise matches the whole antecedent P & Q, so →E gives the consequent R.”
-- If `P`: “P is only part of the antecedent. Once the whole antecedent is present, conclude R.”
-- If `P & Q`: “That repeats the antecedent. →E takes you to the consequent R.”
+### Problem 2
 
-### Problem 3 — correct answer: `Q & R`
+Proof: `~P`, `R`, therefore `[blank]` by `&I 1, 2`
+Correct answer for instructor reference: `~P & R`
 
-- If `Q`: “𝔅 is the whole consequent Q & R. →E gives all of 𝔅, not just its first part.”
-- If `R`: “𝔅 is the whole consequent Q & R. →E gives all of 𝔅, not just its second part.”
-- If `P & Q`: “→E copies the consequent of line 1; it does not build a new conjunction.”
+| Incorrect choice | Student feedback |
+|---|---|
+| `~(P & R)` | Careful: the main connective of a conclusion justified by `&I` must be `&`. |
+| `P & R` | One conjunct does not exactly match the complete sentence on either cited line. `&I` copies the cited sentences without changing them. |
+| `~P` | This omits the second cited line. `&I 1, 2` must use the complete sentence on each cited line. |
 
-### Problem 4 — correct answer: `P → Q`
+### Problem 3
 
-- If `Q`: “The antecedent 𝔄 is the entire formula P → Q, not merely its consequent Q.”
-- If `R`: “R is part of 𝔅. The missing premise must match 𝔄, the whole left side of the conditional.”
-- If `R & S`: “That is 𝔅. →E requires 𝔄 as the second premise in order to conclude 𝔅.”
+Proof: `P → Q`, `~R`, therefore `[blank]` by `&I 1, 2`
+Correct answer for instructor reference: `(P → Q) & ~R`
 
-### Problem 5
+| Incorrect choice | Student feedback |
+|---|---|
+| `P → (Q & ~R)` | Careful: `&I` lets us infer a conjunction (`&`) of the sentences on the two cited lines. |
+| `Q & ~R` | One conjunct is only part of the sentence on a cited line. Each conjunct must match a complete cited sentence. |
+| `(P & Q) → ~R` | Careful: `&I` lets us infer a conjunction (`&`) of the sentences on the two cited lines. |
 
-This exercise uses the metavariable-question fallback.
+### Problem 4
 
-### Problem 6 — correct answer: `~P`
+Proof: `P & Q`, `R → S`, therefore `[blank]` by `&I 1, 2`
+Correct answer for instructor reference: `(P & Q) & (R → S)`
 
-- If `P`: “The antecedent is ~P. P and ~P do not match.”
-- If `Q`: “Q is only part of the consequent. The needed second premise is the antecedent ~P.”
-- If `Q & R`: “That is the result 𝔅. To reach it by →E, the other premise must be 𝔄, which is ~P.”
+| Incorrect choice | Student feedback |
+|---|---|
+| `Q & R` | Both conjuncts are only parts of the sentences on the cited lines. Each conjunct must match a complete cited sentence. |
+| `P & (Q → R)` | The conjuncts do not exactly match the complete sentences on the cited lines. `&I` does not rearrange their contents. |
+| `(P & Q) → (R → S)` | Careful: the main connective of a conclusion justified by `&I` must be `&`. |
+
+### Problem 5: identify `𝔄`
+
+Proof: `P → Q`, `R & S`, therefore `(P → Q) & (R & S)` by `&I 1, 2`
+Correct answer for instructor reference: `P → Q`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `P` | This is only part of a sentence on a cited line. A metavariable must match a complete sentence. |
+| `Q` | This is only part of a sentence on a cited line. A metavariable must match a complete sentence. |
+| `(P → Q) & (R & S)` | This is the whole conclusion, which has the form `𝔄 & 𝔅`. The question asks which complete part plays the role of `𝔄`. |
+
+### Problem 6
+
+Proof: `~(P → Q)`, `R & S`, therefore `[blank]` by `&I 1, 2`
+Correct answer for instructor reference: `~(P → Q) & (R & S)`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `~P → (Q & R)` | Careful: `&I` lets us infer a conjunction (`&`) of the sentences on the two cited lines. |
+| `(P → Q) & (R → S)` | The conjuncts do not exactly match the complete sentences on the cited lines. `&I` copies cited sentences without changing them. |
+| `~((P → Q) & R)` | Careful: the main connective of a conclusion justified by `&I` must be `&`. |
+
+### Clarification included in the `&I` introduction
+
+> `&I` lets you infer a conjunction whose two conjuncts are exactly the sentences on the cited line number(s). The cited sentences need not be different, and the line numbers need not be different. For example, from `P` you may infer `P & P` by `&I 1, 1`.
+
+## Level 2: Conjunction Elimination (`&E`)
+
+General reminder for this level:
+
+> `&E` lets us infer either whole conjunct of the conjunction on the cited line. A conjunct is one of the complete sentences joined by the main `&`.
+
+### Problem 1
+
+Proof: `P & Q`, therefore `[blank]` by `&E 1`
+Correct answer for instructor reference: `P`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `P → Q` | This does not exactly match either whole conjunct on the cited line. `&E` copies one conjunct without changing it. |
+| `P & Q` | This repeats the whole conjunction. `&E` lets us infer one of the complete things joined by its main `&`. |
+| `~Q` | This changes one of the conjuncts. `&E` copies a whole conjunct without changing it. |
+
+### Problem 2
+
+Proof: `P & Q`, therefore `[blank]` by `&E 1`
+Correct answer for instructor reference: `Q`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `P → Q` | This does not exactly match either whole conjunct on the cited line. `&E` copies one conjunct without changing it. |
+| `P & Q` | This repeats the whole conjunction. `&E` lets us infer one of the complete things joined by its main `&`. |
+| `~P` | This changes one of the conjuncts. `&E` copies a whole conjunct without changing it. |
+
+### Problem 3
+
+Proof: `~P & R`, therefore `[blank]` by `&E 1`
+Correct answer for instructor reference: `~P`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `P` | This does not exactly match a whole conjunct on the cited line. `&E` copies a conjunct without dropping anything from it. |
+| `~R` | This changes one of the conjuncts. `&E` copies a whole conjunct without changing it. |
+| `P & R` | This is a new conjunction rather than one whole conjunct from the cited line. |
+
+### Problem 4
+
+Proof: `(P → Q) & R`, therefore `[blank]` by `&E 1`
+Correct answer for instructor reference: `P → Q`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `Q` | This is only part of a conjunct. `&E` copies one whole conjunct—one complete thing joined by the main `&`. |
+| `P` | This is only part of a conjunct. `&E` copies one whole conjunct—one complete thing joined by the main `&`. |
+| `Q & R` | This builds a new conjunction from parts of the cited line. `&E` instead copies one whole conjunct. |
+
+### Problem 5: identify `𝔄`
+
+Proof: `(P & Q) & (R → S)`, therefore `P & Q` by `&E 1`
+Correct answer for instructor reference: `P & Q`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `P` | This is only part of a conjunct. Here `𝔄` must match one whole conjunct of the premise. |
+| `Q` | This is only part of a conjunct. Here `𝔄` must match one whole conjunct of the premise. |
+| `(P & Q) & (R → S)` | This is the whole premise, which has the form `𝔄 & 𝔅`. The question asks which complete part plays the role of `𝔄`. |
+
+### Problem 6
+
+Proof: `~(P → Q) & (R & S)`, therefore `[blank]` by `&E 1`
+Correct answer for instructor reference: `R & S`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `S` | This is only part of a conjunct. `&E` copies one whole conjunct—one complete thing joined by the main `&`. |
+| `P → Q` | This does not exactly match a whole conjunct on the cited line. `&E` copies a conjunct without dropping anything from it. |
+| `~R & S` | This does not exactly match either whole conjunct on the cited line. `&E` does not move material from one conjunct into another. |
+
+## Level 3: Conditional Elimination (`→E`)
+
+General reminder for this level:
+
+> `→E` lets us infer the consequent (the complete back half) of a cited conditional when another cited line contains its antecedent (the complete front half).
+
+### Problem 1
+
+Proof: `P → Q`, `P`, therefore `[blank]` by `→E 1, 2`
+Correct answer for instructor reference: `Q`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `P` | This repeats the antecedent (front half). `→E` lets us infer the consequent (back half) of the cited conditional. |
+| `P → Q` | This repeats the conditional. `→E` lets us infer its consequent when another cited line contains its antecedent. |
+| `Q → P` | This reverses the conditional. `→E` lets us infer its consequent; it does not infer a reversed conditional. |
+
+### Problem 2
+
+Proof: `(P & Q) → R`, `P & Q`, therefore `[blank]` by `→E 1, 2`
+Correct answer for instructor reference: `R`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `Q` | This is only part of the antecedent. `→E` lets us infer the complete consequent (back half) of the cited conditional. |
+| `P` | This is only part of the antecedent. `→E` lets us infer the complete consequent (back half) of the cited conditional. |
+| `P & Q` | This repeats the antecedent. `→E` lets us infer the consequent of the cited conditional. |
+
+### Problem 3
+
+Proof: `P → (Q & R)`, `P`, therefore `[blank]` by `→E 1, 2`
+Correct answer for instructor reference: `Q & R`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `Q` | This is only part of the consequent. `→E` lets us infer the complete consequent (the whole back half) of the cited conditional. |
+| `R` | This is only part of the consequent. `→E` lets us infer the complete consequent (the whole back half) of the cited conditional. |
+| `P & Q` | This constructs a new sentence from parts of the cited lines. `→E` instead lets us infer the complete consequent of the cited conditional. |
+
+### Problem 4
+
+Proof: `(P → Q) → (R & S)`, `[blank]`, therefore `R & S` by `→E 1, 2`
+Correct answer for instructor reference: `P → Q`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `Q` | This is only part of the antecedent. To apply `→E`, the other cited line must contain the complete antecedent (front half) of the conditional. |
+| `R` | This comes from the consequent. To apply `→E`, the other cited line must contain the complete antecedent (front half). |
+| `R & S` | This is the consequent. To apply `→E`, the other cited line must contain the antecedent of the conditional. |
+
+### Problem 5: identify `𝔅`
+
+Proof: `(P & Q) → (R → S)`, `P & Q`, therefore `R → S` by `→E 1, 2`
+Correct answer for instructor reference: `R → S`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `R` | This is only part of the consequent. `𝔅` must match the complete consequent (the whole back half). |
+| `S` | This is only part of the consequent. `𝔅` must match the complete consequent (the whole back half). |
+| `P & Q` | This is the antecedent, so it plays the role of `𝔄`, not `𝔅`. Look for the complete consequent. |
+
+### Problem 6
+
+Proof: `~P → (Q & R)`, `[blank]`, therefore `Q & R` by `→E 1, 2`
+Correct answer for instructor reference: `~P`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `P` | This does not exactly match the antecedent. The other cited line must contain the complete antecedent without changing it. |
+| `Q` | This is only part of the consequent. The missing cited line must instead match the complete antecedent. |
+| `Q & R` | This is the consequent. To apply `→E`, the other cited line must contain the antecedent of the conditional. |
 
 ## Level 4: Mixed Rule Practice
 
-The mixed exercises explain the selected rule. Only explanations for an incorrect selection are shown.
+These hints describe the selected rule and ask the student to compare its shape with the proof. They do not name the correct rule.
 
-- If `&I` is selected: “&I combines two formulas into a conjunction.”
-- If `&E` is selected: “&E takes one whole conjunct from a conjunction.”
-- If `→E` is selected: “→E uses a conditional and its antecedent to reach its consequent.”
+### Problems 1 and 4 — correct rule for instructor reference: `&I`
 
-Problems 1 and 4 have `&I` as the correct answer, Problems 2 and 5 have `&E`, and Problems 3 and 6 have `→E`.
+| Incorrect choice | Student feedback |
+|---|---|
+| `&E` | `&E` starts with a cited conjunction and copies one whole conjunct from it. Does the displayed proof have that shape? |
+| `→E` | `→E` requires a cited conditional and another cited line containing its complete antecedent. Does the displayed proof have that shape? |
+
+### Problems 2 and 5 — correct rule for instructor reference: `&E`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `&I` | `&I` forms a conjunction from the exact sentences on its cited line number(s). Does the displayed proof have that shape? |
+| `→E` | `→E` requires a cited conditional and another cited line containing its complete antecedent. Does the displayed proof have that shape? |
+
+### Problems 3 and 6 — correct rule for instructor reference: `→E`
+
+| Incorrect choice | Student feedback |
+|---|---|
+| `&I` | `&I` forms a conjunction from the exact sentences on its cited line number(s). Does the displayed proof have that shape? |
+| `&E` | `&E` starts with a cited conjunction and copies one whole conjunct from it. Does the displayed proof have that shape? |
+
+## Repository instruction
+
+> Treat incorrect-answer feedback in educational games as high-risk instructional content. Before implementing or committing new or revised feedback, create or update an instructor-readable feedback reference that shows each problem, distractor, and proposed response. Ask the repository owner to review and approve that wording. Do not describe the feedback as final until approval. Check each explanation against the exact formal rule, including limiting or degenerate cases such as citing the same line twice for `&I`, and avoid claims stronger than the rule itself. Prefer hints that direct the student back to the schema without supplying the correct answer.

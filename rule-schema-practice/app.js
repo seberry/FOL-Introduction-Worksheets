@@ -4,9 +4,9 @@ const RULES = {
   andI: {
     symbol: "&I",
     name: "Conjunction Introduction",
-    short: "Put two formulas together",
-    explanation: "If you have 𝔄, and you also have 𝔅, you may put them together and conclude 𝔄 & 𝔅.",
-    note: "𝔄 and 𝔅 are placeholders. Each can stand for any complete formula.",
+    short: "Conjoin the cited line(s)",
+    explanation: "&I lets you infer a conjunction whose two conjuncts are exactly the sentences on the cited line number(s).",
+    note: "𝔄 and 𝔅 are placeholders for complete sentences of TFL. They may be the same sentence, and the same line may be cited twice. Thus, from P you may infer P & P by &I 1, 1.",
     schema: [
       { formula: "A" },
       { formula: "B" },
@@ -22,7 +22,7 @@ const RULES = {
       b: "~R",
       lines: [line("P → Q"), line("~R"), line("(P → Q) & ~R", "&I 1, 2")]
     },
-    callout: "Two available formulas become one conjunction."
+    callout: "The conclusion conjoins exactly what the cited lines say."
   },
   andE: {
     symbol: "&E",
@@ -88,27 +88,35 @@ const LEVELS = [
     ...RULES.andI,
     exercises: [
       ex("Choose the formula that belongs on line 3.", "andI", [line("P"), line("Q"), blank("&I 1, 2")], ["P & Q", "P → Q", "Q", "P"], "P & Q", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|P}", "{B|Q}", "{A|P} & {B|Q}"]), {
-        "P → Q": "That makes a conditional. &I joins the two available formulas with &.",
-        "Q": "That repeats line 2. &I should put both available formulas together.",
-        "P": "That repeats line 1. &I should put both available formulas together."
+        "P → Q": "Careful: &I lets us infer a conjunction (&) of the sentences on the two cited lines.",
+        "Q": "This omits the first cited line. &I 1, 2 must use the complete sentence on each cited line.",
+        "P": "This omits the second cited line. &I 1, 2 must use the complete sentence on each cited line."
       }),
       ex("Choose the formula that belongs on line 3.", "andI", [line("~P"), line("R"), blank("&I 1, 2")], ["~P & R", "~(P & R)", "P & R", "~P"], "~P & R", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|~P}", "{B|R}", "{A|~P} & {B|R}"]), {
-        "~(P & R)": "The negation belongs only to P on line 1. &I does not move it outside the new conjunction.",
-        "P & R": "Line 1 is ~P, not P. Keep each complete formula unchanged when you join them.",
-        "~P": "That uses only one premise. &I combines both formulas."
+        "~(P & R)": "Careful: the main connective of a conclusion justified by &I must be &.",
+        "P & R": "One conjunct does not exactly match the complete sentence on either cited line. &I copies the cited sentences without changing them.",
+        "~P": "This omits the second cited line. &I 1, 2 must use the complete sentence on each cited line."
       }),
       ex("Now each placeholder is replaced by a more complex formula.", "andI", [line("P → Q"), line("~R"), blank("&I 1, 2")], ["(P → Q) & ~R", "P → (Q & ~R)", "Q & ~R", "(P & Q) → ~R"], "(P → Q) & ~R", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|(P → Q)}", "{B|~R}", "{A|(P → Q)} & {B|~R}"]), {
-        "P → (Q & ~R)": "That places only Q together with ~R. The whole formula P → Q is playing the role of 𝔄.",
-        "Q & ~R": "Q is only part of line 1. &I uses the whole formula P → Q.",
-        "(P & Q) → ~R": "&I puts an & between the two whole formulas; it does not rearrange their insides."
+        "P → (Q & ~R)": "Careful: &I lets us infer a conjunction (&) of the sentences on the two cited lines.",
+        "Q & ~R": "One conjunct is only part of the sentence on a cited line. Each conjunct must match a complete cited sentence.",
+        "(P & Q) → ~R": "Careful: &I lets us infer a conjunction (&) of the sentences on the two cited lines."
       }),
       ex("Choose the formula that belongs on line 3.", "andI", [line("P & Q"), line("R → S"), blank("&I 1, 2")], ["(P & Q) & (R → S)", "Q & R", "P & (Q → R)", "(P & Q) → (R → S)"], "(P & Q) & (R → S)", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|(P & Q)}", "{B|(R → S)}", "{A|(P & Q)} & {B|(R → S)}"]), {
-        "Q & R": "That takes pieces from inside the premises. 𝔄 and 𝔅 stand for the two whole formulas.",
-        "P & (Q → R)": "This changes both premises. &I preserves them and adds a new main &.",
-        "(P & Q) → (R → S)": "The rule here is &I, so the new main connective must be &."
+        "Q & R": "Both conjuncts are only parts of the sentences on the cited lines. Each conjunct must match a complete cited sentence.",
+        "P & (Q → R)": "The conjuncts do not exactly match the complete sentences on the cited lines. &I does not rearrange their contents.",
+        "(P & Q) → (R → S)": "Careful: the main connective of a conclusion justified by &I must be &."
       }),
-      roleEx("In this application of &I, what whole formula is playing the role of 𝔄?", "andI", [line("P → Q"), line("R & S"), line("(P → Q) & (R & S)", "&I 1, 2")], ["P", "Q", "P → Q", "(P → Q) & (R & S)"], "P → Q", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|(P → Q)}", "{B|(R & S)}", "{A|(P → Q)} & {B|(R & S)}"]), "𝔄 matches all of line 1: P → Q. A placeholder can stand for a compound formula."),
-      ex("One last match: keep each whole formula intact.", "andI", [line("~(P → Q)"), line("R & S"), blank("&I 1, 2")], ["~(P → Q) & (R & S)", "~P → (Q & R)", "P → Q & R → S", "~((P → Q) & R)"], "~(P → Q) & (R & S)", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|~(P → Q)}", "{B|(R & S)}", "{A|~(P → Q)} & {B|(R & S)}"]))
+      roleEx("In this application of &I, what whole formula is playing the role of 𝔄?", "andI", [line("P → Q"), line("R & S"), line("(P → Q) & (R & S)", "&I 1, 2")], ["P", "Q", "P → Q", "(P → Q) & (R & S)"], "P → Q", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|(P → Q)}", "{B|(R & S)}", "{A|(P → Q)} & {B|(R & S)}"]), "𝔄 matches all of line 1: P → Q. A placeholder can stand for a compound formula.", {
+        "P": "This is only part of a sentence on a cited line. A metavariable must match a complete sentence.",
+        "Q": "This is only part of a sentence on a cited line. A metavariable must match a complete sentence.",
+        "(P → Q) & (R & S)": "This is the whole conclusion, which has the form 𝔄 & 𝔅. The question asks which complete part plays the role of 𝔄."
+      }),
+      ex("One last match: keep each whole formula intact.", "andI", [line("~(P → Q)"), line("R & S"), blank("&I 1, 2")], ["~(P → Q) & (R & S)", "~P → (Q & R)", "(P → Q) & (R → S)", "~((P → Q) & R)"], "~(P → Q) & (R & S)", map(["{A|A}", "{B|B}", "{A|A} & {B|B}"], ["{A|~(P → Q)}", "{B|(R & S)}", "{A|~(P → Q)} & {B|(R & S)}"]), {
+        "~P → (Q & R)": "Careful: &I lets us infer a conjunction (&) of the sentences on the two cited lines.",
+        "(P → Q) & (R → S)": "The conjuncts do not exactly match the complete sentences on the cited lines. &I copies cited sentences without changing them.",
+        "~((P → Q) & R)": "Careful: the main connective of a conclusion justified by &I must be &."
+      })
     ]
   },
   {
@@ -116,19 +124,35 @@ const LEVELS = [
     label: "Level 2",
     ...RULES.andE,
     exercises: [
-      ex("Choose a formula that &E licenses on line 2.", "andE", [line("P & Q"), blank("&E 1")], ["P", "P → Q", "P & Q", "~Q"], "P", map(["{A|A} & {B|B}", "{A|A}"], ["{A|P} & {B|Q}", "{A|P}"])),
-      ex("This time, take out the other conjunct.", "andE", [line("P & Q"), blank("&E 1")], ["Q", "P → Q", "P & Q", "~P"], "Q", map(["{A|A} & {B|B}", "{B|B}"], ["{A|P} & {B|Q}", "{B|Q}"])),
-      ex("Find one whole conjunct of line 1.", "andE", [line("~P & R"), blank("&E 1")], ["~P", "P", "~R", "P & R"], "~P", map(["{A|A} & {B|B}", "{A|A}"], ["{A|~P} & {B|R}", "{A|~P}"])),
-      ex("The first conjunct is itself a conditional.", "andE", [line("(P → Q) & R"), blank("&E 1")], ["P → Q", "Q", "P", "Q & R"], "P → Q", map(["{A|A} & {B|B}", "{A|A}"], ["{A|(P → Q)} & {B|R}", "{A|(P → Q)}"]), {
-        "Q": "Q is only a part of the first conjunct. &E takes out one of the two complete conjuncts.",
-        "P": "P is buried inside the first conjunct. The whole first conjunct is P → Q.",
-        "Q & R": "Those pieces are not the two conjuncts shown by the main &: they are (P → Q) and R."
+      ex("Choose a formula that &E licenses on line 2.", "andE", [line("P & Q"), blank("&E 1")], ["P", "P → Q", "P & Q", "~Q"], "P", map(["{A|A} & {B|B}", "{A|A}"], ["{A|P} & {B|Q}", "{A|P}"]), {
+        "P → Q": "This does not exactly match either whole conjunct on the cited line. &E copies one conjunct without changing it.",
+        "P & Q": "This repeats the whole conjunction. &E lets us infer one of the complete things joined by its main &.",
+        "~Q": "This changes one of the conjuncts. &E copies a whole conjunct without changing it."
       }),
-      roleEx("What whole formula is playing the role of 𝔄?", "andE", [line("(P & Q) & (R → S)"), line("P & Q", "&E 1")], ["P", "P & Q", "Q", "(P & Q) & (R → S)"], "P & Q", map(["{A|A} & {B|B}", "{A|A}"], ["{A|(P & Q)} & {B|(R → S)}", "{A|(P & Q)}"]), "𝔄 is the whole left conjunct, P & Q—not merely the first letter P."),
+      ex("This time, take out the other conjunct.", "andE", [line("P & Q"), blank("&E 1")], ["Q", "P → Q", "P & Q", "~P"], "Q", map(["{A|A} & {B|B}", "{B|B}"], ["{A|P} & {B|Q}", "{B|Q}"]), {
+        "P → Q": "This does not exactly match either whole conjunct on the cited line. &E copies one conjunct without changing it.",
+        "P & Q": "This repeats the whole conjunction. &E lets us infer one of the complete things joined by its main &.",
+        "~P": "This changes one of the conjuncts. &E copies a whole conjunct without changing it."
+      }),
+      ex("Find one whole conjunct of line 1.", "andE", [line("~P & R"), blank("&E 1")], ["~P", "P", "~R", "P & R"], "~P", map(["{A|A} & {B|B}", "{A|A}"], ["{A|~P} & {B|R}", "{A|~P}"]), {
+        "P": "This does not exactly match a whole conjunct on the cited line. &E copies a conjunct without dropping anything from it.",
+        "~R": "This changes one of the conjuncts. &E copies a whole conjunct without changing it.",
+        "P & R": "This is a new conjunction rather than one whole conjunct from the cited line."
+      }),
+      ex("The first conjunct is itself a conditional.", "andE", [line("(P → Q) & R"), blank("&E 1")], ["P → Q", "Q", "P", "Q & R"], "P → Q", map(["{A|A} & {B|B}", "{A|A}"], ["{A|(P → Q)} & {B|R}", "{A|(P → Q)}"]), {
+        "Q": "This is only part of a conjunct. &E copies one whole conjunct—one complete thing joined by the main &.",
+        "P": "This is only part of a conjunct. &E copies one whole conjunct—one complete thing joined by the main &.",
+        "Q & R": "This builds a new conjunction from parts of the cited line. &E instead copies one whole conjunct."
+      }),
+      roleEx("What whole formula is playing the role of 𝔄?", "andE", [line("(P & Q) & (R → S)"), line("P & Q", "&E 1")], ["P", "P & Q", "Q", "(P & Q) & (R → S)"], "P & Q", map(["{A|A} & {B|B}", "{A|A}"], ["{A|(P & Q)} & {B|(R → S)}", "{A|(P & Q)}"]), "𝔄 is the whole left conjunct, P & Q—not merely the first letter P.", {
+        "P": "This is only part of a conjunct. Here 𝔄 must match one whole conjunct of the premise.",
+        "Q": "This is only part of a conjunct. Here 𝔄 must match one whole conjunct of the premise.",
+        "(P & Q) & (R → S)": "This is the whole premise, which has the form 𝔄 & 𝔅. The question asks which complete part plays the role of 𝔄."
+      }),
       ex("Choose the formula that &E licenses.", "andE", [line("~(P → Q) & (R & S)"), blank("&E 1")], ["R & S", "S", "P → Q", "~R & S"], "R & S", map(["{A|A} & {B|B}", "{B|B}"], ["{A|~(P → Q)} & {B|(R & S)}", "{B|(R & S)}"]), {
-        "S": "S is only part of the second conjunct. The whole second conjunct is R & S.",
-        "P → Q": "The first conjunct is ~(P → Q), including its negation. &E cannot drop the ~.",
-        "~R & S": "&E copies a whole conjunct exactly; it does not move a negation into it."
+        "S": "This is only part of a conjunct. &E copies one whole conjunct—one complete thing joined by the main &.",
+        "P → Q": "This does not exactly match a whole conjunct on the cited line. &E copies a conjunct without dropping anything from it.",
+        "~R & S": "This does not exactly match either whole conjunct on the cited line. &E does not move material from one conjunct into another."
       })
     ]
   },
@@ -137,27 +161,35 @@ const LEVELS = [
     label: "Level 3",
     ...RULES.arrowE,
     exercises: [
-      ex("Choose the formula that belongs on line 3.", "arrowE", [line("P → Q"), line("P"), blank("→E 1, 2")], ["Q", "P", "P → Q", "Q → P"], "Q", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|P} → {B|Q}", "{A|P}", "{B|Q}"])),
+      ex("Choose the formula that belongs on line 3.", "arrowE", [line("P → Q"), line("P"), blank("→E 1, 2")], ["Q", "P", "P → Q", "Q → P"], "Q", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|P} → {B|Q}", "{A|P}", "{B|Q}"]), {
+        "P": "This repeats the antecedent (front half). →E lets us infer the consequent (back half) of the cited conditional.",
+        "P → Q": "This repeats the conditional. →E lets us infer its consequent when another cited line contains its antecedent.",
+        "Q → P": "This reverses the conditional. →E lets us infer its consequent; it does not infer a reversed conditional."
+      }),
       ex("Here 𝔄 is a conjunction. Follow the same pattern.", "arrowE", [line("(P & Q) → R"), line("P & Q"), blank("→E 1, 2")], ["R", "Q", "P", "P & Q"], "R", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P & Q)} → {B|R}", "{A|(P & Q)}", "{B|R}"]), {
-        "Q": "The second premise matches the whole antecedent P & Q, so →E gives the consequent R.",
-        "P": "P is only part of the antecedent. Once the whole antecedent is present, conclude R.",
-        "P & Q": "That repeats the antecedent. →E takes you to the consequent R."
+        "Q": "This is only part of the antecedent. →E lets us infer the complete consequent (back half) of the cited conditional.",
+        "P": "This is only part of the antecedent. →E lets us infer the complete consequent (back half) of the cited conditional.",
+        "P & Q": "This repeats the antecedent. →E lets us infer the consequent of the cited conditional."
       }),
       ex("Here 𝔅 is a conjunction. What may you conclude?", "arrowE", [line("P → (Q & R)"), line("P"), blank("→E 1, 2")], ["Q & R", "Q", "R", "P & Q"], "Q & R", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|P} → {B|(Q & R)}", "{A|P}", "{B|(Q & R)}"]), {
-        "Q": "𝔅 is the whole consequent Q & R. →E gives all of 𝔅, not just its first part.",
-        "R": "𝔅 is the whole consequent Q & R. →E gives all of 𝔅, not just its second part.",
-        "P & Q": "→E copies the consequent of line 1; it does not build a new conjunction."
+        "Q": "This is only part of the consequent. →E lets us infer the complete consequent (the whole back half) of the cited conditional.",
+        "R": "This is only part of the consequent. →E lets us infer the complete consequent (the whole back half) of the cited conditional.",
+        "P & Q": "This constructs a new sentence from parts of the cited lines. →E instead lets us infer the complete consequent of the cited conditional."
       }),
       ex("Which formula is needed on line 2 to make →E apply?", "arrowE", [line("(P → Q) → (R & S)"), blank(), line("R & S", "→E 1, 2")], ["P → Q", "Q", "R", "R & S"], "P → Q", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P → Q)} → {B|(R & S)}", "{A|(P → Q)}", "{B|(R & S)}"]), {
-        "Q": "The antecedent 𝔄 is the entire formula P → Q, not merely its consequent Q.",
-        "R": "R is part of 𝔅. The missing premise must match 𝔄, the whole left side of the conditional.",
-        "R & S": "That is 𝔅. →E requires 𝔄 as the second premise in order to conclude 𝔅."
+        "Q": "This is only part of the antecedent. To apply →E, the other cited line must contain the complete antecedent (front half) of the conditional.",
+        "R": "This comes from the consequent. To apply →E, the other cited line must contain the complete antecedent (front half).",
+        "R & S": "This is the consequent. To apply →E, the other cited line must contain the antecedent of the conditional."
       }),
-      roleEx("What whole formula is playing the role of 𝔅?", "arrowE", [line("(P & Q) → (R → S)"), line("P & Q"), line("R → S", "→E 1, 2")], ["R", "S", "R → S", "P & Q"], "R → S", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P & Q)} → {B|(R → S)}", "{A|(P & Q)}", "{B|(R → S)}"]), "𝔅 is the entire consequent R → S. A placeholder may stand for a conditional."),
+      roleEx("What whole formula is playing the role of 𝔅?", "arrowE", [line("(P & Q) → (R → S)"), line("P & Q"), line("R → S", "→E 1, 2")], ["R", "S", "R → S", "P & Q"], "R → S", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|(P & Q)} → {B|(R → S)}", "{A|(P & Q)}", "{B|(R → S)}"]), "𝔅 is the entire consequent R → S. A placeholder may stand for a conditional.", {
+        "R": "This is only part of the consequent. 𝔅 must match the complete consequent (the whole back half).",
+        "S": "This is only part of the consequent. 𝔅 must match the complete consequent (the whole back half).",
+        "P & Q": "This is the antecedent, so it plays the role of 𝔄, not 𝔅. Look for the complete consequent."
+      }),
       ex("Which second premise makes the displayed inference work?", "arrowE", [line("~P → (Q & R)"), blank(), line("Q & R", "→E 1, 2")], ["~P", "P", "Q", "Q & R"], "~P", map(["{A|A} → {B|B}", "{A|A}", "{B|B}"], ["{A|~P} → {B|(Q & R)}", "{A|~P}", "{B|(Q & R)}"]), {
-        "P": "The antecedent is ~P. P and ~P do not match.",
-        "Q": "Q is only part of the consequent. The needed second premise is the antecedent ~P.",
-        "Q & R": "That is the result 𝔅. To reach it by →E, the other premise must be 𝔄, which is ~P."
+        "P": "This does not exactly match the antecedent. The other cited line must contain the complete antecedent without changing it.",
+        "Q": "This is only part of the consequent. The missing cited line must instead match the complete antecedent.",
+        "Q & R": "This is the consequent. To apply →E, the other cited line must contain the antecedent of the conditional."
       })
     ]
   },
@@ -167,7 +199,7 @@ const LEVELS = [
     symbol: "Mix",
     name: "Mixed Rule Practice",
     short: "Name the rule that fits",
-    explanation: "Compare the proof with all three schemas and choose the rule that licenses its final line.",
+    explanation: "Compare the provided proof with all three schemas and choose the rule that licenses its final line.",
     note: "",
     everyday: [],
     callout: "",
@@ -189,10 +221,24 @@ function map(schema, actual) { return { schema, actual }; }
 function ex(prompt, rule, lines, options, answer, reveal, wrong = {}) {
   return { kind: "fill", prompt, rule, lines, options, answer, reveal, wrong };
 }
-function roleEx(prompt, rule, lines, options, answer, reveal, correctText) {
-  return { kind: "role", prompt, rule, lines, options, answer, reveal, correctText, wrong: {} };
+function roleEx(prompt, rule, lines, options, answer, reveal, correctText, wrong = {}) {
+  return { kind: "role", prompt, rule, lines, options, answer, reveal, correctText, wrong };
 }
 function mixedEx(lines, answer, rule, reveal) {
+  const feedbackByCorrectRule = {
+    "&I": {
+      "&E": "&E starts with a cited conjunction and copies one whole conjunct from it. Does the displayed proof have that shape?",
+      "→E": "→E requires a cited conditional and another cited line containing its complete antecedent. Does the displayed proof have that shape?"
+    },
+    "&E": {
+      "&I": "&I forms a conjunction from the exact sentences on its cited line number(s). Does the displayed proof have that shape?",
+      "→E": "→E requires a cited conditional and another cited line containing its complete antecedent. Does the displayed proof have that shape?"
+    },
+    "→E": {
+      "&I": "&I forms a conjunction from the exact sentences on its cited line number(s). Does the displayed proof have that shape?",
+      "&E": "&E starts with a cited conjunction and copies one whole conjunct from it. Does the displayed proof have that shape?"
+    }
+  };
   return {
     kind: "rule",
     prompt: "Which rule licenses the final line?",
@@ -201,11 +247,7 @@ function mixedEx(lines, answer, rule, reveal) {
     options: ["&I", "&E", "→E"],
     answer,
     reveal,
-    wrong: {
-      "&I": "&I combines two formulas into a conjunction.",
-      "&E": "&E takes one whole conjunct from a conjunction.",
-      "→E": "→E uses a conditional and its antecedent to reach its consequent."
-    }
+    wrong: feedbackByCorrectRule[answer]
   };
 }
 
@@ -397,9 +439,9 @@ function renderFeedback(exercise) {
   if (!state.answered && state.lastIncorrect === null) return "";
   if (!state.answered) {
     const checkedChoice = state.lastIncorrect;
-    const fallback = exercise.kind === "role"
+    const fallback = exercise.wrong[checkedChoice] || (exercise.kind === "role"
       ? "Look for the complete formula occupying that placeholder—not just a letter inside it."
-      : exercise.wrong[checkedChoice] || "Compare the whole formulas in the proof with each line of the rule schema.";
+      : "Compare the whole formulas in the proof with each line of the rule schema.");
     return `<div class="feedback incorrect"><h2>Not quite—try again.</h2><p>${fallback}</p></div>`;
   }
 
