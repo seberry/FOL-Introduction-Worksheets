@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="First-order logic practice for intermediate logic students: English-to-FOL formalization, truth in models, relations, and nested quantifiers.">
+  <title>FOL Practice · Intermediate Logic</title>
+  <style>
+    :root { color-scheme: light; --ink: #203b37; --muted: #53635e; --accent: #24624e; --line: #d4ded5; --paper: #faf9f5; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.65; }
+    a { color: var(--accent); text-underline-offset: .2em; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 3px solid #9d570c; outline-offset: 5px; border-radius: 2px; }
+    .skip { position: absolute; top: -100px; left: 16px; background: white; padding: 10px 18px; z-index: 2; }
+    .skip:focus { top: 12px; }
+    .page { max-width: 1000px; margin: auto; padding: 54px 28px 30px; }
+    .eyebrow { font-size: .76rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+    header { position: relative; padding-bottom: 30px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.6rem, 7vw, 4.2rem); font-weight: 500; letter-spacing: -.045em; margin: 16px 0; }
+    .intro { max-width: 660px; font-size: 1.12rem; color: var(--muted); margin: 0; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px 26px; margin-top: 26px; font-size: .95rem; }
+    .start { margin: 30px 0 40px; padding: 22px 26px; background: #eaf0e7; border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; }
+    .start p { margin: 6px 0 0; }
+    section { margin: 38px 0; scroll-margin-top: 20px; }
+    .section-head { display: flex; gap: 16px; align-items: baseline; margin-bottom: 8px; }
+    .number { font-family: Georgia, serif; font-size: 1.25rem; color: var(--accent); }
+    h2 { font-family: Georgia, serif; font-size: 1.8rem; font-weight: 500; margin: 0; }
+    .section-note { color: var(--muted); margin: 0 0 20px 40px; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .card { background: white; border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+    .wide { grid-column: 1 / -1; }
+    .tag { display: block; color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 650; margin-bottom: 10px; }
+    h3 { font-size: 1.2rem; margin: 0 0 12px; }
+    h3 a { color: var(--ink); text-decoration-color: #8ca99b; }
+    .card p { color: var(--muted); margin: 0; }
+    .card .use { font-size: .9rem; margin-top: 14px; }
+    footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--muted); font-size: .85rem; display: flex; justify-content: space-between; gap: 16px; }
+    @media (max-width: 600px) {
+      .page { padding: 32px 20px 24px; }
+      .cards { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+      .start { padding: 18px; }
+      .section-note { margin-left: 0; }
+      footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print { body { background: white; } .page { padding: 0; } nav, .skip { display: none; } .card { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to practice links</a>
+  <div class="page">
+    <header id="top">
+      <div class="eyebrow">Intermediate Logic · Practice Library</div>
+      <h1>Refresh your FOL.</h1>
+      <p class="intro">A place to revisit first-order logic: translate English into formulas, read a model, and work through quantified sentences. Choose the skill you want to refresh.</p>
+      <nav aria-label="Practice topics">
+        <a href="#formalization">Formalization</a>
+        <a href="#truth">Truth in a model</a>
+        <a href="#review">Review &amp; self-checks</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <aside class="start" aria-label="Suggested starting point">
+        <strong>Coming back to FOL after a while?</strong>
+        <p>Work through the guided truth practice from simple predicates to nested quantifiers, then try the mixed review. If translating English is what you need, begin with formalization.</p>
+      </aside>
+
+      <section id="formalization" aria-labelledby="formalization-title">
+        <div class="section-head"><span class="number" aria-hidden="true">01</span><h2 id="formalization-title">Formalization</h2></div>
+        <p class="section-note">Practice expressing English sentences in first-order logic.</p>
+        <div class="cards">
+          <article class="card wide">
+            <span class="tag">English → FOL · Hints &amp; sample answers</span>
+            <h3><a href="../Polyadic-Symbolization-Quiz-Prep/">Formalization with relations</a></h3>
+            <p>Translate sentences using a two-place “likes” predicate alongside one-place predicates. Start with the easy problems, then move to sentences with multiple quantifiers.</p>
+            <p class="use">Try your own translation before opening a hint or sample answer.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="truth" aria-labelledby="truth-title">
+        <div class="section-head"><span class="number" aria-hidden="true">02</span><h2 id="truth-title">Truth in a model</h2></div>
+        <p class="section-note">Three guided worksheets, in order from foundations to nested quantifiers.</p>
+        <div class="cards">
+          <article class="card">
+            <span class="tag">Start here · One-place predicates</span>
+            <h3><a href="../Intro-FOL-Worksheet-1/">1. Predicates, quantifiers &amp; scope</a></h3>
+            <p>Check sentences about writers, spies, and headaches in a four-person model. Practice finding witnesses and counterexamples, then compare quantifier scopes.</p>
+          </article>
+          <article class="card">
+            <span class="tag">Next · Two-place predicates</span>
+            <h3><a href="../Intro-FOL-Worksheet-2/">2. Binary relations &amp; arrow diagrams</a></h3>
+            <p>Read a relation from an arrow diagram. Check atomic and singly quantified sentences, including relations an object bears to itself.</p>
+          </article>
+          <article class="card wide">
+            <span class="tag">Then · Multiple quantifiers</span>
+            <h3><a href="../Intro-FOL-Worksheet-3/">3. Nested quantifiers</a></h3>
+            <p>Practice sentences such as “everything is related to something” and “something is related to everything.” Work through incoming and outgoing arrows, and try a new model for another round.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" aria-labelledby="review-title">
+        <div class="section-head"><span class="number" aria-hidden="true">03</span><h2 id="review-title">Review &amp; self-checks</h2></div>
+        <p class="section-note">Bring the skills together, or check your grasp of the basics.</p>
+        <div class="cards">
+          <article class="card">
+            <span class="tag">Mixed review · New models</span>
+            <h3><a href="../FOL-Truth-Review-1/">Truth in a first-order model</a></h3>
+            <p>Review atomic sentences, single quantifiers, and nested quantifiers in an arrow model. Inspect the evaluation steps and generate another model to keep practicing.</p>
+          </article>
+          <article class="card">
+            <span class="tag">Self-check · One-place predicates</span>
+            <h3><a href="../Quiz-Monadic-Truth/">Monadic truth quiz</a></h3>
+            <p>Test yourself on simple quantified sentences using one-place predicates. Submit your answers to see how you did.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer><span>First-order logic · Formalization &amp; truth in models</span><a href="#top">Back to top ↑</a></footer>
+  </div>
+</body>
+</html>
