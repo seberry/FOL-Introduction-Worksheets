@@ -204,6 +204,21 @@
       font-family: "SF Mono", Menlo, Consolas, monospace;
       font-size: 0.9rem;
     }
+    @media screen {
+      html {
+        scroll-padding-top: calc(50vh + 10px);
+      }
+
+      .symbol-key {
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+        /* Leave room for exercises, even on short screens. */
+        box-sizing: border-box;
+        max-height: calc(50vh - 20px);
+        overflow-y: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -221,7 +236,7 @@
       </p>
     </header>
 
-    <section class="symbol-key" aria-label="Symbolization key">
+    <section class="symbol-key" aria-label="Symbolization key" tabindex="0">
       <h2>Symbolization key</h2>
       <p><strong>Domain:</strong> all people</p>
       <ul class="symbol-key-code">

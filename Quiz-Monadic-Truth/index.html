@@ -167,6 +167,22 @@
       font-style: italic;
     }
     
+    @media screen {
+      html {
+        scroll-padding-top: calc(50vh + 10px);
+      }
+
+      .model-section {
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+        background: white;
+        /* Leave room for exercises, even on short screens. */
+        max-height: calc(50vh - 20px);
+        overflow-y: auto;
+      }
+    }
+
     @media print {
       body {
         margin: 0;
@@ -188,7 +204,7 @@
 <body>
   <h1> Quiz: FOL Truth in a Model I (Simple Monadic Sentences)  </h1>
   
-  <div class="model-section" id="model-display">
+  <div class="model-section" id="model-display" role="region" aria-label="Model key" tabindex="0">
     <!-- Model will be inserted here -->
   </div>
   

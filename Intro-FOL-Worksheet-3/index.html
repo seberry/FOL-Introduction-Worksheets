@@ -347,12 +347,25 @@
     }
 
     
+    @media screen {
+      html {
+        scroll-padding-top: calc(50vh + 10px);
+      }
+
+      .model-box {
+        position: sticky;
+        /* Leave room for exercises, even on short screens. */
+        box-sizing: border-box;
+        max-height: calc(50vh - 20px);
+        overflow-y: auto;
+      }
+    }
   </style>
 </head>
 <body>
   <h1 style="text-align: center; color: #2c3e50;">First-Order Logic: Nested Quantifiers (Worksheet 4)</h1>
   
-  <div class="model-box">
+  <div class="model-box" role="region" aria-label="Model key" tabindex="0">
     <h2>Model</h2>
     <p><strong>Domain:</strong> <span id="domain-display">{1, 2, 3}</span></p>
     <p><strong>Names:</strong> a: <span id="a-display">1</span>, b: <span id="b-display">2</span></p>
