@@ -143,6 +143,49 @@ table.propvars td.var-name {
   left: 320px;
 }
 
+@media (max-width: 980px) {
+  #page-container, #app-body {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #app-body {
+    height: auto;
+    overflow: visible;
+  }
+
+  #app-body .panel {
+    position: relative;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    border-right: 0;
+    border-bottom: 1px solid #e3e3e3;
+  }
+
+  #app-body .panel .tab-pane {
+    overflow: visible;
+  }
+
+  #app-body .graph {
+    position: relative;
+    left: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 640 / 540;
+  }
+
+  #app-body .graph svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #app-body .current-formula {
+    left: 0;
+  }
+}
+
 #app-body .current-formula {
   position: absolute;
   top: 0;
