@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { model, lessons, gallery, truth } from './models.mjs';
 import { shortResponse, expandedResponse, witnessResponse } from './feedback.mjs';
+import { proposedResponse } from './quantified.mjs';
 test('atomic feedback uses only relevant terms and covers empty and nonempty extensions',()=>{
  assert.equal(shortResponse('Pa',model(2,1,[1,3],[2])), 'Not quite. a names 2 and P only applies to 1 and 3, so Pa is false.');
  assert.equal(shortResponse('Pa',model(2,1,[],[2])), 'Not quite. a names 2 and P applies to nothing, so Pa is false.');
@@ -15,7 +16,7 @@ test('disjunction and conditional feedback correctly report part truth and concl
 });
 test('all gallery responses and expanded explanations reflect evaluator truth and compact notation',()=>{
  for(const lesson of lessons) for(const f of [lesson.formula,lesson.variation]) for(let r=0;r<6;r++) for(const m of gallery(f,r)) {
-  assert.match(shortResponse(f,m), truth(f,m)? /^Correct!/: /^Not quite\./);
+  assert.match(lesson.id <= 8 ? shortResponse(f,m) : proposedResponse(f,m), truth(f,m)? /^Correct!/: /^Not quite\./);
   assert.doesNotMatch(expandedResponse(f,m), /\b[PQ]\([abx]\)/);
  }
 });

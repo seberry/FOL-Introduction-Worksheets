@@ -13,7 +13,7 @@ The `.mjs` extension means module JavaScript: these files contain code loaded by
 Run the checks from the repository root:
 
 ```sh
-node --test FOL-Truth-Practice/models.test.mjs FOL-Truth-Practice/feedback.test.mjs fol-explanations/test/semantics.test.mjs
+node --test FOL-Truth-Practice/models.test.mjs FOL-Truth-Practice/feedback.test.mjs FOL-Truth-Practice/quantified.test.mjs fol-explanations/test/semantics.test.mjs
 ```
 
 ## Where things are
@@ -23,13 +23,14 @@ node --test FOL-Truth-Practice/models.test.mjs FOL-Truth-Practice/feedback.test.
 - `diagram.mjs`: shared picture renderer for the introduction, examples, gallery, witness model, and picture guide. Three-object models use overlapping regions; other domain sizes retain labeled columns.
 - `style.css`: layout, SVG regions, object/name labels, solid blue P and dashed yellow Q outlines, and column-style pictures. Pictures can be hidden with the existing checkbox; model descriptions remain visible.
 - `models.mjs`: lessons, formula variations, finite models, and deterministic six-card rounds. The first `Pa` round is explicit; later rounds vary the target true count. Existential rounds use domains of one to four objects so false models are visually distinct. Evaluation and witness checking come from `../fol-explanations/`.
+- `quantified.mjs`: Level 2–4 lessons, model galleries, and reviewed quantified-sentence and object-choice responses. `generate-level-2-4-review.mjs` regenerates the representative `LEVEL-2-4-FEEDBACK-REVIEW.md`.
 - `feedback.mjs`: reviewed short responses and compact-notation rendering of the existing full explainer. `generate-review.mjs` generates `FEEDBACK-REVIEW.md` from this same code and the first round of every sentence and variation.
 
 ## Model pictures
 
 For domain `{1, 2, 3}`, objects stay in a triangle: 1 above, 2 below left, and 3 below right. P uses a blue fill and solid outline; Q uses a yellow fill and dashed outline. Singleton extensions have circular regions, pairs have rounded enclosures, and the full domain has an elliptical region. Fills render first, then both outlines, then predicate labels and objects. Q's outline is slightly larger, so identical extensions retain two visible boundaries. Region geometry carries no meaning beyond which numbered objects it contains.
 
-Empty extensions show `P: none` or `Q: none` in the key and have no region. Names appear beneath their objects, including shared names such as `a, b`. Only numbered objects belong to the domain. The picture guide includes overlapping, identical, empty, and neither-property examples. All practice cards retain written model descriptions and display the vocabulary used in the current sentence. Domains of sizes one, two, and four still use explicit membership tags, preserving the existing existential rounds.
+Empty extensions show `P: none` or `Q: none` in the key and have no region. Names appear beneath their objects, including shared names such as `a, b`. Only numbered objects belong to the domain. The picture guide includes overlapping, identical, empty, and neither-property examples. All practice cards retain written model descriptions and display the vocabulary used in the current sentence. Domains of sizes one, two, and four, and all models displaying R, use explicit membership tags; this is a temporary three-predicate visualization pending further design.
 
 Incorrect gallery selections and witness choices display dark orange hint text on a pale orange background, including any expanded explanation. Correct answers and new prompts restore the default styling. The reviewed feedback wording is unchanged; “Not quite” and “Correct!” continue to identify the result without relying on color.
 

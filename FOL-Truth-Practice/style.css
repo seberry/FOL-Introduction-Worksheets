@@ -78,3 +78,7 @@ button:disabled { opacity: .5; cursor: default; }
   header { padding: 1.5rem 0; }
   select { max-width: 100%; }
 }
+
+/* Three-predicate pictures use labeled membership columns. */
+.predicate-key-item.r::before { border-color: #7b4c89; border-top-style: dotted; }
+.tag.r { background: #e8d9ee; }

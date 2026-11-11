@@ -1,4 +1,5 @@
 import { evaluate, checkCandidate } from '../fol-explanations/index.mjs';
+import { proposedLessons, reviewGallery } from './quantified.mjs';
 export const lessons = [
   ['Pa', 'Pa says that the object named by a has property P.', 'Qb'],
   ['Pa ∨ Qa', 'At least one of P and Q applies to the object named by a.', 'Pb ∨ Qb'],
@@ -8,13 +9,14 @@ export const lessons = [
   ['¬Pa ∨ Qa', 'Either P does not apply to a, or Q applies to a, or both.', 'Pa ∨ ¬Qa'],
   ['Pa → Qa', 'If P applies to a, then Q applies to a. The conditional is false only when P applies to a and Q does not.', 'Pb → Qb'],
   ['∃x Px', 'At least one object has property P.', '∃x Qx']
-].map(([formula, introduction, variation], index) => ({ id: index + 1, formula, introduction, variation }));
+].map(([formula, introduction, variation], index) => ({ id: index + 1, level: index === 7 ? 2 : 1, formula, introduction, variation })).concat(proposedLessons.map((lesson, index) => ({ ...lesson, id: index + 9 })));
 export function model(a, b, p, q) { return { domain: [1, 2, 3], constants: { a, b }, predicates: { P: p, Q: q } }; }
 const subsets = [[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]];
 export const pool = [1, 2, 3].flatMap(a => [1, 2, 3].flatMap(b => subsets.flatMap(p => subsets.map(q => model(a, b, p, q)))));
 export const truth = (formula, m) => evaluate(formula, m).value;
 export const witness = (formula, m, object) => checkCandidate(formula, m, object).valid;
 export function gallery(formula, round = 0) {
+  if (proposedLessons.some(lesson => lesson.formula === formula || lesson.variation === formula)) return reviewGallery(formula, round);
   if (formula === 'Pa' && round === 0) return [
     model(1, 1, [1], []), model(2, 1, [1, 3], []),
     model(2, 1, [1, 2], []), model(1, 1, [2, 3], []),

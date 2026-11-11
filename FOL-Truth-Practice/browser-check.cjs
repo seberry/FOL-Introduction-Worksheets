@@ -13,7 +13,18 @@ const output = 'working/monadic-highlights';
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto('http://127.0.0.1:8765/FOL-Truth-Practice/');
+    await page.locator('#lesson').selectOption('7');
+    assert(await page.locator('#level-two-introduction').isVisible(), 'Existential introduction is visible in Level 2');
+    assert(!(await page.locator('#level-one-introduction').isVisible()), 'Model introduction is hidden in Level 2');
+    const exampleTruth = await page.evaluate(async () => {
+      const { truth, model } = await import('./models.mjs');
+      const example = model(1, 2, [1], [2, 3]);
+      return [truth('∃x Px', example), truth('∃x (Px ∧ Qx)', example)];
+    });
+    assert.deepEqual(exampleTruth, [true, false]);
     await page.locator('#lesson').selectOption('0');
+    assert(await page.locator('#level-one-introduction').isVisible(), 'Model introduction returns in Level 1');
+    assert(!(await page.locator('#level-two-introduction').isVisible()), 'Existential introduction is hidden in Level 1');
     const guide = page.locator('.picture-guide');
     assert(!(await guide.locator('p').isVisible()), 'Picture explanation starts collapsed');
     await guide.locator('summary').click();
@@ -92,7 +103,7 @@ const output = 'working/monadic-highlights';
 
     for (const width of [1440, 844, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
-      for (let lesson = 0; lesson < 8; lesson++) {
+      for (let lesson = 0; lesson < 20; lesson++) {
         await page.locator('#lesson').selectOption(String(lesson));
         for (let variation = 0; variation < 2; variation++) {
           assert.equal(await page.locator('#gallery > button').count(), 6);
@@ -104,6 +115,7 @@ const output = 'working/monadic-highlights';
         }
       }
     }
+    await page.locator('#lesson').selectOption('7');
     await page.locator('#witness-choices button').nth(0).focus();
     await page.keyboard.press('Enter');
     assert.match(await page.locator('#witness-feedback').textContent(), /Correct!/);
@@ -116,6 +128,37 @@ const output = 'working/monadic-highlights';
     await page.locator('#witness-choices button').nth(1).click();
     await page.locator('#witness-next').click();
     assert(!(await page.locator('#witness-feedback').evaluate(e => e.classList.contains('is-incorrect'))), 'New witness model clears incorrect styling');
+    await page.locator('#lesson').selectOption('12');
+    assert(await page.locator('#level-three-introduction').isVisible());
+    assert.equal(await page.locator('#candidate-title').textContent(), 'Find a counterexample');
+    assert.equal(await page.locator('#gallery > button').count(), 6);
+    assert(await page.locator('#witness-choices button').count() > 0);
+    await page.locator('#witness-choices button').first().click();
+    assert.match(await page.locator('#witness-feedback').textContent(), /counterexample/);
+    for (const index of ['8', '12', '14', '16']) {
+      await page.locator('#lesson').selectOption(index);
+      for (const button of await page.locator('#witness-choices button').all()) {
+        const object = Number((await button.textContent()).replace('Object ', ''));
+        const expected = await page.evaluate(async ({ index, object }) => {
+          const { lessons, gallery } = await import('./models.mjs');
+          const { checkCandidate, evaluate } = await import('../fol-explanations/index.mjs');
+          const formula = lessons[Number(index)].formula;
+          const cards = gallery(formula, 0);
+          const isWitness = evaluate(formula, cards[0]).formula.type === 'exists';
+          const model = cards.find(m => evaluate(formula, m).value === isWitness);
+          return checkCandidate(formula, model, object).valid;
+        }, { index, object });
+        await button.click();
+        assert.equal((await page.locator('#witness-feedback').textContent()).startsWith('Correct!'), expected);
+      }
+      await page.locator('#witness-next').click();
+      assert.equal(await page.locator('#witness-feedback').textContent(), 'Choose an object.');
+    }
+    await page.locator('#lesson').selectOption('11');
+    assert(await page.locator('#gallery .tag.r').count() > 0, 'Three-predicate pictures include R labels');
+    await page.locator('#lesson').selectOption('17');
+    assert(await page.locator('#level-four-introduction').isVisible());
+    assert(await page.locator('#witness-section').isHidden());
     await page.addScriptTag({ content: axe.source });
     for (const lesson of ['1','7']) {
       await page.locator('#lesson').selectOption(lesson);

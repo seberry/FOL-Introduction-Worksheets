@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Truth in a Model · Practice</title><link rel="stylesheet" href="style.css"></head>
 <body><header><div class="wrap"><p class="eyebrow">FIRST-ORDER LOGIC · PRACTICE</p><h1>Truth in a model</h1><p>Explore a sentence, then find the models that make it true. Practice as much as you like.</p></div></header>
-<main class="wrap"><section class="introduction" aria-labelledby="models-heading">
+<main class="wrap"><section id="level-one-introduction" class="introduction" aria-labelledby="models-heading">
 <h2 id="models-heading">What is a model?</h2>
 <p>Models describe logically possible situations. We can ask whether a sentence is true in the situation described by a model.</p>
 <p>For example, suppose a model has three objects, 1, 2, and 3. The name <i>a</i> names object 1, and <i>P</i> represents a property that applies to exactly objects 1 and 3. A second property, <i>Q</i>, applies to exactly objects 2 and 3. We can picture the situation like this:</p>
@@ -10,8 +10,29 @@
 <p>We can now ask whether sentences are true in this situation. For example, <strong>Pa</strong> says that the object named by <i>a</i> has property <i>P</i>. Since <i>a</i> names 1 and <i>P</i> applies to 1, <strong>Pa is true</strong> in this model.</p>
 <p>In contrast, <strong>Qa</strong> says that the object named by <i>a</i> has property <i>Q</i>. Since <i>a</i> names 1 and <i>Q</i> applies only to 2 and 3, <strong>Qa is false</strong> in this model.</p>
 <p>For a familiar example, if <i>a</i> names Alice and <i>P</i> represents the property of being pretentious, <strong>Pa</strong> says that Alice is pretentious.</p>
+</section>
+<section id="level-two-introduction" class="introduction" aria-labelledby="existential-heading" hidden>
+<h2 id="existential-heading">Something has a property</h2>
+<p>An existential sentence says that at least one object in the domain has a property. To see whether it is true, look for an object that makes the sentence after <strong>∃x</strong> true.</p>
+<p>In this model, the domain contains 1, 2, and 3. <i>P</i> applies only to 1, and <i>Q</i> applies only to 2 and 3.</p>
+<div id="existential-introduction-picture" class="introduction-diagram"></div>
+<p><strong>∃x Px</strong> says that something is <i>P</i>. It is true in this model: 1 has property <i>P</i>. Object 1 is a <em>witness</em> for the sentence.</p>
+<p><strong>∃x (Px ∧ Qx)</strong> says that something has both properties <i>P</i> and <i>Q</i>. It is false in this model: there is no single object you could choose for <i>x</i> that makes both <strong>Px</strong> and <strong>Qx</strong> true. Object 1 has <i>P</i>, while objects 2 and 3 have <i>Q</i>; none has both.</p>
+</section>
+<section id="level-three-introduction" class="introduction" aria-labelledby="universal-heading" hidden>
+<h2 id="universal-heading">Every object has a property</h2>
+<p>A universal sentence says that every object in the domain satisfies a condition. To see whether it is true, check every object; one object that fails the condition is enough to make it false.</p>
+<p>In this model, the domain contains 1, 2, and 3. <i>P</i> applies to all three objects, and <i>Q</i> applies only to 1 and 3.</p>
+<div id="universal-introduction-picture" class="introduction-diagram"></div>
+<p><strong>∀x Px</strong> says that everything is <i>P</i>. It is true in this model because each of 1, 2, and 3 has property <i>P</i>.</p>
+<p><strong>∀x Qx</strong> says that everything is <i>Q</i>. It is false: 2 does not have property <i>Q</i>. Object 2 is a <em>counterexample</em> to the sentence.</p>
+</section>
+<section id="level-four-introduction" class="introduction" aria-labelledby="combined-heading" hidden>
+<h2 id="combined-heading">Combining quantified sentences</h2>
+<p>We can join quantified sentences with connectives such as “and” and “if … then.” First work out whether each quantified part is true, then use the connective to evaluate the whole sentence.</p>
+<p>For example, <strong>(∃x Px) ∧ (∃x Qx)</strong> says that something is <i>P</i> and something is <i>Q</i>. The object with <i>P</i> and the object with <i>Q</i> may be different.</p>
 </section><nav aria-label="Choose a lesson"><label for="lesson">Choose a mini-lesson</label><select id="lesson"></select></nav>
 <section><p class="eyebrow" id="level"></p><h2 id="formula"></h2><p id="intro"></p><h3>Two examples</h3><div id="examples" class="examples"></div></section>
 <section aria-labelledby="gallery-title"><div class="section-top"><div><p class="eyebrow">FIND THE TRUE MODELS</p><h2 id="gallery-title">Your turn</h2><p>Select all the models where the following sentence is true:</p><p id="prompt" class="practice-sentence"></p></div><div class="controls"><button id="round" type="button">Another round</button><button id="variation" type="button">Try a variation</button><label><input id="pictures" type="checkbox" checked> Show pictures</label></div></div><div id="gallery" class="gallery"></div><div class="feedback" aria-live="polite" aria-atomic="true"><p id="feedback">Choose a model to start.</p><details id="more" hidden><summary>More explanation</summary><pre id="explanation"></pre></details><p id="complete" hidden>Nice work! You found all the true models. Try another round or move to the next lesson.</p></div><div class="controls"><button id="previous" type="button">Previous lesson</button><button id="next" type="button">Next lesson</button></div></section>
-<section id="witness-section" hidden><p class="eyebrow">A LITTLE MORE PRACTICE</p><h2>Find a witness</h2><p>For ∃x Px, a witness is an object that has P. Choose an object in this model.</p><div id="witness-model" class="witness-model"></div><div class="controls" id="witness-choices" aria-label="Choose a witness"></div><p id="witness-feedback" class="feedback" aria-live="polite">Choose an object.</p><button type="button" id="witness-next">Another witness model</button></section>
+<section id="witness-section" hidden><p class="eyebrow">A LITTLE MORE PRACTICE</p><h2 id="candidate-title">Find a witness</h2><p id="candidate-instructions">Choose an object in this model.</p><div id="witness-model" class="witness-model"></div><div class="controls" id="witness-choices" aria-label="Choose an object"></div><p id="witness-feedback" class="feedback" aria-live="polite">Choose an object.</p><button type="button" id="witness-next">Another model</button></section>
 <details class="design"><summary>About these model pictures</summary><p>In three-object pictures, 1, 2, and 3 stay in the same positions. P has a solid blue outline; Q has a dashed yellow outline. Both outlines appear when the properties apply to the same objects. “P: none” or “Q: none” means that no objects have that property.</p><div class="examples" id="prototypes"></div><p class="muted">Practice pictures show the predicates and names used in the sentence. Pictures with one, two, or four objects use P and Q labels beside the objects instead of regions. You can hide the practice pictures and use the written model descriptions.</p></details></main><script type="module" src="preview.mjs"></script></body></html>

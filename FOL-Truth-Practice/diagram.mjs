@@ -46,9 +46,8 @@ export function modelPicture(model, used) {
   }
   picture.append(legend);
 
-  if (model.domain.length !== 3 || ![1, 2, 3].every(n => model.domain.includes(n))) {
-    // Preserve the existing one-to-four-object existential rounds. Their
-    // non-three-object pictures use explicit membership labels.
+  if (used.predicates.includes('R') || model.domain.length !== 3 || ![1, 2, 3].every(n => model.domain.includes(n))) {
+    // Membership labels also handle R until a three-predicate region design is chosen.
     const columns = document.createElement('div');
     columns.className = 'diagram object-columns';
     for (const n of model.domain) {
