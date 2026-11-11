@@ -1,0 +1,5 @@
+.relation-picture{background:#f5f9f9;border:1px solid #dce7e7;border-radius:.5rem;margin-bottom:.7rem}.relation-picture svg{display:block;width:100%;height:auto;max-width:300px;margin:auto}.relation-arrow{fill:none;stroke:#276d81;stroke-width:3}.relation-node{fill:white;stroke:#334b59;stroke-width:2}.relation-number{font:700 20px Georgia,serif;text-anchor:middle;dominant-baseline:middle;fill:#243444}.relation-name{font:italic 16px Georgia,serif;text-anchor:middle;fill:#243444}.intro-model{max-width:360px}.pairs{overflow-wrap:anywhere}
+
+/* Keep immediate and completion feedback visible while students inspect the gallery. */
+.gallery-feedback { position: sticky; bottom: .5rem; z-index: 5; max-height: 45vh; overflow-y: auto; box-shadow: 0 2px 10px #24344422; }
+.gallery-feedback #complete { font-weight: 700; margin-top: .5rem; }
