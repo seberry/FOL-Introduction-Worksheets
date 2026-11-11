@@ -36,38 +36,59 @@ const output = 'working/monadic-highlights';
 
     const geometry = await page.evaluate(async () => {
       const { modelPicture } = await import('./diagram.mjs');
-      const extension = mask => [1, 2, 3].filter(n => mask & (1 << (n - 1)));
+      const extension = (mask,size) => Array.from({length:size},(_,i)=>i+1).filter(n => mask & (1 << (n - 1)));
       const host = document.createElement('div');
       host.id = 'geometry-review';
       host.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px;background:white';
       document.body.append(host);
-      const failures = [];
-      for (let p = 0; p < 8; p++) for (let q = 0; q < 8; q++) {
-        const model = { domain: [1, 2, 3], constants: { a: 2, b: 2 }, predicates: { P: extension(p), Q: extension(q) } };
+      const failures = [], cases=[];
+      for (let p=0;p<8;p++) for(let q=0;q<8;q++) cases.push({size:3,masks:[p,q],show:[[5,6],[3,3],[7,7],[0,0]].some(([a,b])=>a===p&&b===q)});
+      // Each region depends only on its own extension and domain layout. Exercise
+      // all 90 P/Q/R geometries, including identical extensions and empty sets.
+      for (let size=1;size<=4;size++) for(let mask=0;mask<2**size;mask++) {
+        cases.push({size,masks:[mask,mask,mask],show:[0,1,2**size-1].includes(mask)});
+      }
+      for (const [size,masks] of [[2,[1,2,0]],[3,[3,5,6]],[4,[9,6,11]],[4,[7,14,13]],[4,[5,10,0]]]) cases.push({size,masks,show:true});
+      for (const {size,masks,show} of cases) {
+        const predicates=['P','Q','R'].slice(0,masks.length);
+        const domain=Array.from({length:size},(_,i)=>i+1), named=domain.at(-1);
+        const model = { domain, constants: { a:named, b:named }, predicates: Object.fromEntries(predicates.map((p,i)=>[p,extension(masks[i],size)])) };
         const card = document.createElement('div');
         const title = document.createElement('p');
-        title.textContent = `P: ${extension(p).join(', ') || 'none'}; Q: ${extension(q).join(', ') || 'none'}`;
-        const picture = modelPicture(model, { predicates: ['P', 'Q'], constants: ['a', 'b'] });
+        title.textContent = `Domain: ${domain.join(', ')}; `+predicates.map(p=>`${p}: ${model.predicates[p].join(', ') || 'none'}`).join('; ');
+        const picture = modelPicture(model, { predicates, constants: ['a', 'b'] });
         card.append(title, picture); host.append(card);
-        const svg = picture.querySelector('svg');
-        for (const predicate of ['P', 'Q']) {
+        if(picture.querySelectorAll('.object-node').length!==size) failures.push('Every object needs a circled number');
+        for (const predicate of predicates) {
           const shape = picture.querySelector(`.region-fill[data-predicate="${predicate}"]`);
           for (const node of picture.querySelectorAll('[data-object]')) {
             const n = Number(node.dataset.object);
             const x = Number(node.getAttribute('cx')), y = Number(node.getAttribute('cy'));
             // Check the whole numbered node and its name label, not just its center.
-            for (const [dx, dy] of [[0,0],[-16,0],[16,0],[0,-16],[0,16],[0,32]]) {
-              const screen = new DOMPoint(x + dx, y + dy).matrixTransform(svg.getScreenCTM());
-              const inside = shape ? shape.isPointInFill(screen.matrixTransform(shape.getScreenCTM().inverse())) : false;
-              if (inside !== model.predicates[predicate].includes(n)) failures.push({p,q,predicate,n,dx,dy,inside});
+            for (const [dx, dy] of [[0,0],[-16,0],[16,0],[0,-16],[0,16],[0,32],[-18,32],[18,32]]) {
+              // Shapes are direct SVG children. Stay in viewBox coordinates to
+              // avoid screen round-trip error at vertical capsule centerlines.
+              const transform=shape?.transform.baseVal.consolidate()?.matrix;
+              const point=new DOMPoint(x+dx,y+dy);
+              const local=transform ? point.matrixTransform(transform.inverse()) : point;
+              const inside = shape ? shape.isPointInFill(local) : false;
+              if (inside !== model.predicates[predicate].includes(n)) failures.push({size,masks,predicate,n,dx,dy,inside,local:local && [local.x,local.y]});
             }
           }
           const key = [...picture.querySelectorAll('.predicate-key-item')].find(e => e.textContent.startsWith(predicate));
           if (model.predicates[predicate].length === 0 && key.textContent !== `${predicate}: none`) failures.push('Missing empty label');
         }
-        if (picture.querySelectorAll('.object-names')[1].textContent !== 'a, b') failures.push('Missing shared names');
-        // Keep representative edge cases for a compact visual review.
-        if (![[5,6],[3,3],[0,2],[1,2],[7,7],[0,0],[7,2],[1,7]].some(([a,b]) => a === p && b === q)) card.hidden = true;
+        if (picture.querySelectorAll('.object-names')[size-1].textContent !== 'a, b') failures.push('Missing shared names');
+        for (const text of picture.querySelectorAll('svg text')) {
+          const box=text.getBBox();
+          if(box.x<0 || box.y<0 || box.x+box.width>320 || box.y+box.height>294) failures.push({size,masks,text:text.textContent,problem:'clipped text'});
+        }
+        const badges=[...picture.querySelectorAll('.predicate-label')].map(e=>e.getBBox());
+        for(let i=0;i<badges.length;i++) for(let j=i+1;j<badges.length;j++) {
+          const a=badges[i],b=badges[j];
+          if(a.x<b.x+b.width && b.x<a.x+a.width && a.y<b.y+b.height && b.y<a.y+a.height) failures.push({size,masks,problem:'overlapping predicate labels'});
+        }
+        card.hidden=!show;
       }
       return failures;
     });
@@ -107,9 +128,17 @@ const output = 'working/monadic-highlights';
         await page.locator('#lesson').selectOption(String(lesson));
         for (let variation = 0; variation < 2; variation++) {
           assert.equal(await page.locator('#gallery > button').count(), 6);
+          await page.locator('#gallery .card, #examples .card, #witness-model .card').evaluateAll(cards => {
+            for(const card of cards) {
+              const picture=card.querySelector('.model-picture');
+              if(!picture) continue;
+              const domain=card.querySelector('.description p').textContent.replace('Domain: ','').split(', ');
+              if(picture.querySelectorAll('circle.object-node').length!==domain.length) throw new Error('Missing circled object in a live card');
+            }
+          });
           assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Overflow: ${width}, lesson ${lesson}`);
-          if (lesson === 1 && variation === 0 && [1440,390,320].includes(width)) {
-            await page.locator('#gallery').screenshot({ path: `${output}/two-predicates-${width}.png` });
+          if ([1,7,11,16].includes(lesson) && variation === 0 && [1440,390,320].includes(width)) {
+            await page.locator('#gallery').screenshot({ path: `${output}/lesson-${lesson}-${width}.png` });
           }
           await page.locator('#variation').click();
         }
@@ -155,15 +184,15 @@ const output = 'working/monadic-highlights';
       assert.equal(await page.locator('#witness-feedback').textContent(), 'Choose an object.');
     }
     await page.locator('#lesson').selectOption('11');
-    assert(await page.locator('#gallery .tag.r').count() > 0, 'Three-predicate pictures include R labels');
+    assert(await page.locator('#gallery .predicate-label.r').count() > 0, 'Three-predicate pictures include R regions and labels');
     await page.locator('#lesson').selectOption('17');
     assert(await page.locator('#level-four-introduction').isVisible());
     assert(await page.locator('#witness-section').isHidden());
     await page.addScriptTag({ content: axe.source });
-    for (const lesson of ['1','7']) {
+    for (const lesson of ['1','7','11','16']) {
       await page.locator('#lesson').selectOption(lesson);
       if (lesson === '7') await page.locator('#witness-choices button').nth(1).click();
-      else {
+      else if (lesson === '1') {
         await page.locator('#gallery > button').nth(0).click();
         await page.locator('#more summary').click();
         assert.equal(await page.locator('#explanation').evaluate(e => getComputedStyle(e).color), 'rgb(154, 52, 18)');
@@ -172,7 +201,7 @@ const output = 'working/monadic-highlights';
       assert.deepEqual(accessibility.violations.map(v => ({ id: v.id, impact: v.impact })), []);
     }
     assert.deepEqual(errors, []);
-    console.log('PASS: geometry for all 64 P/Q extensions, shared names, empty sets, all lessons/variations at four widths, gallery/witness keyboard interaction, incorrect hint colors and resets, expandable picture guide, picture toggle, accessibility, and no JavaScript errors.');
+    console.log('PASS: all 64 three-object P/Q models and all 90 P/Q/R region geometries for domains of 1–4 objects, shared names, empty sets, label bounds, circled objects throughout all lessons/variations at four widths, gallery/witness keyboard interaction, hint colors and resets, expandable picture guide, picture toggle, accessibility, and no JavaScript errors.');
     console.log(`Screenshots: ${output}/`);
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

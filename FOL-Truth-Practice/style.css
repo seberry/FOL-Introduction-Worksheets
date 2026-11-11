@@ -47,27 +47,23 @@ button:disabled { opacity: .5; cursor: default; }
 .predicate-key-item { display: inline-flex; align-items: center; gap: .35rem; }
 .predicate-key-item::before { content: ''; width: 1.35rem; border-top: 3px solid #28749a; }
 .predicate-key-item.q::before { border-color: #98700c; border-top-style: dashed; }
+.predicate-key-item.r::before { border-color: #7b4c89; border-top-style: dotted; }
 .set-diagram { display: block; width: 100%; height: auto; max-width: 340px; margin: auto; }
 .predicate-region.p.region-fill { fill: #5bb6df; fill-opacity: .25; }
 .predicate-region.q.region-fill { fill: #f3cd56; fill-opacity: .32; }
+.predicate-region.r.region-fill { fill: #b489c7; fill-opacity: .22; }
 .region-fill { stroke: none; }
 .region-outline { fill: none; stroke-width: 2; }
 .region-outline.p { stroke: #28749a; }
 .region-outline.q { stroke: #98700c; stroke-dasharray: 7 5; }
+.region-outline.r { stroke: #7b4c89; stroke-dasharray: 1 5; stroke-linecap: round; }
 .predicate-label { font: 700 17px system-ui,sans-serif; text-anchor: middle; paint-order: stroke; stroke: #f5f9f9; stroke-width: 5; stroke-linejoin: round; }
 .predicate-label.p { fill: #22698e; }
 .predicate-label.q { fill: #7d5b08; }
+.predicate-label.r { fill: #71417f; }
 .object-node { fill: white; stroke: #334b59; stroke-width: 2; }
 .object-number { font: 700 20px Georgia,serif; fill: #243444; text-anchor: middle; dominant-baseline: middle; }
 .object-names { font: italic 17px Georgia,serif; fill: #243444; text-anchor: middle; paint-order: stroke; stroke: #f5f9f9; stroke-width: 3; stroke-linejoin: round; }
-.object-columns { display: flex; justify-content: space-around; align-items: start; padding: .75rem .25rem; min-height: 120px; }
-.object { text-align: center; min-width: 2.5rem; }
-.number { font: 700 1.7rem Georgia,serif; }
-.names { min-height: 1.5rem; font-family: Georgia,serif; font-style: italic; }
-.tags { display: flex; justify-content: center; gap: .25rem; min-height: 1.6rem; }
-.tag { font-size: .75rem; font-weight: 700; border-radius: .25rem; padding: .05rem .35rem; }
-.tag.p { background: #cce8f3; }
-.tag.q { background: #f7e5b5; }
 @media (max-width:720px) {
   .gallery { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .section-top { display: block; }
@@ -78,7 +74,3 @@ button:disabled { opacity: .5; cursor: default; }
   header { padding: 1.5rem 0; }
   select { max-width: 100%; }
 }
-
-/* Three-predicate pictures use labeled membership columns. */
-.predicate-key-item.r::before { border-color: #7b4c89; border-top-style: dotted; }
-.tag.r { background: #e8d9ee; }

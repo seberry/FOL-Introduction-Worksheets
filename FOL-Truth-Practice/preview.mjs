@@ -72,10 +72,13 @@ $('witness-next').onclick=()=>{witnessRound++;showFeedback('witness-feedback','C
 $('introduction-picture').append(modelPicture(model(1,2,[1,3],[2,3]), { predicates:['P','Q'], constants:['a'] }));
 $('existential-introduction-picture').append(modelPicture(model(1,2,[1],[2,3]), { predicates:['P','Q'], constants:[] }));
 $('universal-introduction-picture').append(modelPicture(model(1,2,[1,2,3],[1,3]), { predicates:['P','Q'], constants:[] }));
-for (const [heading, m] of [
+for (const [heading, m, formula='Pa ∧ Qb'] of [
   ['Overlapping properties', model(1,2,[1,3],[2,3])],
   ['The same objects have P and Q', model(2,2,[1,2],[1,2])],
   ['No objects have P', model(1,2,[],[2])],
-  ['An object with neither property', model(1,3,[1],[2])]
-]) $('prototypes').append(card(m,heading,true,'Pa ∧ Qb'));
+  ['An object with neither property', model(1,3,[1],[2])],
+  ['One object with all three properties', {domain:[1],constants:{a:1,b:1},predicates:{P:[1],Q:[1],R:[1]}}, 'Pa ∧ Qb ∧ Ra'],
+  ['Two objects with different properties', {domain:[1,2],constants:{a:1,b:2},predicates:{P:[1],Q:[2],R:[]}}, 'Pa ∧ Qb ∧ Ra'],
+  ['Four objects with overlapping properties', {domain:[1,2,3,4],constants:{a:1,b:4},predicates:{P:[1,4],Q:[2,3],R:[1,2,4]}}, 'Pa ∧ Qb ∧ Ra']
+]) $('prototypes').append(card(m,heading,true,formula));
 render();
