@@ -93,7 +93,8 @@ var svg = d3.select('#app-body .graph')
   .attr('tabindex', 0)  // make SVG focusable so it can receive key events
   .on('contextmenu', function() { d3.event.preventDefault(); })
   .attr('width', width)
-  .attr('height', height);
+  .attr('height', height)
+  .attr('viewBox', '0 0 ' + width + ' ' + height);
 
 // init D3 force layout
 var force = d3.layout.force()
@@ -351,7 +352,7 @@ function restart() {
     .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
     .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; })
     .on('mousedown', function(d) {
-      if(appMode !== MODE.EDIT || d3.event.ctrlKey) return;
+      if(appMode !== MODE.EDIT || d3.event.ctrlKey || d3.event.shiftKey) return;
 
       // select link
       mousedown_link = d;
@@ -393,7 +394,7 @@ function restart() {
       d3.select(this).attr('transform', '');
     })
     .on('mousedown', function(d) {
-      if(appMode !== MODE.EDIT || d3.event.ctrlKey) return;
+      if(appMode !== MODE.EDIT || d3.event.ctrlKey || d3.event.shiftKey) return;
 
       // select node
       mousedown_node = d;
@@ -498,7 +499,7 @@ function mousedown() {
   // because :active only works in WebKit?
   svg.classed('active', true);
 
-  if(d3.event.ctrlKey || mousedown_node || mousedown_link) return;
+  if(d3.event.ctrlKey || d3.event.shiftKey || mousedown_node || mousedown_link) return;
 
   // insert new node at point
   var point = d3.mouse(this),
@@ -564,15 +565,16 @@ var lastKeyDown = -1;
 function keydown() {
   d3.event.preventDefault();
 
+  // Enable layout dragging with Shift or Ctrl, including when another key is held.
+  if(d3.event.shiftKey || d3.event.ctrlKey) {
+    circle.call(force.drag);
+    svg.classed('ctrl', true);
+  }
+
   if(lastKeyDown !== -1) return;
   lastKeyDown = d3.event.keyCode;
 
-  // ctrl
-  if(d3.event.keyCode === 17) {
-    circle.call(force.drag);
-    svg.classed('ctrl', true);
-    return;
-  }
+  if(d3.event.keyCode === 16 || d3.event.keyCode === 17) return;
 
   if(!selected_node && !selected_link) return;
   switch(d3.event.keyCode) {
@@ -654,8 +656,8 @@ function keydown() {
 function keyup() {
   lastKeyDown = -1;
 
-  // ctrl
-  if(d3.event.keyCode === 17) {
+  // Keep dragging enabled until both layout modifier keys are released.
+  if(!d3.event.shiftKey && !d3.event.ctrlKey) {
     // "uncall" force.drag
     // see: https://groups.google.com/forum/?fromgroups=#!topic/d3-js/-HcNN1deSow
     circle
